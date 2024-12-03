@@ -1,0 +1,22 @@
+[{
+  "_id": {
+    "$oid": "672ddf8d0ea5c21f77761a24"
+  },
+  "name": "android",
+  "description": "ư",
+  "createdAt": {
+    "$date": "2024-11-08T09:53:17.738Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672de00c0ea5c21f77761a39"
+  },
+  "name": "iphone",
+  "description": "ttg",
+  "createdAt": {
+    "$date": "2024-11-08T09:55:24.908Z"
+  },
+  "__v": 0
+}]

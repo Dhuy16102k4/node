@@ -1,0 +1,124 @@
+[{
+  "_id": {
+    "$oid": "67475a3601cb74d5a2f9b041"
+  },
+  "user": {
+    "$oid": "671e10608703f01389e30623"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "673340ced022c4fae2a41d9a"
+      },
+      "quantity": 2,
+      "price": 15000000,
+      "_id": {
+        "$oid": "67475a3601cb74d5a2f9b042"
+      }
+    }
+  ],
+  "totalPrice": 30000000,
+  "status": "Cancelled",
+  "address": "123 Example St, City, Country",
+  "paymentMethod": "Cash",
+  "createdAt": {
+    "$date": "2024-11-27T17:43:18.422Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-27T17:43:18.422Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674c6538f990e0397531927e"
+  },
+  "user": {
+    "$oid": "671e10608703f01389e30623"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "673340c2d022c4fae2a41d93"
+      },
+      "quantity": 2,
+      "price": 15000000,
+      "_id": {
+        "$oid": "674c6538f990e0397531927f"
+      }
+    }
+  ],
+  "totalPrice": 30000000,
+  "status": "Shipped",
+  "address": "q2",
+  "paymentMethod": "Cash",
+  "createdAt": {
+    "$date": "2024-12-01T13:31:36.277Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-01T13:31:36.277Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674c670cf990e039753192ac"
+  },
+  "user": {
+    "$oid": "671e10608703f01389e30623"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "673340c2d022c4fae2a41d93"
+      },
+      "quantity": 1,
+      "price": 15000000,
+      "_id": {
+        "$oid": "674c670cf990e039753192ad"
+      }
+    }
+  ],
+  "totalPrice": 15000000,
+  "status": "Cancelled",
+  "address": "q2",
+  "paymentMethod": "Cash",
+  "createdAt": {
+    "$date": "2024-12-01T13:39:24.064Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-01T13:39:24.064Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674dd35f43f2483979b0c5bb"
+  },
+  "user": {
+    "$oid": "671e10608703f01389e30623"
+  },
+  "products": [
+    {
+      "product": {
+        "$oid": "673340ced022c4fae2a41d9a"
+      },
+      "quantity": 6,
+      "price": 15000000,
+      "_id": {
+        "$oid": "674dd35f43f2483979b0c5bc"
+      }
+    }
+  ],
+  "totalPrice": 90000000,
+  "status": "Shipped",
+  "address": "123",
+  "paymentMethod": "Cash",
+  "createdAt": {
+    "$date": "2024-12-02T15:33:51.091Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-02T15:33:51.091Z"
+  },
+  "__v": 0
+}]

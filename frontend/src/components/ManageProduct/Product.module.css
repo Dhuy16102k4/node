@@ -1,0 +1,285 @@
+/* Container Styling */
+.admin-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+/* Các phần khác của CSS không thay đổi */
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+span {
+  margin-bottom: 20px;
+}
+.pagination button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+}
+/* Các phần khác của CSS không thay đổi */
+
+/* Căn giữa các nút Sửa và Xóa */
+.buttonGroup {
+  display: flex;
+  justify-content: center; /* Căn giữa các nút theo chiều ngang */
+  gap: 10px; /* Khoảng cách giữa các nút */
+  margin-top: 10px;
+}
+
+.button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+/* Button Styling */
+.button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+}
+
+.button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+/* Form Styling */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.input, .textarea {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.input:focus, .textarea:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+/* Product List Styling */
+.list {
+  
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  padding: 0;
+}
+/* Các phần khác không thay đổi */
+
+.product-image {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+/* Các phần khác của CSS không thay đổi */
+
+.product-image {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.preview {
+  width: 100px;
+  height: auto;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.fileName {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Thêm class để tạo khoảng cách giữa các nút "Sửa" và "Xóa" */
+.buttonGroup {
+  display: flex;
+  gap: 10px; /* Khoảng cách giữa các nút */
+  margin-top: 10px;
+}
+
+.button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.pagination button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.preview {
+  width: 100px;
+  height: auto;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.pageNumber {
+  font-size: 16px;
+  font-weight: bold;
+}
+.addProductHeader {
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.plusSign {
+  font-size: 20px;
+  color: green; /* You can change the color of the "+" sign */
+}
+
+.form {
+  margin-top: 20px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  height: 100px;
+}
+
+.fileName {
+  font-size: 14px;
+  color: gray;
+}
+
+.preview {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: green;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: darkgreen;
+}
+
+.list-item {
+  background-color: #faf0e6;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+
+}
+
+.list-item:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.product-name {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.product-price {
+  color: #4CAF50;
+  font-size: 1.1rem;
+  margin-top: 10px;
+}
+
+.product-description {
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: 10px;
+}

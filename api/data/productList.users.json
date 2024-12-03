@@ -1,0 +1,60 @@
+[{
+  "_id": {
+    "$oid": "671e10608703f01389e30623"
+  },
+  "username": "huy",
+  "email": "dhuy1610@gmail.com",
+  "password": "$2b$10$g5Q4lyZ55dsiWBKnJZLAw.ZxifaRB1MFdE/fdTL.s3O4ccm6qCd1a",
+  "createdAt": {
+    "$date": "2024-10-27T10:05:20.984Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-27T10:05:20.984Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "671fa3f75ee340f24becaf9b"
+  },
+  "username": "duc",
+  "email": "d1610@gmail.com",
+  "password": "$2b$10$nKXpQ6qs7QMRjPuzkAma2OCUJ7FCzd8aE8lyqyb2gHBsUgjLnTfra",
+  "createdAt": {
+    "$date": "2024-10-28T14:47:19.674Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-28T14:47:19.674Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "672922c86c648e62b6757a03"
+  },
+  "username": "test",
+  "email": "test@gmail.com",
+  "password": "$2b$10$36RSfFitRXeluwIaMWCLv.KrdCYZ1t7UeV90MDjoQInlsU7UxEwxi",
+  "createdAt": {
+    "$date": "2024-11-04T19:38:48.367Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-04T19:38:48.367Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674ddc74e284807846a59133"
+  },
+  "username": "duc1",
+  "email": "duc@gmail.com",
+  "password": "$2b$10$loaZgxmelZBSUNxP2H4zGer5Lz.upidr11xX2ZAmil4cTk8JBWXfS",
+  "createdAt": {
+    "$date": "2024-12-02T16:12:36.871Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-02T16:12:36.871Z"
+  },
+  "__v": 0
+}]
