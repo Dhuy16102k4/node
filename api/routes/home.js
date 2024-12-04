@@ -9,6 +9,8 @@ router.post('/detail/comment/:id',authenticateToken,homeController.addComment);
 
 router.get('/detail/:id',authenticateToken,homeController.productDetail);
 
+router.get('/menu',homeController.menuDisplay);
+
 router.get('/',homeController.display);
 
 module.exports = router;

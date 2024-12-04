@@ -47,13 +47,8 @@ class LoginController {
     
     // Đăng xuất người dùng
     async logout(req, res, next) {
-        req.session.destroy((err) => {
-            if (err) {
-                console.error("Error during logout:", err);
-                return res.status(500).json({ message: 'Logout failed' });
-            }
-            res.status(200).json({ message: 'Logout successful' });
-        });
+        
+        res.status(200).json({ message: 'Logout successful' });
     }
 }
 

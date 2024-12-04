@@ -4,23 +4,23 @@ import Header from '../../components/Header/Header';
 import ExploreMenu from '../../components/ExploreMenu/ExploreMenu';
 import PhoneDisplay from '../../components/PhoneDisplay/PhoneDisplay';
 import axiosInstance from '../../utils/axiosConfig';  // Giả sử axios đã được cấu hình ở đây
-import Pagination from '../../components/Pagination/Pagination'; // Import component phân trang
+import Pagination from '../../components/Pagination/Pagination'; 
 
 const Home = () => {
   const [category, setCategory] = useState('All');
   const [phoneList, setPhoneList] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
-  const [totalPages, setTotalPages] = useState(1); // Tổng số trang
+  const [currentPage, setCurrentPage] = useState(1); 
+  const [totalPages, setTotalPages] = useState(1); 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const productsResponse = await axiosInstance.get('/', { 
           params: {
-            category: category === 'All' ? '' : category, // Lọc sản phẩm theo category
+            category: category === 'All' ? '' : category, 
             page: currentPage,
-            limit: 4, // Giới hạn sản phẩm mỗi trang
+            limit: 4, 
           }
         });
 

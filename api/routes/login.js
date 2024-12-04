@@ -6,6 +6,7 @@ const authenticateToken = require('../middlerware/authToken');
 router.get('/', authenticateToken, (req, res) => {
     res.status(200).json({ authenticated: true, name: req.user });
 });
+router.get('/logout', authenticateToken, loginController.logout);
 
 router.post('/submit', loginController.submit);
 
