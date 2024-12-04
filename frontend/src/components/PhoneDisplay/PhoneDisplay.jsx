@@ -1,11 +1,17 @@
 import React from 'react';
 import './PhoneDisplay.css';
 import PhoneItem from '../PhoneItem/PhoneItem';
+import { useLocation } from 'react-router-dom';
+
+
 
 const PhoneDisplay = ({ category, phoneList }) => {
+  const location = useLocation();
+
   return (
     <div className="phone-display" id="phone-display">
-      <h2>Check out our new products</h2>
+      {location.pathname === '/'?<h2>Check out our new products</h2>:<h2>Explore our product</h2>}
+      <hr />
       <div className="phone-display-list">
         {phoneList
           .filter(item => category === 'All' || category === item.category._id) // Sửa lại để kiểm tra ID category
@@ -20,6 +26,7 @@ const PhoneDisplay = ({ category, phoneList }) => {
             />
           ))}
       </div>
+      <hr />
     </div>
   );
 };

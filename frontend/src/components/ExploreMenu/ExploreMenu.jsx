@@ -16,7 +16,14 @@ const ExploreMenu = ({ category, setCategory, categories }) => {
 
   const handleCategoryChange = (categoryId) => {
     setCategory(categoryId);
-    navigate(`/?category=${categoryId === 'All' ? '' : categoryId}`);
+  
+    if (location.pathname === '/menu') {
+      // Nếu đang ở trang Menu, giữ người dùng trên trang Menu
+      navigate(`/menu?category=${categoryId === 'All' ? '' : categoryId}`);
+    } else {
+      // Nếu không, chuyển về Home
+      navigate(`/?category=${categoryId === 'All' ? '' : categoryId}`);
+    }
   };
 
   if (!Array.isArray(categories) || categories.length === 0) {

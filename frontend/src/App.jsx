@@ -9,6 +9,7 @@ import LoginPopup from "./components/LoginPopup/LoginPopup";
 import Admin from "./pages/Admin/Admin"; // Thêm Admin Page nếu cần
 import ProductApp from "./pages/product/ProductApp";
 import CategoryManagementApp from "./pages/category/CategoryManagementApp";
+import Menu from "./pages/Menu/Menu";
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -36,6 +37,7 @@ const App = () => {
             <Navbar setShowLogin={setShowLogin} username={username} setUsername={setUsername} />
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/menu" element={<Menu />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/order" element={<PlaceOrder />} />
             </Routes>

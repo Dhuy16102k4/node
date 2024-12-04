@@ -5,7 +5,7 @@
     display: flex;
     flex-direction: row; /* Đảm bảo các nút luôn hiển thị ngang */
     gap: 20px;  /* Khoảng cách giữa các nút */
-    padding: 20px;
+    padding: 20px 0px;
     overflow-x: auto; /* Cho phép cuộn ngang nếu danh mục quá nhiều */
 }
 
