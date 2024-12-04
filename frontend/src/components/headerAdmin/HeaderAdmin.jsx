@@ -32,19 +32,19 @@ const HeaderAdmin = () => {
               </Link>
             </li>
             <li>
-              <Link to="/admin/user" className="navIcon">
+              <Link to="../admin/user" className="navIcon">
                 <GridViewOutlinedIcon />
                 User Manage
               </Link>
             </li>
             <li>
-              <Link to="/admin/category" className="navIcon">
+              <Link to="../admin/category" className="navIcon" onClick={() => setMobile(false)}>
                 <SupportOutlinedIcon />
                 Category Manage
               </Link>
             </li>
             <li>
-              <Link to="/admin/pages" className="navIcon">
+              <Link to="../admin/pages" className="navIcon">
                 <StyleOutlinedIcon />
                 Pages
               </Link>
