@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./CategoryManagement.module.css";
+import Modal from "./modal"; // Import the Modal component
 
 // Mock API calls
 const fetchCategories = () => {
@@ -19,13 +20,14 @@ const fetchCategories = () => {
 
 const CategoryManagement = () => {
   const [categories, setCategories] = useState([]);
-  const [newCategory, setNewCategory] = useState({ name: "", description: "" });
+  const [categoryData, setCategoryData] = useState({ name: "", description: "" });
   const [editingCategory, setEditingCategory] = useState(null);
   const [loading, setLoading] = useState(true);
-  
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   // Phân trang
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // Giới hạn mỗi trang hiển thị 5 mục
+  const itemsPerPage = 5;
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -36,36 +38,49 @@ const CategoryManagement = () => {
     loadCategories();
   }, []);
 
-  const handleAddCategory = async () => {
-    if (!newCategory.name.trim() || !newCategory.description.trim()) {
+  const handleAddCategory = () => {
+    if (!categoryData.name.trim() || !categoryData.description.trim()) {
       alert("Both category name and description are required");
       return;
     }
-    const addedCategory = { id: Date.now(), ...newCategory };
+    const addedCategory = { id: Date.now(), ...categoryData };
     setCategories([...categories, addedCategory]);
-    setNewCategory({ name: "", description: "" });
+    setCategoryData({ name: "", description: "" });
+    setIsModalVisible(false); // Hide modal after adding
   };
 
   const handleEditCategory = (category) => {
     setEditingCategory(category);
-    setNewCategory({ name: category.name, description: category.description });
+    setCategoryData({ name: category.name, description: category.description });
+    setIsModalVisible(true); // Show modal when editing
   };
 
-  const handleSaveCategory = async () => {
-    if (!newCategory.name.trim() || !newCategory.description.trim()) {
+  const handleSaveCategory = () => {
+    if (!categoryData.name.trim() || !categoryData.description.trim()) {
       alert("Both category name and description are required");
       return;
     }
-    const updatedCategory = { ...newCategory, id: editingCategory.id };
+    const updatedCategory = { ...categoryData, id: editingCategory.id };
     setCategories(categories.map((category) =>
       category.id === updatedCategory.id ? updatedCategory : category
     ));
     setEditingCategory(null);
-    setNewCategory({ name: "", description: "" });
+    setCategoryData({ name: "", description: "" });
+    setIsModalVisible(false); // Hide modal after saving
   };
 
   const handleDeleteCategory = (categoryId) => {
     setCategories(categories.filter((category) => category.id !== categoryId));
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false); // Hide the modal when canceled
+    setCategoryData({ name: "", description: "" }); // Clear form fields
+    setEditingCategory(null); // Clear any editing state
+  };
+
+  const handleInputChange = (field, value) => {
+    setCategoryData((prevData) => ({ ...prevData, [field]: value }));
   };
 
   // Lấy danh sách các category cho trang hiện tại
@@ -84,31 +99,23 @@ const CategoryManagement = () => {
     <div className={styles.container}>
       <h1>Category Management</h1>
 
-      {/* Phần nhập liệu cho category */}
-      <div className={styles.formWrapper}>
-        <input
-          type="text"
-          value={newCategory.name}
-          onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
-          placeholder="Enter category name"
-          className={styles.input}
-        />
-        <textarea
-          value={newCategory.description}
-          onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
-          placeholder="Enter category description"
-          className={styles.textarea}
-        />
-        {editingCategory ? (
-          <button onClick={handleSaveCategory} className={styles.buttonSave}>
-            Save Changes
-          </button>
-        ) : (
-          <button onClick={handleAddCategory} className={styles.buttonAdd}>
-            Add Category
-          </button>
-        )}
-      </div>
+      {/* Nút thêm category */}
+      <button 
+        onClick={() => setIsModalVisible(true)} 
+        className={styles.buttonAdd}
+      >
+        Add Product
+      </button>
+
+      {/* Modal for Add or Edit */}
+      <Modal
+        isVisible={isModalVisible}
+        onClose={handleCancel}
+        onSave={editingCategory ? handleSaveCategory : handleAddCategory}
+        categoryData={categoryData}
+        onInputChange={handleInputChange}
+        isEditing={!!editingCategory}
+      />
 
       {/* Bảng hiển thị danh sách category */}
       <div className={styles.tableWrapper}>

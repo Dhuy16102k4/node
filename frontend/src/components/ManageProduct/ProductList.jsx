@@ -5,38 +5,55 @@ const ProductList = ({ products, editProduct, deleteProduct }) => {
   return (
     <div>
       <h2>Danh sách sản phẩm</h2>
-      <ul className={styles.list}>
-        {products.map((product) => (
-          <li className={styles['list-item']} key={product.id}>
-            {product.image && (
-              <img
-                src={product.image}
-                alt={product.name}
-                className={styles['product-image']}
-              />
-            )}
-            <div className={styles['product-name']}>{product.name}</div>
-            <div className={styles['product-price']}>{product.price} VND</div>
-            <p className={styles['product-description']}>{product.description}</p>
-            <div className={styles['product-category']}>Danh mục: {product.category}</div>
-            <div className={styles['product-stock']}>Số lượng trong kho: {product.stock}</div>
-            <div className={styles.buttonGroup}>
-              <button
-                className={styles.button}
-                onClick={() => editProduct(product)} // Gọi hàm sửa sản phẩm
-              >
-                Sửa
-              </button>
-              <button
-                className={styles.button}
-                onClick={() => deleteProduct(product.id)} // Gọi hàm xóa sản phẩm
-              >
-                Xóa
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <table className={styles['product-table']}>
+        <thead>
+          <tr>
+            <th>Hình ảnh</th>
+            <th>Tên sản phẩm</th>
+            <th>Giá tiền</th>
+            <th>Danh mục</th>
+            <th>Số lượng trong kho</th>
+            <th>Mô tả</th>
+            <th colSpan="2">Thao tác</th> {/* Cột thao tác cho Sửa và Xóa */}
+          </tr>
+        </thead>
+        <tbody>
+          {products.map((product) => (
+            <tr key={product.id}>
+              <td>
+                {product.image && (
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className={styles['product-image']}
+                  />
+                )}
+              </td>
+              <td>{product.name}</td>
+              <td>{product.price} VND</td>
+              <td>{product.category}</td>
+              <td>{product.stock}</td>
+              <td>{product.description}</td>
+              <td>
+                <button
+                  className={`${styles.button} ${styles['edit-button']}`}
+                  onClick={() => editProduct(product)}
+                >
+                  Sửa
+                </button>
+              </td>
+              <td>
+                <button
+                  className={`${styles.button} ${styles['delete-button']}`}
+                  onClick={() => deleteProduct(product.id)}
+                >
+                  Xóa
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
