@@ -3,36 +3,51 @@ import './Home.css';
 import Header from '../../components/Header/Header';
 import ExploreMenu from '../../components/ExploreMenu/ExploreMenu';
 import PhoneDisplay from '../../components/PhoneDisplay/PhoneDisplay';
-import axiosInstance from '../../utils/axiosConfig'; // Assuming axios config is here
+import axiosInstance from '../../utils/axiosConfig';  // Giả sử axios đã được cấu hình ở đây
+import Pagination from '../../components/Pagination/Pagination'; // Import component phân trang
 
 const Home = () => {
   const [category, setCategory] = useState('All');
   const [phoneList, setPhoneList] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
+  const [totalPages, setTotalPages] = useState(1); // Tổng số trang
 
   useEffect(() => {
-    // Fetch products and categories from the backend
     const fetchData = async () => {
       try {
-        const productsResponse = await axiosInstance.get('/');
-        // const categoriesResponse = await axiosInstance.get('/category');
-        
-        // Set the state with the fetched data
+        const productsResponse = await axiosInstance.get('/', { 
+          params: {
+            category: category === 'All' ? '' : category, // Lọc sản phẩm theo category
+            page: currentPage,
+            limit: 4, // Giới hạn sản phẩm mỗi trang
+          }
+        });
+
         setPhoneList(productsResponse.data.products);
-       // setCategories(categoriesResponse.data);
+        setTotalPages(productsResponse.data.totalPages); // Cập nhật totalPages
+
+        const categoriesResponse = await axiosInstance.get('/category');
+        setCategories(categoriesResponse.data.categories || []);  // Lấy danh mục
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
 
     fetchData();
-  }, []); 
+  }, [category, currentPage]); // Gọi lại khi category hoặc currentPage thay đổi
 
   return (
     <div>
       <Header />
       <ExploreMenu category={category} setCategory={setCategory} categories={categories} />
-      <PhoneDisplay category={category} phoneList={phoneList} />
+      <PhoneDisplay category={category} phoneList={phoneList} /> {/* Hiển thị sản phẩm */}
+      <Pagination 
+        currentPage={currentPage}
+        totalPages={totalPages}
+        setCurrentPage={setCurrentPage}
+        category={category} // Truyền category vào Pagination để khi thay đổi trang vẫn giữ đúng category
+      />
     </div>
   );
 };

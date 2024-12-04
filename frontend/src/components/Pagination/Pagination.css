@@ -1,0 +1,27 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .pagination-btn {
+    text-decoration: none;
+    padding: 10px 15px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    margin: 0 5px;
+    color: #007bff; /* Màu sắc mặc định */
+  }
+  
+  .pagination-btn.active {
+    background-color: #ff8c00; /* Màu cam cho nút đang được chọn */
+    color: white;
+  }
+  
+  .pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  

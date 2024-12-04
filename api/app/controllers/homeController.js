@@ -10,7 +10,7 @@ class homeController {
         try {
             const categoryId = req.query.category;
             const page = parseInt(req.query.page) || 1;
-            const productPerPage = parseInt(req.query.limit) || 10;
+            const productPerPage = parseInt(req.query.limit) ||4;
             let filter = {};
 
             if (categoryId && mongoose.Types.ObjectId.isValid(categoryId)) {

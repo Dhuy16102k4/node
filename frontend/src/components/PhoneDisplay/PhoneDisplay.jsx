@@ -8,7 +8,7 @@ const PhoneDisplay = ({ category, phoneList }) => {
       <h2>Check out our new products</h2>
       <div className="phone-display-list">
         {phoneList
-          .filter(item => category === 'All' || category === item.category.name) // Adjust for JSON structure
+          .filter(item => category === 'All' || category === item.category._id) // Sửa lại để kiểm tra ID category
           .map(item => (
             <PhoneItem
               key={item._id}
@@ -16,7 +16,7 @@ const PhoneDisplay = ({ category, phoneList }) => {
               name={item.name}
               description={item.description}
               price={item.price}
-              image={item.img.replace(/\\/g, '/')} // Correct image path
+              image={item.img.replace(/\\/g, '/')} // Đảm bảo đường dẫn hình ảnh đúng
             />
           ))}
       </div>
