@@ -104,13 +104,32 @@
   transform: translate(-50%, -50%);
   background-color: white;
   padding: 20px;
+  width: 80%;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   z-index: 1000;
-  width: 100%;
   max-width: 800px; /* Chiều rộng tối đa của modal */
   min-width: 400px; /* Chiều rộng tối thiểu của modal */
-  box-sizing: border-box; /* Đảm bảo padding không làm thay đổi chiều rộng */
+  box-sizing: border-box; /* Đảm bảo padding không làm thay đổi chiều rộng */ 
+}
+/* Style for category filter */
+.filterContainer {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.filterLabel {
+  font-size: 1.2rem;
+  margin-right: 10px;
+}
+
+.filterSelect {
+  padding: 8px 15px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  cursor: pointer;
 }
 
 .modal-overlay {
@@ -491,7 +510,7 @@ span {
 .form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  
   margin-bottom: 30px;
 }
 
