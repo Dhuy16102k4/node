@@ -21,6 +21,7 @@ const PhoneDisplay = ({ category, phoneList }) => {
               id={item._id}
               name={item.name}
               description={item.description}
+              stock={item.stock}
               price={item.price}
               image={item.img.replace(/\\/g, '/')} // Đảm bảo đường dẫn hình ảnh đúng
             />

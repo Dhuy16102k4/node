@@ -16,7 +16,7 @@ app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Cấu hình session với cookie
+// // Cấu hình session với cookie
 // app.use(session({
 //   secret: 'your-secret-key',
 //   resave: true, 
@@ -30,11 +30,12 @@ app.use(express.json());
 
 
 app.use(cors({
-  origin: '*', 
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow Authorization header
   credentials: true
 }));
+
 
 
 app.use(express.static(path.join(__dirname, 'public')));

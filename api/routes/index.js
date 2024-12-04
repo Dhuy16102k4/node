@@ -5,10 +5,12 @@ const categoryRouter = require('./admin/category');
 const cart = require('./cart');
 const order = require('./order');
 const homeRouter = require('./home');
-
+const tokenRouter = require('./refreshToken');
 function route(app) {
     app.use('/login', loginRouter);
     app.use('/register',registerRouter);
+    app.use('/refresh', tokenRouter);
+
     app.use('/admin/product',productRouter);
     app.use('/category',categoryRouter);
     

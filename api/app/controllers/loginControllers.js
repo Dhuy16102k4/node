@@ -2,6 +2,12 @@ const bcrypt = require('bcrypt');
 const User = require('../models/users');
 const jwt = require('jsonwebtoken');
 
+// Ensure SECRET_KEY is set
+if (!process.env.SECRET_KEY) {
+    throw new Error("SECRET_KEY is not defined in the environment variables");
+}
+
+// Function to generate JWT (access or refresh token)
 function generateToken(user){
     const header = {
         alg: 'HS256',
@@ -10,14 +16,26 @@ function generateToken(user){
     const payload = {
         userId: user._id,
         username: user.username,
-        //email maybe
-        exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24)
+        exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24) // expires in 24 hours
+    };
+    return jwt.sign(payload, process.env.SECRET_KEY, { header });
+}
+
+function generateRefreshToken(user){
+    const header = {
+        alg: 'HS256',
+        typ: 'JWT'
+    };
+    const payload = {
+        userId: user._id,
+        username: user.username,
+        exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 30) // refresh token expires in 30 days
     };
     return jwt.sign(payload, process.env.SECRET_KEY, { header });
 }
 
 class LoginController {
-    // Đăng nhập người dùng
+    // Handle user login
     async submit(req, res, next) {
         const { username, password } = req.body;
         if (!username || !password) {
@@ -31,10 +49,9 @@ class LoginController {
     
             const isMatch = await bcrypt.compare(password, user.password);
             if (isMatch) {
-                console.log(process.env.SECRET_KEY);
                 const token = generateToken(user);
-                console.log(token);
-                return res.status(200).json({ message: 'Login successful' , token});
+                const refreshToken = generateRefreshToken(user);
+                return res.status(200).json({ message: 'Login successful', token, refreshToken });
             } else {
                 return res.status(401).json({ message: 'Invalid username or password.' });
             }
@@ -44,10 +61,8 @@ class LoginController {
         }
     }
     
-    
-    // Đăng xuất người dùng
+    // Handle logout (optional, but good to add)
     async logout(req, res, next) {
-        
         res.status(200).json({ message: 'Logout successful' });
     }
 }

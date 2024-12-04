@@ -1,115 +1,152 @@
-import { createContext, useState, useEffect } from 'react';
-import { phone_list } from '../assets/assets';
+import React, { createContext, useState, useEffect } from 'react';
+import axiosInstance from '../utils/axiosConfig';  // Giả sử axiosInstance đã được cấu hình
 
-export const StoreContext = createContext(null);
+// Tạo context
+export const StoreContext = createContext(); 
 
-const StoreContextProvider = (props) => {
+const StoreProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState({});
-  const [user, setUser] = useState(null); // Store user data
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  // Effect to retrieve and parse user data from localStorage
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    
-    // Check if storedUser exists and is a valid JSON string
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser); // Attempt to parse the user data
-        setUser(parsedUser); // Set user state with the parsed data
-      } catch (error) {
-        console.error('Error parsing user data:', error); // Log error if JSON is invalid
-        localStorage.removeItem('user'); // Optionally clear invalid data from localStorage
-      }
+  // Định dạng giá
+  const formatPrice = (price) => {
+    return price.toLocaleString();
+  };
+
+  // Lấy token từ localStorage
+  const getAuthToken = () => {
+    return localStorage.getItem('authToken');  // Lấy token từ localStorage
+  };
+
+  // Hàm tạo headers bao gồm Authorization token
+  const createHeaders = () => {
+    const token = getAuthToken();  // Lấy token từ localStorage
+    return {
+      'Authorization': `Bearer ${token}`,  // Thêm token vào headers
+      'Content-Type': 'application/json',   // Đảm bảo rằng content-type là json
+    };
+  };
+
+  // Lấy giỏ hàng từ server
+  const getCart = async () => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get('/cart', { headers: createHeaders() });  // Gọi API với headers
+      const cart = response.data.cart;
+      const formattedCart = {};
+
+      cart.products.forEach(item => {
+        formattedCart[item.product._id] = {
+          quantity: item.quantity,
+          price: item.price,
+          isSelected: item.isSelected
+        };
+      });
+
+      setCartItems(formattedCart);
+    } catch (err) {
+      setError('Failed to fetch cart. Please try again.');
+      console.error('Error fetching cart:', err);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  // Thêm sản phẩm vào giỏ hàng
+  const addToCart = async (productId, quantity) => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post('/cart/add', 
+        { 
+          productId, 
+          quantity 
+        },
+        { headers: createHeaders() }  // Gửi headers với Authorization token
+      );
+
+      setCartItems(response.data.cart.products);
+      console.log('Product added to cart:', response.data);
+    } catch (err) {
+      setError('Failed to add product to cart.');
+      console.error('Error adding to cart:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Xóa sản phẩm khỏi giỏ hàng
+  const removeFromCart = async (productId) => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.delete(`/cart/remove/${productId}`, 
+        { headers: createHeaders() }  // Gửi headers với Authorization token
+      );
+      setCartItems(response.data.cart.products);
+      console.log('Product removed from cart:', response.data);
+    } catch (err) {
+      setError('Failed to remove product from cart.');
+      console.error('Error removing from cart:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Cập nhật trạng thái chọn sản phẩm trong giỏ hàng
+  const selectItems = async (productId, isSelected) => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.put('/cart/selected', {
+        productId,
+        isSelected
+      }, 
+      { headers: createHeaders() }  // Gửi headers với Authorization token
+      );
+      setCartItems(response.data.cart.products);
+      console.log('Product selection updated:', response.data);
+    } catch (err) {
+      setError('Failed to update product selection.');
+      console.error('Error updating selection:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Hàm gửi giỏ hàng
+  const handleSendCart = async () => {
+    try {
+      const response = await axiosInstance.post('/cart/send', {
+        cartItems
+      }, 
+      { headers: createHeaders() }  // Gửi headers với Authorization token
+      );
+      console.log('Cart sent successfully:', response.data);
+    } catch (err) {
+      setError('Failed to send cart.');
+      console.error('Error sending cart:', err);
+    }
+  };
+
+  useEffect(() => {
+    getCart();  // Khi component load, gọi API để lấy giỏ hàng
   }, []);
 
-  // Add product to cart
-  const addToCart = (itemId) => {
-    setCartItems((prev) => ({
-      ...prev,
-      [itemId]: {
-        quantity: (prev[itemId]?.quantity || 0) + 1,
-        added: prev[itemId]?.added || false,
-      },
-    }));
-  };
-
-  // Remove product from cart
-  const removeFromCart = (itemId) => {
-    setCartItems((prev) => {
-      if (!prev[itemId]) return prev;
-      const updatedQuantity = prev[itemId].quantity - 1;
-      if (updatedQuantity <= 0) {
-        const updatedCart = { ...prev };
-        delete updatedCart[itemId]; // Remove item if quantity <= 0
-        return updatedCart;
-      }
-      return {
-        ...prev,
-        [itemId]: { ...prev[itemId], quantity: updatedQuantity },
-      };
-    });
-  };
-
-  // Clear a specific item from the cart
-  const clearItemFromCart = (itemId) => {
-    setCartItems((prev) => {
-      const updatedCart = { ...prev };
-      delete updatedCart[itemId]; // Remove product from cart
-      return updatedCart;
-    });
-  };
-
-  // Mark item as sent
-  const handleSendCart = (itemId) => {
-    setCartItems((prev) => ({
-      ...prev,
-      [itemId]: {
-        quantity: prev[itemId]?.quantity || 1,
-        added: true,
-      },
-    }));
-  };
-
-  // Calculate the total cart amount
-  const getTotalCartAmount = () => {
-    let totalAmount = 0;
-    for (const itemId in cartItems) {
-      const cartItem = cartItems[itemId];
-      if (cartItem?.added) {
-        let itemInfo = phone_list.find((product) => product._id === itemId);
-        if (itemInfo) {
-          totalAmount += itemInfo.price * cartItem.quantity;
-        }
-      }
-    }
-    return totalAmount;
-  };
-
-  // Format price in Vietnamese format
-  const formatPrice = (price) => {
-    if (price >= 1000000) {
-      return price.toLocaleString('vi-VN') + ' đ';
-    } else if (price >= 1000) {
-      return price.toLocaleString('vi-VN') + ' đ';
-    } else {
-      return price.toLocaleString('vi-VN') + ' đ';
-    }
-  };
-
-  const contextValue = {
-    phone_list,
-    cartItems,
-    addToCart,
-    removeFromCart,
-    handleSendCart,
-    formatPrice,
-    clearItemFromCart,
-    getTotalCartAmount,
-    user, // Provide user data in context
-  };
-
-  return <StoreContext.Provider value={contextValue}>{props.children}</StoreContext.Provider>;
+  return (
+    <StoreContext.Provider
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        selectItems,
+        formatPrice,
+        handleSendCart,
+        loading,
+        error
+      }}
+    >
+      {children}
+    </StoreContext.Provider>
+  );
 };
 
-export default StoreContextProvider;
+export default StoreProvider;
