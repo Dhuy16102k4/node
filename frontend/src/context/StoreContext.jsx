@@ -28,43 +28,84 @@ const StoreProvider = ({ children }) => {
     };
   };
 
-  // Lấy giỏ hàng từ server
   const getCart = async () => {
     setLoading(true);
     try {
-      const response = await axiosInstance.get('/cart', { headers: createHeaders() });  // Gọi API với headers
-      const cart = response.data.cart;
+      // Gọi API với headers
+      const response = await axiosInstance.get('/cart', { headers: createHeaders() });
+  
+      // Log the full response to inspect its structure
+      console.log('Full response received:', response);
+  
+      // Access products directly from response.data
+      const products = response?.data?.products;
+      console.log('Products data received:', products);  // Log products directly
+  
+      // Check if products data is valid
+      if (!products || !Array.isArray(products) || products.length === 0) {
+        setError('No valid products data found.');
+        console.error('Invalid products in response:', response?.data);
+        return;
+      }
+  
+      // Format the cart data properly
       const formattedCart = {};
-
-      cart.products.forEach(item => {
-        formattedCart[item.product._id] = {
-          quantity: item.quantity,
-          price: item.price,
-          isSelected: item.isSelected
-        };
+      products.forEach(item => {
+        // Ensure the product data is valid
+        if (item?.product?._id && item?.quantity != null && item?.price != null) {
+          // Ensure quantity and price are valid numbers
+          if (typeof item.quantity === 'number' && typeof item.price === 'number') {
+            // Ensure isSelected is a boolean
+            const isSelected = typeof item.isSelected === 'boolean' ? item.isSelected : false;
+  
+            // Format the cart item
+            formattedCart[item.product._id] = {
+              quantity: item.quantity,
+              price: item.price,
+              isSelected: isSelected,
+              product: item.product  // Ensure product info is included
+            };
+          } else {
+            console.error('Invalid quantity or price:', item);
+          }
+        } else {
+          console.error('Invalid product data:', item);
+        }
       });
-
+  
+      // Update cart state with formatted data
       setCartItems(formattedCart);
     } catch (err) {
+      // Handle errors in the API call
       setError('Failed to fetch cart. Please try again.');
-      console.error('Error fetching cart:', err);
+      console.error('Error fetching cart:', err.message || err);
     } finally {
       setLoading(false);
     }
   };
+  
+  
+  
+  
+
+
+
+
+
 
   // Thêm sản phẩm vào giỏ hàng
-  const addToCart = async (productId, quantity) => {
+  const addToCart = async (productId, quantity = 1) => {
     setLoading(true);
     try {
-      const response = await axiosInstance.post('/cart/add', 
-        { 
-          productId, 
-          quantity 
+      const response = await axiosInstance.post('/cart/add',
+        {
+          productId,
+          quantity
         },
-        { headers: createHeaders() }  // Gửi headers với Authorization token
+        { headers: createHeaders() } // Gửi headers với Authorization token
       );
-
+  
+      // Cập nhật trạng thái giỏ hàng ngay lập tức
       setCartItems(response.data.cart.products);
       console.log('Product added to cart:', response.data);
     } catch (err) {
@@ -74,19 +115,24 @@ const StoreProvider = ({ children }) => {
       setLoading(false);
     }
   };
+  
 
   // Xóa sản phẩm khỏi giỏ hàng
-  const removeFromCart = async (productId) => {
+  const handleRemoveFromCart = async (productId, action) => {
     setLoading(true);
     try {
-      const response = await axiosInstance.delete(`/cart/remove/${productId}`, 
-        { headers: createHeaders() }  // Gửi headers với Authorization token
+      const response = await axiosInstance.post('/cart/remove',
+        {
+          productId,
+          action: action
+        },
+        { headers: createHeaders() }
       );
       setCartItems(response.data.cart.products);
-      console.log('Product removed from cart:', response.data);
+      console.log('Cart updated:', response.data);
     } catch (err) {
-      setError('Failed to remove product from cart.');
-      console.error('Error removing from cart:', err);
+      setError('Failed to update cart.');
+      console.error('Error updating cart:', err);
     } finally {
       setLoading(false);
     }
@@ -136,7 +182,7 @@ const StoreProvider = ({ children }) => {
       value={{
         cartItems,
         addToCart,
-        removeFromCart,
+        handleRemoveFromCart,  // Pass the correct function name here
         selectItems,
         formatPrice,
         handleSendCart,

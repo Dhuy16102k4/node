@@ -5,13 +5,22 @@ import { assets } from '../../assets/assets';
 import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
-  const { cartItems, addToCart, removeFromCart, formatPrice } = useContext(StoreContext);
+  const { cartItems, addToCart, handleRemoveFromCart, formatPrice } = useContext(StoreContext);  // Use the correct function name
   const navigate = useNavigate();
-  
-  const cartArray = Object.values(cartItems);  // Convert cartItems object to array for easier iteration
-  
+
+  const cartArray = Object.values(cartItems); 
+
   const getTotalCartAmount = () => {
     return cartArray.reduce((total, item) => total + item.product.price * item.quantity, 0);
+  };
+
+  const handleRemove = (productId) => {
+    // Call the handleRemoveFromCart function
+    handleRemoveFromCart(productId, 'remove');
+  };
+
+  const handleDecrement = (productId) => {
+    handleRemoveFromCart(productId, 'decrement');
   };
 
   return (
@@ -32,21 +41,27 @@ const Cart = () => {
             </div>
             <br />
             <hr />
-            {cartArray.map((item) => (
-              <div className="cart-items-title cart-items-item" key={item.product._id}>
-                <input type="checkbox" />
-                <img src={item.product.image} alt={item.product.name} />
-                <p>{item.product.name}</p>
-                <p>{formatPrice(item.product.price)}</p>
-                <div className="quantity">
-                  <img onClick={() => removeFromCart(item.product._id)} src={assets.minus_icon} alt="Remove" />
-                  <p>{item.quantity}</p>
-                  <img onClick={() => addToCart(item.product._id)} src={assets.plus_icon} alt="Add More" />
+            {cartArray.map((item) => {
+              const imageUrl = item.product?.img
+                ? `${import.meta.env.VITE_API_URL}${item.product.img.replace(/\\/g, '/')}`
+                : assets.default_image;
+
+              return (
+                <div className="cart-items-title cart-items-item" key={item.product._id}>
+                  <input type="checkbox" />
+                  <img src={imageUrl} alt={item.product.name} />
+                  <p>{item.product.name}</p>
+                  <p>{formatPrice(item.product.price)}</p>
+                  <div className="quantity">
+                    <img onClick={() => handleDecrement(item.product._id)} src={assets.minus_icon} alt="Remove" />
+                    <p>{item.quantity}</p>
+                    <img onClick={() => addToCart(item.product._id)} src={assets.plus_icon} alt="Add More" />
+                  </div>
+                  <p>{formatPrice(item.product.price * item.quantity)}</p>
+                  <p onClick={() => handleRemove(item.product._id)} className="cross">x</p>
                 </div>
-                <p>{formatPrice(item.product.price * item.quantity)}</p>
-                <p onClick={() => removeFromCart(item.product._id)} className="cross">x</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <div className="cart-bottom">
             <div className="cart-total">

@@ -69,23 +69,51 @@ class CartController {
     }
     
     async removeCart(req, res) {
-        const productId = req.params.id; 
+        const { productId, action } = req.body; // action: "remove" or "decrement"
         try {
+            // Find the user's cart
             const cart = await Cart.findOne({ user: req.user._id });
             if (!cart) {
                 return res.status(404).json({ message: 'Cart not found' });
             }
 
-            const initialLength = cart.products.length;
-            cart.products = cart.products.filter(item => item.product.toString() !== productId);
-            if (cart.products.length === initialLength) {
+            // Find the product in the cart
+            const productIndex = cart.products.findIndex(item => item.product.toString() === productId);
+            if (productIndex === -1) {
                 return res.status(404).json({ message: 'Product not found in cart' });
             }
 
+            const productInCart = cart.products[productIndex];
+            const product = await Product.findById(productId);
+            if (!product) {
+                return res.status(404).json({ message: 'Product not found' });
+            }
+
+            if (action === 'decrement') {
+                // If action is 'decrement', decrease the quantity by 1
+                if (productInCart.quantity > 1) {
+                    productInCart.quantity -= 1; // Decrease quantity
+                    product.stock += 1; // Increase stock
+                } else {
+                    // If quantity is 1, remove product completely
+                    cart.products.splice(productIndex, 1); // Remove the product
+                    product.stock += 1; // Increase stock
+                }
+            } else if (action === 'remove') {
+                // If action is 'remove', completely remove the product from the cart
+                cart.products.splice(productIndex, 1); // Remove product
+                product.stock += productInCart.quantity; // Add back the stock
+            } else {
+                return res.status(400).json({ message: 'Invalid action' });
+            }
+
+            // Save updated cart and product
             await cart.save();
-            res.status(200).json({ message: 'Product removed from cart', cart });
+            await product.save();
+
+            res.status(200).json({ message: 'Cart updated successfully', cart });
         } catch (err) {
-            return res.status(500).json({ message: 'Error removing product from cart', error: err.message });
+            return res.status(500).json({ message: 'Error updating cart', error: err.message });
         }
     }
 
