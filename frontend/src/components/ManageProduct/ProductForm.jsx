@@ -8,13 +8,12 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct }) => {
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState('');
   const [id, setId] = useState(null);
-  const [category, setCategory] = useState(''); // New state for category
-  const [stock, setStock] = useState(''); // New state for stock
+  const [category, setCategory] = useState('');
+  const [stock, setStock] = useState('');
 
-  // Categories for the dropdown
   const categories = ['Electronics', 'Clothing', 'Books', 'Home Appliances'];
 
-  // When editing a product, fill the form with existing data
+  // Khi chỉnh sửa sản phẩm, điền thông tin vào form
   useEffect(() => {
     if (editingProduct) {
       setName(editingProduct.name);
@@ -23,8 +22,8 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct }) => {
       setImage(editingProduct.image || null);
       setImageName(editingProduct.imageName || '');
       setId(editingProduct.id);
-      setCategory(editingProduct.category || ''); // Set category if editing
-      setStock(editingProduct.stock || ''); // Set stock if editing
+      setCategory(editingProduct.category || '');
+      setStock(editingProduct.stock || '');
     }
   }, [editingProduct]);
 
@@ -33,8 +32,8 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct }) => {
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setImage(reader.result); // Store base64 URL
-        setImageName(file.name); // Store file name
+        setImage(reader.result);
+        setImageName(file.name);
       };
       reader.readAsDataURL(file);
     }
@@ -43,35 +42,33 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const product = { 
-      id: id || Date.now(), 
-      name, 
-      description, 
-      price, 
-      image, 
-      imageName, 
-      category, 
-      stock 
+    const product = {
+      id: id || Date.now(),
+      name,
+      description,
+      price,
+      image,
+      imageName,
+      category,
+      stock,
     };
 
     if (editingProduct) {
-      updateProduct(product); // Call the update product function
+      updateProduct(product); // Cập nhật sản phẩm
     } else {
-      addProduct(product); // Call the add product function
+      addProduct(product); // Thêm sản phẩm mới
     }
 
-    // Reset form and clear the file input
     setName('');
     setDescription('');
     setPrice('');
-    setImage(null); // Reset image
-    setImageName(''); // Clear image name
-    setCategory(''); // Reset category
-    setStock(''); // Reset stock
-    setId(null); // Reset ID
+    setImage(null);
+    setImageName('');
+    setCategory('');
+    setStock('');
+    setId(null);
 
-    // Manually clear the file input by resetting the key
-    document.getElementById('image-input').value = ''; // Reset the file input element
+    document.getElementById('image-input').value = ''; // Reset file input
   };
 
   return (
@@ -122,7 +119,7 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct }) => {
           required
         />
         <input
-          id="image-input" // Set an id for the image input
+          id="image-input"
           type="file"
           className={styles.input}
           accept="image/*"
