@@ -8,6 +8,7 @@ import Footer from "./components/Footer/Footer";
 import LoginPopup from "./components/LoginPopup/LoginPopup";
 import Admin from "./pages/Admin/Admin"; // Thêm Admin Page nếu cần
 import ProductApp from "./pages/product/ProductApp";
+import CategoryManagementApp from "./pages/category/CategoryManagementApp";
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -38,6 +39,7 @@ const App = () => {
           <Routes>
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin/product" element={<ProductApp />} />
+            <Route path="/admin/category" element={<CategoryManagementApp />} />
           </Routes>
         </div>
       )}
