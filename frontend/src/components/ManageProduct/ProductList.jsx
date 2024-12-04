@@ -1,10 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Product.module.css'; // Import CSS module
 
 const ProductList = ({ products, editProduct, deleteProduct }) => {
+  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [selectedCategory, setSelectedCategory] = useState(''); // State for selected category
+
+  const handleCategoryChange = (event) => {
+    const category = event.target.value;
+    setSelectedCategory(category);
+    // Filter products based on selected category
+    if (category === '') {
+      setFilteredProducts(products);
+    } else {
+      const filtered = products.filter((product) => product.category === category);
+      setFilteredProducts(filtered);
+    }
+  };
+
+  const categories = [...new Set(products.map((product) => product.category))]; // Get unique categories
+
   return (
     <div>
       <h2>Danh sách sản phẩm</h2>
+      <div className={styles.filterContainer}>
+        <label htmlFor="category" className={styles.filterLabel}>Lọc theo danh mục:</label>
+        <select 
+          id="category" 
+          className={styles.filterSelect} 
+          value={selectedCategory} 
+          onChange={handleCategoryChange}
+        >
+          <option value="">Tất cả</option>
+          {categories.map((category, index) => (
+            <option key={index} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+      </div>
       <table className={styles['product-table']}>
         <thead>
           <tr>
@@ -18,7 +51,7 @@ const ProductList = ({ products, editProduct, deleteProduct }) => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <tr key={product.id}>
               <td>
                 {product.image && (
