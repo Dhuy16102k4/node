@@ -75,7 +75,7 @@ const Product = () => {
       
       {/* Nút thêm sản phẩm */}
       <button className={styles.addProductButton} onClick={openModal}>
-        <span className={styles.plusSign}>+</span> Thêm sản phẩm
+        <span className={styles.plusSign}></span> Add Product
       </button>
 
       {/* Modal với form thêm sản phẩm */}
