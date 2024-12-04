@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import './Navbar.css';
 import { assets } from '../../assets/assets';
 import { Link, useNavigate } from "react-router-dom"; // Use navigate from react-router-dom
 import jwt_decode from 'jwt-decode'; 
+import { StoreContext } from "../../context/StoreContext";
 
 const Navbar = ({ setShowLogin, username, setUsername }) => {
   const [menu, setMenu] = useState("home");
+  const {token, setToken} = useContext(StoreContext);
   const navigate = useNavigate(); // Use navigate for programmatic navigation
 
   // Logout function to remove token and update the UI immediately
@@ -28,15 +30,18 @@ const Navbar = ({ setShowLogin, username, setUsername }) => {
         <div className="navbar-search-icon">
           <Link to="/cart"><img src={assets.basket_icon} alt="" /></Link>
         </div>
-
-        {username ? (
-          <>
-            <span>{username}</span>
-            <button onClick={handleLogout}>Logout</button> {/* Logout Button */}
-          </>
-        ) : (
-          <button onClick={() => setShowLogin(true)}>Sign in</button>  // If not logged in, show Sign in button
-        )}
+        
+        {!username?<button onClick={() => setShowLogin(true)}>Sign in</button>
+        :<div className="nav-bar-profile">
+          <img src={assets.profile_icon} alt="" />
+          <ul className="nav-profile-dropdown">
+            <li><img src={assets.bag_icon} alt="" /><p>Profile</p></li>
+            <hr />
+            <li onClick={handleLogout}><img src={assets.logout_icon} alt="" />Logout</li>
+          </ul>
+        </div>
+        }
+        
       </div>
     </div>
   );
