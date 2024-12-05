@@ -5,22 +5,31 @@ import { assets } from '../../assets/assets';
 import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
-  const { cartItems, addToCart, handleRemoveFromCart, formatPrice } = useContext(StoreContext);  // Use the correct function name
+  const { cartItems, addToCart, handleRemoveFromCart, formatPrice , selectItems } = useContext(StoreContext); 
   const navigate = useNavigate();
 
   const cartArray = Object.values(cartItems); 
 
   const getTotalCartAmount = () => {
-    return cartArray.reduce((total, item) => total + item.product.price * item.quantity, 0);
+    return cartArray.reduce((total, item) => {
+      // Only include the price of selected items
+      if (item.isSelected) {
+        total += item.product.price * item.quantity;
+      }
+      return total;
+    }, 0);
   };
 
   const handleRemove = (productId) => {
-    // Call the handleRemoveFromCart function
     handleRemoveFromCart(productId, 'remove');
   };
 
   const handleDecrement = (productId) => {
     handleRemoveFromCart(productId, 'decrement');
+  };
+
+  const handleSelectItem = (productId, isSelected) => {
+    selectItems(productId, isSelected);
   };
 
   return (
@@ -48,7 +57,11 @@ const Cart = () => {
 
               return (
                 <div className="cart-items-title cart-items-item" key={item.product._id}>
-                  <input type="checkbox" />
+                  <input 
+                    type="checkbox" 
+                    checked={item.isSelected} 
+                    onChange={() => handleSelectItem(item.product._id, !item.isSelected)} 
+                  />
                   <img src={imageUrl} alt={item.product.name} />
                   <p>{item.product.name}</p>
                   <p>{formatPrice(item.product.price)}</p>

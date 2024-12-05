@@ -117,31 +117,34 @@ class CartController {
         }
     }
 
-    async selectItems(req, res) {
-        const { productId, isSelected } = req.body;
-        if (!mongoose.Types.ObjectId.isValid(productId)) {
-            return res.status(400).json({ message: 'Invalid product ID.' });
-        }
-        try {
-            const cart = await Cart.findOne({ user: req.user._id }).populate('products.product');
-            if (!cart) {
-                return res.status(404).json({ message: 'Cart not found' });
-            }
-
-            const product = cart.products.find(item => item.product._id.toString() === productId);
-            if (!product) {
-                return res.status(404).json({ message: 'Product not found in cart' });
-            }
-
-            // Update product selection status
-            product.isSelected = isSelected;
-            await cart.save();
-
-            res.status(200).json({ message: 'Product selection updated', cart });
-        } catch (err) {
-            res.status(500).json({ message: 'Error updating selection', error: err.message });
-        }
+    // cartController.js
+async selectItems(req, res) {
+    const { productId, isSelected } = req.body;
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+        return res.status(400).json({ message: 'Invalid product ID.' });
     }
+    try {
+        const cart = await Cart.findOne({ user: req.user._id }).populate('products.product');
+        if (!cart) {
+            return res.status(404).json({ message: 'Cart not found' });
+        }
+
+        const product = cart.products.find(item => item.product._id.toString() === productId);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found in cart' });
+        }
+
+        // Update product selection status
+        product.isSelected = isSelected;
+        await cart.save();
+
+        console.log("Updated product selection:", product); // Keep your debug logs for easier tracking
+        res.status(200).json({ message: 'Product selection updated', cart });
+    } catch (err) {
+        res.status(500).json({ message: 'Error updating selection', error: err.message });
+    }
+}
+
 }
 
 module.exports = new CartController();
