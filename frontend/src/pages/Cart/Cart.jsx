@@ -3,10 +3,13 @@ import { StoreContext } from '../../context/StoreContext';
 import './Cart.css';
 import { assets } from '../../assets/assets';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
 const Cart = () => {
   const { cartItems, addToCart, handleRemoveFromCart, formatPrice, selectItems } = useContext(StoreContext); 
   const navigate = useNavigate();
+  const [error, setError] = useState('');
+  const {setshowOut} = useContext(AuthContext)
 
   // Convert cartItems to an array of items for easier mapping
   const cartArray = Object.values(cartItems);
@@ -43,6 +46,22 @@ const Cart = () => {
   // Toggle item selection
   const handleSelectItem = (productId, isSelected) => {
     selectItems(productId, isSelected);
+  };
+
+  const handleAddToCart = async (id, currentQuantity, stock) => {
+    try {
+      // Kiểm tra số lượng trước khi gọi API
+      if (stock <= 0) {
+        throw new Error(`Insufficient stock. Only ${stock} items available.`);
+      }
+
+      // Gọi addToCart với ID sản phẩm và số lượng (thêm 1 sản phẩm mỗi lần)
+      await addToCart(id);
+      setError('');  // Reset error nếu thêm vào giỏ hàng thành công
+    } catch (err) {
+      setshowOut(true);
+      setError(err.message || 'Something went wrong. Please try again.');
+    }
   };
 
   return (
@@ -87,7 +106,7 @@ const Cart = () => {
                   <div className="quantity">
                     <img onClick={() => handleDecrement(item.product._id)} src={assets.minus_icon} alt="Remove" />
                     <p>{item.quantity}</p>
-                    <img onClick={() => addToCart(item.product._id)} src={assets.plus_icon} alt="Add More" />
+                    <img onClick={() => handleAddToCart(item.product._id, item.quantity, item.product.stock)} src={assets.plus_icon} alt="Add More" />
                   </div>
                   <p>{formatPrice(item.product?.price * item.quantity || 0)}</p> {/* Ensure total is calculated properly */}
                   <p onClick={() => handleRemove(item.product._id)} className="cross">x</p>
