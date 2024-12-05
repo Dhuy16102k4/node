@@ -49,14 +49,29 @@ const StoreProvider = ({ children }) => {
       setLoading(false);
     }
   };
+  const updateCart = async (productId, quantity) => {
+    try {
+      const response = await fetch('/api/cart/updateQuantity', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId, quantity }),
+      });
   
+      const updatedCart = await response.json();
+      // Cập nhật lại state giỏ hàng trong frontend
+      setCartItems(updatedCart.cart.products);
+    } catch (error) {
+      console.error('Error updating cart:', error);
+    }
+  };
   
   const addToCart = async (productId, quantity = 1) => {
     setLoading(true);
     try {
       const response = await axiosInstance.post('/cart/add', { productId, quantity }, { headers: createHeaders() });
       setCartItems(response.data.cart.products);
-      getCart();
     } catch (err) {
       setError('Failed to add product to cart.');
     } finally {
@@ -69,8 +84,6 @@ const StoreProvider = ({ children }) => {
     try {
       const response = await axiosInstance.post('/cart/remove', { productId, action }, { headers: createHeaders() });
       setCartItems(response.data.cart.products);
-      getCart();
-      
     } catch (err) {
       setError('Failed to update cart.');
     } finally {

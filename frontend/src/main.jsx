@@ -6,9 +6,9 @@ import App from './App.jsx';
 import { BrowserRouter } from 'react-router-dom';
 import AuthContextProvider from './context/AuthContext.jsx'; // Import AuthContextProvider
 import StoreContextProvider from './context/StoreContext.jsx'; // Import StoreContextProvider
-
+import ErrorBoundary from './ErrorBoundary';
 createRoot(document.getElementById('root')).render(
-  
+<ErrorBoundary>
   <BrowserRouter>
     <AuthContextProvider>
       <StoreContextProvider>
@@ -16,4 +16,5 @@ createRoot(document.getElementById('root')).render(
       </StoreContextProvider>
     </AuthContextProvider>
   </BrowserRouter>
+</ErrorBoundary>
 )
