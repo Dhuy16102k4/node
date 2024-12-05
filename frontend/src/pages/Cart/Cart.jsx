@@ -1,35 +1,67 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StoreContext } from '../../context/StoreContext';
 import './Cart.css';
 import { assets } from '../../assets/assets';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
 const Cart = () => {
-  const { cartItems, addToCart, handleRemoveFromCart, formatPrice , selectItems } = useContext(StoreContext); 
+  const { cartItems, addToCart, handleRemoveFromCart, formatPrice, selectItems } = useContext(StoreContext); 
   const navigate = useNavigate();
+  const [error, setError] = useState('');
+  const {setshowOut} = useContext(AuthContext)
 
-  const cartArray = Object.values(cartItems); 
+  // Convert cartItems to an array of items for easier mapping
+  const cartArray = Object.values(cartItems);
 
+  // Ensure that the cart items are loaded and not empty before rendering
+  useEffect(() => {
+    if (cartArray.length === 0) {
+      console.log("Cart is empty or not initialized properly.");
+    }
+  }, [cartItems]);
+
+  // Calculate the total amount of selected items in the cart
   const getTotalCartAmount = () => {
     return cartArray.reduce((total, item) => {
-      // Only include the price of selected items
       if (item.isSelected) {
-        total += item.product.price * item.quantity;
+        const price = item.product?.price || 0; // Ensure price is valid
+        const quantity = item.quantity || 0;  // Ensure quantity is valid
+        total += price * quantity;
       }
       return total;
     }, 0);
   };
 
+  // Remove item from cart
   const handleRemove = (productId) => {
     handleRemoveFromCart(productId, 'remove');
   };
 
+  // Decrement item quantity
   const handleDecrement = (productId) => {
     handleRemoveFromCart(productId, 'decrement');
   };
 
+  // Toggle item selection
   const handleSelectItem = (productId, isSelected) => {
     selectItems(productId, isSelected);
+  };
+
+  const handleAddToCart = async (id, currentQuantity, stock) => {
+    try {
+      // Kiểm tra số lượng trước khi gọi API
+      if (stock <= 0) {
+        throw new Error(`Insufficient stock. Only ${stock} items available.`);
+      }
+
+      // Gọi addToCart với ID sản phẩm và số lượng (thêm 1 sản phẩm mỗi lần)
+      await addToCart(id);
+      setError('');  // Reset error nếu thêm vào giỏ hàng thành công
+    } catch (err) {
+      setshowOut(true);
+      setError(err.message || 'Something went wrong. Please try again.');
+    }
   };
 
   return (
@@ -55,8 +87,14 @@ const Cart = () => {
                 ? `${import.meta.env.VITE_API_URL}${item.product.img.replace(/\\/g, '/')}`
                 : assets.default_image;
 
+              // Ensure that each item has a valid key
+              const key = item.product?._id || item.product?.name || Math.random().toString(36).substring(7);
+
               return (
-                <div className="cart-items-title cart-items-item" key={item.product._id}>
+                <div 
+                  key={key}  // Ensure the key is unique
+                  className="cart-items-title cart-items-item"
+                >
                   <input 
                     type="checkbox" 
                     checked={item.isSelected} 
@@ -64,13 +102,13 @@ const Cart = () => {
                   />
                   <img src={imageUrl} alt={item.product.name} />
                   <p>{item.product.name}</p>
-                  <p>{formatPrice(item.product.price)}</p>
+                  <p>{formatPrice(item.product?.price || 0)}</p> {/* Ensure price is a number */}
                   <div className="quantity">
                     <img onClick={() => handleDecrement(item.product._id)} src={assets.minus_icon} alt="Remove" />
                     <p>{item.quantity}</p>
-                    <img onClick={() => addToCart(item.product._id)} src={assets.plus_icon} alt="Add More" />
+                    <img onClick={() => handleAddToCart(item.product._id, item.quantity, item.product.stock)} src={assets.plus_icon} alt="Add More" />
                   </div>
-                  <p>{formatPrice(item.product.price * item.quantity)}</p>
+                  <p>{formatPrice(item.product?.price * item.quantity || 0)}</p> {/* Ensure total is calculated properly */}
                   <p onClick={() => handleRemove(item.product._id)} className="cross">x</p>
                 </div>
               );
@@ -82,17 +120,17 @@ const Cart = () => {
               <div>
                 <div className="cart-total-details">
                   <p>Subtotal</p>
-                  <p>{formatPrice(getTotalCartAmount())}</p>
+                  <p>{formatPrice(getTotalCartAmount())}</p> {/* Use calculated total */}
                 </div>
                 <hr />
                 <div className="cart-total-details">
                   <p>Delivery Fee</p>
-                  <p>{formatPrice(getTotalCartAmount() === 0 ? 0 : 25000)}</p>
+                  <p>{formatPrice(getTotalCartAmount() === 0 ? 0 : 25000)}</p> {/* Delivery fee */}
                 </div>
                 <hr />
                 <div className="cart-total-details">
                   <p>Total</p>
-                  <p>{formatPrice(getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 25000)}</p>
+                  <p>{formatPrice(getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 25000)}</p> {/* Total with delivery fee */}
                 </div>
               </div>
               <button onClick={() => navigate('/order')}>PROCEED TO CHECKOUT</button>

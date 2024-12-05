@@ -49,12 +49,14 @@ const StoreProvider = ({ children }) => {
       setLoading(false);
     }
   };
-
+  
+  
   const addToCart = async (productId, quantity = 1) => {
     setLoading(true);
     try {
       const response = await axiosInstance.post('/cart/add', { productId, quantity }, { headers: createHeaders() });
       setCartItems(response.data.cart.products);
+      getCart();
     } catch (err) {
       setError('Failed to add product to cart.');
     } finally {
@@ -67,6 +69,8 @@ const StoreProvider = ({ children }) => {
     try {
       const response = await axiosInstance.post('/cart/remove', { productId, action }, { headers: createHeaders() });
       setCartItems(response.data.cart.products);
+      getCart();
+      
     } catch (err) {
       setError('Failed to update cart.');
     } finally {
@@ -85,13 +89,20 @@ const StoreProvider = ({ children }) => {
       setLoading(false);
     }
   };
+  const getTotalCartAmount = () => {
+    return Object.values(cartItems).reduce((total, item) => {
+      return total + item.price * item.quantity;
+    }, 0);
+  };
+
+  
 
   useEffect(() => {
     getCart();
   }, []);
 
   return (
-    <StoreContext.Provider value={{ cartItems, addToCart, handleRemoveFromCart, selectItems, formatPrice, loading, error }}>
+    <StoreContext.Provider value={{ cartItems, addToCart, handleRemoveFromCart, selectItems, formatPrice,getTotalCartAmount, loading, error }}>
       {children}
     </StoreContext.Provider>
   );

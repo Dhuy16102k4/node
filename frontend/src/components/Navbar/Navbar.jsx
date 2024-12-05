@@ -4,9 +4,13 @@ import './Navbar.css';
 import { assets } from '../../assets/assets';
 import { Link } from "react-router-dom";
 import { AuthContext } from '../../context/AuthContext';
+import { StoreContext } from "../../context/StoreContext";
 
 const Navbar = () => {
   const { setShowLogin, username, handleLogout } = useContext(AuthContext);
+  const {cartItems} = useContext(StoreContext);
+  const cartArray = Object.values(cartItems);
+
 
   return (
     <div className="navbar">
@@ -20,6 +24,8 @@ const Navbar = () => {
         <img src={assets.search_icon} alt="" />
         <div className="navbar-search-icon">
           <Link to="/cart"><img src={assets.basket_icon} alt="" /></Link>
+          {cartArray.length > 0?<div className="dot"></div>:""}
+          
         </div>
         {!username?<button onClick={() => setShowLogin(true)}>Sign in</button>
         :<div className="nav-bar-profile">

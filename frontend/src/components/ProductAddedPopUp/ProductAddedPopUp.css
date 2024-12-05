@@ -1,0 +1,47 @@
+
+.login-popup1 {
+    position: fixed;
+    z-index: 9999;  /* Ensures it's on top */
+    width: 100%;
+    height: 100%; /* Semi-transparent black background */
+    display: grid;
+    justify-items: center;  /* Center the container horizontally */
+    align-items: flex-start; 
+    padding: 10px 0px;
+}
+
+/* Popup container styling */
+.login-popup-container1 {
+    width: max(13vw, 150px);  /* Ensures the width adapts to the screen */
+    color: #808080;
+    background-color: #90EE90;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    animation: fadeIn 0.5s;  /* Optional fade-in animation */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Title styling */
+.login-popup-title1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-size: 15px;
+}
+
+/* Optional animation for fade-in effect */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

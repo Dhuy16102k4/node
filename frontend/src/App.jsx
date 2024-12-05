@@ -12,9 +12,11 @@ import ProductApp from "./pages/product/ProductApp";
 import CategoryManagementApp from "./pages/category/CategoryManagementApp";
 import Menu from "./pages/Menu/Menu";
 import { AuthContext } from "./context/AuthContext"; // AuthContext
-
+import OrderManagementApp from "./pages/order/OrderManagementApp";
+import OutOfStock from "./components/OutOfStock/OutOfStock";
+import ProductAddedPopUp from "./components/ProductAddedPopUp/ProductAddedPopUp";
 const App = () => {
-  const { showLogin } = useContext(AuthContext); // Show login state from context
+  const { showLogin, showOut, showAdd, setShowAdd } = useContext(AuthContext); // Show login state from context
   const location = useLocation();
 
   // Check if the current route is part of the admin panel
@@ -28,6 +30,7 @@ const App = () => {
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/product" element={<ProductApp />} />
           <Route path="/admin/category" element={<CategoryManagementApp />} />
+          <Route path="/admin/order" element={<OrderManagementApp />} />
         </Routes>
       </div>
     );
@@ -37,6 +40,8 @@ const App = () => {
     <>
       {/* Show Login Popup only if showLogin is true */}
       {showLogin && <LoginPopup />}
+      {showOut && <OutOfStock/>}
+      {showAdd && <ProductAddedPopUp onClose={() => setShowAdd(false)}/>}
       <div className="app">
         <Navbar />
         <Routes>

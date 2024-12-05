@@ -8,6 +8,8 @@ export const AuthContext = createContext();
 const AuthContextProvider = ({ children }) => {
   const [showLogin, setShowLogin] = useState(false);
   const [username, setUsername] = useState(localStorage.getItem("username") || null);
+  const [showOut, setshowOut] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');
@@ -44,7 +46,11 @@ const AuthContextProvider = ({ children }) => {
       setShowLogin,
       username,
       setUsername,
-      handleLogout
+      handleLogout,
+      showOut,
+      setshowOut,
+      showAdd,
+      setShowAdd
     }}>
       {children}
     </AuthContext.Provider>
