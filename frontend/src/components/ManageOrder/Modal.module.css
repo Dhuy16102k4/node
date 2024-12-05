@@ -1,0 +1,91 @@
+/* CSS cho modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Màu nền mờ */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    overflow: hidden;
+  }
+  
+  /* Modal content */
+  .modalContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 10000;
+  }
+  
+  /* Nút đóng (x) */
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #888;
+  }
+  
+  .close:hover {
+    color: #333;
+  }
+  /* Tiêu đề modal */
+.modalTitle {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Các trường nhập liệu (input và select) */
+  .modalLabel {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  
+  .modalInput,
+  .modalSelect {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  
+  /* Nút lưu */
+  .modalButton {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+    max-width: 200px;
+    margin-top: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .modalButton:hover {
+    background-color: #45a049;
+  }
+  
+  .modalButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  

@@ -44,9 +44,9 @@ const HeaderAdmin = () => {
               </Link>
             </li>
             <li>
-              <Link to="../admin/pages" className="navIcon">
+              <Link to="../admin/order" className="navIcon">
                 <StyleOutlinedIcon />
-                Pages
+                Order Manage
               </Link>
             </li>
           </ul>

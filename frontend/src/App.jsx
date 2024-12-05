@@ -12,7 +12,7 @@ import ProductApp from "./pages/product/ProductApp";
 import CategoryManagementApp from "./pages/category/CategoryManagementApp";
 import Menu from "./pages/Menu/Menu";
 import { AuthContext } from "./context/AuthContext"; // AuthContext
-
+import OrderManagementApp from "./pages/order/OrderManagementApp";
 const App = () => {
   const { showLogin } = useContext(AuthContext); // Show login state from context
   const location = useLocation();
@@ -28,6 +28,7 @@ const App = () => {
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/product" element={<ProductApp />} />
           <Route path="/admin/category" element={<CategoryManagementApp />} />
+          <Route path="/admin/order" element={<OrderManagementApp />} />
         </Routes>
       </div>
     );
