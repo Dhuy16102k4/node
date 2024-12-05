@@ -21,7 +21,7 @@ const PhoneItem = ({ id, name, price, description, image, stock }) => {
         throw new Error(`Insufficient stock. Only ${stock} items available.`);
       }
 
-      // Gọi addToCart với ID sản phẩm và số lượng (thêm 1 sản phẩm mỗi lần)
+      // Gọi với ID sản phẩm và số lượng (thêm 1 sản phẩm mỗi lần)
       await addToCart(id);
       setShowAdd(true);
       setError('');  // Reset error nếu thêm vào giỏ hàng thành công
