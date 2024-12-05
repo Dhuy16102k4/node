@@ -112,20 +112,17 @@ class CartController {
             if (action === 'decrement') {
              
                 if (productInCart.quantity > 1) {
-                    productInCart.quantity -= 1;
-                    product.stock = Math.min(product.stock + 1, initialStock);  
+                    productInCart.quantity -= 1; // Decrease quantity
+                     // Increase stock
                 } else {
-                
-                    cart.products.splice(productIndex, 1);  
-                    product.stock = Math.min(product.stock + 1, initialStock);  
+                    // If quantity is 1, remove product completely
+                    cart.products.splice(productIndex, 1); // Remove the product
+                     // Increase stock
                 }
     
             } else if (action === 'remove') {
-           
-                const quantityToReturn = productInCart.quantity;
-                cart.products.splice(productIndex, 1);  
-                product.stock = Math.min(product.stock + quantityToReturn, initialStock);
-    
+                // If action is 'remove', completely remove the product from the cart
+                cart.products.splice(productIndex, 1); // Remove product
             } else {
                 return res.status(400).json({ message: 'Invalid action' });
             }

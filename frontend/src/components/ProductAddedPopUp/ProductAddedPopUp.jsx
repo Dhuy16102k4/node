@@ -12,7 +12,7 @@ const ProductAddedPopUp = () => {
         const timer = setTimeout(() => {
           setIsFadingOut(true);
           setTimeout(() => setShowAdd(false), 500);  // Đóng popup sau khi hiệu ứng fade-out kết thúc
-        }, 1000);
+        }, 500);
         
         // để tránh việc gọi setState khi component đã unmount
         return () => clearTimeout(timer);

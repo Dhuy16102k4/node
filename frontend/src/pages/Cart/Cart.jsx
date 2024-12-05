@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StoreContext } from '../../context/StoreContext';
 import './Cart.css';
 import { assets } from '../../assets/assets';
@@ -51,7 +51,7 @@ const Cart = () => {
   const handleAddToCart = async (id, currentQuantity, stock) => {
     try {
       // Kiểm tra số lượng trước khi gọi API
-      if (stock <= 0) {
+      if (currentQuantity + 1 > stock) {
         throw new Error(`Insufficient stock. Only ${stock} items available.`);
       }
 
@@ -82,6 +82,7 @@ const Cart = () => {
             </div>
             <br />
             <hr />
+            
             {cartArray.map((item) => {
               const imageUrl = item.product?.img
                 ? `${import.meta.env.VITE_API_URL}${item.product.img.replace(/\\/g, '/')}`
