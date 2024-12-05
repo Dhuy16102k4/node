@@ -18,7 +18,8 @@ const jwt = require('jsonwebtoken');
 
 // Middleware to validate the access token
 module.exports = (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1];
+    const token = req.headers['authorization']?.split(' ')[1];// Extract token from header
+
     console.log('Received Token:', token);  // This will print the token (or undefined if it's missing)
 
     if (!token) {
@@ -27,7 +28,11 @@ module.exports = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.SECRET_KEY); // Validate token
-        req.user = { _id: decoded.userId, username: decoded.username }; // Attach user info to req object
+        if (!decoded.userId || !decoded.username || !decoded.email) {
+            return res.status(401).json({ message: 'Invalid token structure.' });
+        }
+        req.user = { _id: decoded.userId, username: decoded.username, email: decoded.email }; // Attach user info to req object
+        console.log('Decoded User Info:', req.user);
         next();  // Proceed to the next middleware or route handler
     } catch (err) {
         console.log('Token Verification Error:', err); // Log the error for debugging

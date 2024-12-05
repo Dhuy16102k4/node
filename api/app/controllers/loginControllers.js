@@ -16,6 +16,7 @@ function generateToken(user){
     const payload = {
         userId: user._id,
         username: user.username,
+        email: user.email,
         exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24) // expires in 24 hours
     };
     return jwt.sign(payload, process.env.SECRET_KEY, { header });
@@ -29,6 +30,7 @@ function generateRefreshToken(user){
     const payload = {
         userId: user._id,
         username: user.username,
+        email: user.email,
         exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 30) // refresh token expires in 30 days
     };
     return jwt.sign(payload, process.env.SECRET_KEY, { header });

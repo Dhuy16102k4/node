@@ -17,9 +17,11 @@ const orderSchema = new Schema({
         default: 'Pending' 
     }, // Trạng thái đơn hàng
     address: { type: String, required: true }, // Địa chỉ giao hàng
+    phone: { type: String, required: true }, // Số điện thoại người đặt hàng
     paymentMethod: { type: String, enum: ['Cash', 'Credit Card', 'Online'], default: 'Cash' }, // Phương thức thanh toán
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });
+
 
 module.exports = mongoose.model('Order', orderSchema);
