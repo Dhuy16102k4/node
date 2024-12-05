@@ -33,7 +33,7 @@ const PhoneItem = ({ id, name, price, description, image, stock }) => {
 
   const handleAddToCart = async () => {
     try {
-      if (quantity + 1 > stock) {
+      if (quantity + currentQuantity > stock || currentQuantity + 1 > stock) {
         throw new Error(`Insufficient stock. Only ${stock} items available.`);
       }
       quantity==0?await addToCart(id, 1):await addToCart(id, quantity);
