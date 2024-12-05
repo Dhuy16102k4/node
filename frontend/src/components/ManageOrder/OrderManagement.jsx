@@ -122,7 +122,7 @@ const OrderManagement = () => {
                 <td>{order.customerName}</td>
                 <td>{order.product}</td>
                 <td>{order.quantity}</td>
-                <td>${order.total}</td>
+                <td>{order.total} VND</td>
                 <td>{order.status}</td>
                 <td>
                   <button onClick={() => handleEditOrder(order)} className={styles.buttonEdit}>
