@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { assets } from '../../assets/assets';
 import './PhoneItem.css';
 import { StoreContext } from '../../context/StoreContext';
@@ -7,37 +7,75 @@ import { AuthContext } from '../../context/AuthContext';
 const PhoneItem = ({ id, name, price, description, image, stock }) => {
   const { cartItems, addToCart, formatPrice } = useContext(StoreContext);
   const [error, setError] = useState('');  // Thêm state để lưu trữ lỗi
-  const currentQuantity = cartItems[id]?.quantity || 0;
-  const {setshowOut, setShowAdd} = useContext(AuthContext);
+  const { setshowOut, setShowAdd } = useContext(AuthContext);
+
+  // Lấy số lượng từ cartItems hoặc 0 nếu không có trong giỏ
+  let currentQuantity = cartItems[id]?.quantity || 0;
+
+  // Lưu trữ số lượng vào state
+  const [quantity, setQuantity] = useState(0);
 
   // Construct the full image URL dynamically using the updated .env variables for Vite
   const imageUrl = `${import.meta.env.VITE_API_URL}${image.replace(/\\/g, '/')}`;
 
-  // Hàm gọi addToCart với quantity
+  // Lưu số lượng vào localStorage khi thay đổi
+  useEffect(() => {
+    localStorage.setItem(`product_${id}_quantity`, quantity);
+  }, [quantity, id]);
+
+  // Lấy số lượng từ localStorage khi component load
+  useEffect(() => {
+    const savedQuantity = localStorage.getItem(`product_${id}_quantity`);
+    if (savedQuantity) {
+      setQuantity(Number(savedQuantity)); // Chuyển về kiểu số nếu có giá trị
+    }
+  }, [id]);
+
   const handleAddToCart = async () => {
     try {
-      // Kiểm tra số lượng trước khi gọi API
-      if (currentQuantity + 1 > stock) {
+      if (quantity + 1 > stock) {
         throw new Error(`Insufficient stock. Only ${stock} items available.`);
       }
-
-      // Gọi với ID sản phẩm và số lượng (thêm 1 sản phẩm mỗi lần)
-      await addToCart(id);
+      quantity==0?await addToCart(id, 1):await addToCart(id, quantity);
+      
       setShowAdd(true);
-      setError('');  // Reset error nếu thêm vào giỏ hàng thành công
+      setError('');
     } catch (err) {
       setshowOut(true);
       setError(err.message || 'Something went wrong. Please try again.');
     }
   };
 
+  const increaseQuantity = () => {
+    if (quantity < stock) {
+      setQuantity((prev) => prev + 1);
+    } else {
+      setshowOut(true);
+    }
+  };
+
+  const decreaseQuantity = () => {
+    if (quantity > 0) {
+      setQuantity((prev) => prev - 1);
+      setError('');
+    }
+  };
+
   return (
     <div className="phone-item">
       <div className="phone-item-img-container">
-        {/* Use the dynamically constructed image URL */}
         <img className="phone-item-image" src={imageUrl} alt={name} />
 
         <div className="food-item-counter">
+          {quantity === 0 ? (
+            <img className="add" onClick={() => increaseQuantity()} src={assets.add_icon_white} alt="Add to Cart" />
+          ) : (
+            <div className="food-item-counter">
+              <img onClick={() => decreaseQuantity()} src={assets.remove_icon_red} alt="Remove from Cart" />
+              <p>{quantity}</p>
+              <img onClick={() => increaseQuantity()} src={assets.add_icon_green} alt="Add More" />
+            </div>
+          )}
         </div>
       </div>
       <div className="phone-item-info">
@@ -47,8 +85,6 @@ const PhoneItem = ({ id, name, price, description, image, stock }) => {
         </div>
         <p className="phone-item-price">{formatPrice(price)}</p>
         
-        
-        {/* Thay đổi nút Add to Cart để gọi hàm addToCart với quantity */}
         <button onClick={handleAddToCart}>Add to Cart</button>
       </div>
     </div>
@@ -56,6 +92,3 @@ const PhoneItem = ({ id, name, price, description, image, stock }) => {
 };
 
 export default PhoneItem;
-{/* <button onClick={handleAddToCart}>
-          {currentQuantity === 0 ? 'Add to Cart' : 'Add More'}
-        </button> */}

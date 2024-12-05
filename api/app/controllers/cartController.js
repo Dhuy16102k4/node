@@ -93,16 +93,15 @@ class CartController {
                 // If action is 'decrement', decrease the quantity by 1
                 if (productInCart.quantity > 1) {
                     productInCart.quantity -= 1; // Decrease quantity
-                    product.stock += 1; // Increase stock
+                     // Increase stock
                 } else {
                     // If quantity is 1, remove product completely
                     cart.products.splice(productIndex, 1); // Remove the product
-                    product.stock += 1; // Increase stock
+                     // Increase stock
                 }
             } else if (action === 'remove') {
                 // If action is 'remove', completely remove the product from the cart
                 cart.products.splice(productIndex, 1); // Remove product
-                product.stock += productInCart.quantity; // Add back the stock
             } else {
                 return res.status(400).json({ message: 'Invalid action' });
             }

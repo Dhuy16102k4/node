@@ -51,7 +51,7 @@ const Cart = () => {
   const handleAddToCart = async (id, currentQuantity, stock) => {
     try {
       // Kiểm tra số lượng trước khi gọi API
-      if (stock <= 0) {
+      if (currentQuantity + 1 > stock) {
         throw new Error(`Insufficient stock. Only ${stock} items available.`);
       }
 
