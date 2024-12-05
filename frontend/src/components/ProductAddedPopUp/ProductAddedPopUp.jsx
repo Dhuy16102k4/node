@@ -14,7 +14,7 @@ const ProductAddedPopUp = () => {
           setTimeout(() => setShowAdd(false), 500);  // Đóng popup sau khi hiệu ứng fade-out kết thúc
         }, 1000);
         
-        // Cleanup để tránh việc gọi setState khi component đã unmount
+        // để tránh việc gọi setState khi component đã unmount
         return () => clearTimeout(timer);
       }
     }, [showAdd, setShowAdd]);
