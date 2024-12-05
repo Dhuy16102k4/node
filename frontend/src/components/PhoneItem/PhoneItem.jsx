@@ -23,7 +23,7 @@ const PhoneItem = ({ id, name, price, description, image, stock }) => {
     localStorage.setItem(`product_${id}_quantity`, quantity);
   }, [quantity, id]);
 
-  // Lấy số lượng từ localStorage khi component load
+  
   useEffect(() => {
     const savedQuantity = localStorage.getItem(`product_${id}_quantity`);
     if (savedQuantity) {
@@ -33,7 +33,7 @@ const PhoneItem = ({ id, name, price, description, image, stock }) => {
 
   const handleAddToCart = async () => {
     try {
-      if (quantity + currentQuantity > stock || currentQuantity + 1 > stock) {
+      if (currentQuantity + 1 > stock || quantity + currentQuantity > stock) {
         throw new Error(`Insufficient stock. Only ${stock} items available.`);
       }
       quantity==0?await addToCart(id, 1):await addToCart(id, quantity);
