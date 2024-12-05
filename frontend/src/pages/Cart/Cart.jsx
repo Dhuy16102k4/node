@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StoreContext } from '../../context/StoreContext';
 import './Cart.css';
 import { assets } from '../../assets/assets';
@@ -82,6 +82,7 @@ const Cart = () => {
             </div>
             <br />
             <hr />
+            
             {cartArray.map((item) => {
               const imageUrl = item.product?.img
                 ? `${import.meta.env.VITE_API_URL}${item.product.img.replace(/\\/g, '/')}`

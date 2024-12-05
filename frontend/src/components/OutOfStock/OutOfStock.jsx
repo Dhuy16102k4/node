@@ -1,36 +1,40 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './OutOfStock.css'
 import { AuthContext } from '../../context/AuthContext'
 import { assets } from '../../assets/assets'
 
 const OutOfStock = () => {
-    const {setshowOut, showOut} = useContext(AuthContext)
-
-    if(!showOut){
-        return null;
+    const { showOut, setshowOut } = useContext(AuthContext);  // Lấy giá trị showAdd từ AuthContext
+    const [isFadingOut, setIsFadingOut] = useState(false);
+    
+    // Dùng useEffect để thay đổi trạng thái sau 1 giây và bắt đầu hiệu ứng fade-out
+    useEffect(() => {
+        if (showOut) {
+        const timer = setTimeout(() => {
+            setIsFadingOut(true);
+            setTimeout(() => setshowOut(false), 500);  // Đóng popup sau khi hiệu ứng fade-out kết thúc
+        }, 1000);
+        
+        // để tránh việc gọi setState khi component đã unmount
+        return () => clearTimeout(timer);
+        }
+    }, [showOut, setshowOut]);
+    
+    if (!showOut) {
+        return null; 
     }
-
+    
     return (
-        <div className="out-popup">
-        <form className="out-popup-container">
-            <div className="out-popup-title">
-                <h2>Product is out of stock</h2>
-                <img
-                    onClick={() => setshowOut(false)}
-                    src={assets.cross_icon}
-                    alt="Close"
-                    style={{ cursor: 'pointer' }}
-                />
-                <div className='out-popup-text'>
-                    <p>Please choose our other product or wait for us to update more quantity! </p>
-                </div>
-                
+        <div className={`login-popup2 ${isFadingOut ? 'fade-out' : ''}`}>
+        <form className="login-popup-container2">
+            <div className="login-popup-title2">
+            <p>Product is out of stock!</p>
             </div>
-
         </form>
         </div>
-    )
-    }
+    );
+
+}
     
 
 export default OutOfStock
