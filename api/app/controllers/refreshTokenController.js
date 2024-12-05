@@ -6,6 +6,7 @@ function generateAccessToken(user) {
     const payload = {
         userId: user._id,
         username: user.username,
+        email: user.email,
         exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24), // 24 hours expiry
     };
     return jwt.sign(payload, process.env.SECRET_KEY);

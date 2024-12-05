@@ -1,44 +1,71 @@
-const Cart = require('../models/carts');
-const Product = require('../models/products');
+const nodemailer = require('nodemailer');
 const Order = require('../models/orders');
+const Cart = require('../models/carts');
+
+
+// Tạo transporter
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'huyd37448@gmail.com', // Email của bạn
+        pass: 'dwxr hpop lkke ekto' // Mật khẩu ứng dụng (nếu bật 2FA) hoặc mật khẩu tài khoản (nếu không bật 2FA)
+    }
+});
+
+// Hàm gửi email
+async function sendEmail(userEmail, subject, message) {
+    const mailOptions = {
+        from: 'huyd37448@gmail.com',
+        to: userEmail,
+        subject: subject, // Tiêu đề email
+        text: message // Nội dung email
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log('Email sent successfully');
+    } catch (error) {
+        console.error('Error sending email: ', error);
+    }
+}
+
+// Nội dung email theo trạng thái
+const emailContent = {
+    Pending: (orderId) => `Đơn hàng ID ${orderId} đã được đặt thành công và đang chờ xác nhận.`,
+    Confirmed: (orderId) => `Đơn hàng ID ${orderId} đã được xác nhận. Chúng tôi sẽ sớm xử lý và giao hàng.`,
+    Shipped: (orderId) => `Đơn hàng ID ${orderId} đã được vận chuyển. Xin vui lòng chờ đợi.`,
+    Delivered: (orderId) => `Đơn hàng ID ${orderId} đã được giao thành công. Cảm ơn bạn đã mua sắm tại cửa hàng của chúng tôi.`,
+    Cancelled: (orderId) => `Đơn hàng ID ${orderId} đã bị hủy. Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi.`
+};
 
 async function findUserCart(userId) {
     return await Cart.findOne({ user: userId }).populate('products.product');
 }
-async function findUserOders(userId) {
+
+async function findUserOrders(userId) {
     return await Order.find({ user: userId });
 }
 
-
-
 class OrderController {
-    async display(req, res) {
-        try {
-            const orders = await findUserOders(req.user._id);
-            if (!orders) {
-                return res.status(404).json({ message: 'No orders found for this user' });
-            }
-            res.status(200).json(orders);
-        } catch (err) {
-            res.status(500).json({ message: 'Error fetching orders', error: err.message });
-        }
-    }
+    // Phương thức thêm đơn hàng
     async add(req, res) {
-        const { address, paymentMethod } = req.body;
+        const { address, paymentMethod, phone } = req.body;
         try {
             const cart = await findUserCart(req.user._id);
             if (!cart) {
-                return res.status(400).json({ message: 'Cart is empty. Cannot place an order.' });
+                return res.status(400).json({ message: 'Giỏ hàng trống. Không thể đặt đơn hàng.' });
             }
-            //loc các sản phẩm đã chọn
-            const selectedProducts = cart.products.filter(item => item.isSelected)
+
+            const selectedProducts = cart.products.filter(item => item.isSelected);
             if (selectedProducts.length === 0) {
-                return res.status(400).json({ message: 'No products selected for checkout.' });
+                return res.status(400).json({ message: 'Không có sản phẩm nào được chọn.' });
             }
+
             const totalPrice = selectedProducts.reduce(
                 (total, item) => total + item.quantity * item.price,
                 0
             );
+
             const order = new Order({
                 user: req.user._id,
                 products: selectedProducts.map(item => ({
@@ -48,70 +75,118 @@ class OrderController {
                 })),
                 totalPrice,
                 address,
+                phone,
                 paymentMethod,
                 status: 'Pending',
             });
+
             await order.save();
+            
+            selectedProducts.forEach(item => {
+                const product = item.product;
+                const quantityOrdered = item.quantity;
+    
+                if (product.stock < quantityOrdered) {
+                    return res.status(400).json({ message: `Không đủ số lượng của sản phẩm: ${product.name}` });
+                }
+    
+                product.stock -= quantityOrdered;
+                product.save();  // Save the updated stock
+            });
             cart.products = cart.products.filter(item => !item.isSelected);
+            
             await cart.save();
 
-            res.status(201).json({ message: 'Order add successfully', order });
+            // Gửi email thông báo đặt hàng thành công
+            await sendEmail(req.user.email, 'Đặt hàng thành công', emailContent.Pending(order._id));
+
+            res.status(201).json({ message: 'Đơn hàng đã được đặt thành công', order });
         } catch (err) {
-            res.status(500).json({ message: 'Error add order', error: err.message });
+            res.status(500).json({ message: 'Lỗi khi đặt đơn hàng', error: err.message });
         }
     }
+
+    // Phương thức hủy đơn hàng
     async cancelOrders(req, res) {
-        const orderId = req.params.id; 
+        const orderId = req.params.id;
         try {
             const order = await Order.findById(orderId);
-
-            if (!orderId) {
-                return res.status(400).json({ message: 'No products selected for cancel.' });
+            if (!order) {
+                return res.status(400).json({ message: 'Không tìm thấy đơn hàng để hủy.' });
             }
             if (order.user.toString() !== req.user._id.toString()) {
-                return res.status(403).json({ message: 'You are not authorized to cancel this order' });
+                return res.status(403).json({ message: 'Bạn không có quyền hủy đơn hàng này' });
             }
             if (['Shipped', 'Delivered'].includes(order.status)) {
-                return res.status(400).json({ message: 'Cannot cancel an order that has been shipped or delivered' });
+                return res.status(400).json({ message: 'Không thể hủy đơn hàng đã được giao hoặc vận chuyển' });
             }
+
             order.status = 'Cancelled';
             await order.save();
-            res.status(200).json({ message: 'Order canceled successfully', order });
+
+            // Gửi email thông báo hủy đơn hàng
+            await sendEmail(req.user.email, 'Đơn hàng đã bị hủy', emailContent.Cancelled(order._id));
+
+            res.status(200).json({ message: 'Đơn hàng đã bị hủy', order });
         } catch (err) {
-            res.status(500).json({ message: 'Error cancel order', error: err.message });
+            res.status(500).json({ message: 'Lỗi khi hủy đơn hàng', error: err.message });
         }
     }
+
+    // Phương thức cập nhật trạng thái đơn hàng
     async updateStatus(req, res) {
-        const orderId = req.params.id; 
+        const orderId = req.params.id;
         const { status } = req.body;
         try {
             const order = await Order.findById(orderId);
-            if (!orderId) {
-                return res.status(400).json({ message: 'No products selected for update' });
+            if (!order) {
+                return res.status(400).json({ message: 'Không tìm thấy đơn hàng để cập nhật.' });
             }
+
             const validStatuses = ['Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'];
             if (!validStatuses.includes(status)) {
-                return res.status(400).json({ message: 'Invalid status value' });
+                return res.status(400).json({ message: 'Trạng thái không hợp lệ.' });
             }
+
             order.status = status;
+
+            // Gửi email theo trạng thái mới
+            await sendEmail(req.user.email, `Trạng thái đơn hàng: ${status}`, emailContent[status](order._id));
+
             await order.save();
-            res.status(200).json({ message: 'Order status updated successfully', order });
+
+            res.status(200).json({ message: `Trạng thái đơn hàng đã được cập nhật thành ${status}`, order });
         } catch (err) {
-            res.status(500).json({ message: 'Error updating order status', error: err.message });
+            res.status(500).json({ message: 'Lỗi khi cập nhật trạng thái đơn hàng', error: err.message });
         }
     }
-    // Get details of a specific order
+
+    // Phương thức hiển thị tất cả đơn hàng của người dùng
+    async display(req, res) {
+        try {
+            const orders = await findUserOrders(req.user._id);
+            if (!orders) {
+                return res.status(404).json({ message: 'Không tìm thấy đơn hàng nào' });
+            }
+            res.status(200).json(orders);
+        } catch (err) {
+            res.status(500).json({ message: 'Lỗi khi lấy thông tin đơn hàng', error: err.message });
+        }
+    }
+
+    // Phương thức lấy chi tiết đơn hàng
     async getOrderById(req, res) {
-        const { orderId } = req.params.id; 
+        const { orderId } = req.params;
         try {
             const order = await Order.findById(orderId).populate('products.product');
             if (!order) {
-                return res.status(404).json({ message: 'Order not found' });
+                return res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
             }
             res.status(200).json(order);
         } catch (err) {
-            res.status(500).json({ message: 'Error fetching order', error: err.message });
+            res.status(500).json({ message: 'Lỗi khi lấy thông tin đơn hàng', error: err.message });
         }
     }
 }
+
 module.exports = new OrderController();

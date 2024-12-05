@@ -4,7 +4,7 @@ const loginController = require('../app/controllers/loginControllers'); // Ensur
 const authenticateToken = require('../middlerware/authToken');
 
 // Route definitions
-router.get('/', authenticateToken, (req, res) => {
+router.get('/check', authenticateToken, (req, res) => {
     res.status(200).json({ authenticated: true, name: req.user });
 });
 

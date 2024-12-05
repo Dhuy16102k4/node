@@ -59,7 +59,7 @@ class CartController {
             }
     
             await cart.save();
-            product.stock -= quantity;
+            
             await product.save();
     
             res.status(200).json({ message: 'Product added to cart', cart });
