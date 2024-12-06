@@ -287,13 +287,21 @@ main {
 }
 
 
-.review-list img{
+.review img{
     width: 15px;
 }
 
 
-.review-list p{
-    padding: 5px;
+.review p strong {
+  margin-right: 8px; /* Tạo khoảng cách giữa tên người dùng và rating */
+}
+
+.review p .reviewContent{
+  font-size: 1.2rem !important; 
+}
+
+.review p img {
+  margin-right: 8px; /* Tạo khoảng cách giữa ảnh người dùng và tên */
 }
 
 .review-summary{
@@ -313,9 +321,29 @@ select {
   margin-bottom: 10px;
 }
 
-.review {
-  margin-top: 15px;
+.Error{
+  color: red;
 }
+
+.review {
+  margin: 15px;
+  padding-bottom: 5px;
+}
+
+.review hr{
+  margin-top: 3px;
+}
+
+.review .reviewContent{
+  margin-left: 25px;          /* Khoảng cách bên trái */
+  font-size: 1.1rem;          /* Kích thước chữ */
+  line-height: 1.6;           /* Tăng chiều cao dòng để văn bản dễ đọc */
+  color: #4A4A4A;             /* Màu chữ xám nhẹ */
+  font-family: 'Arial', sans-serif;  /* Font chữ đơn giản và dễ đọc */
+  font-weight: 400;           /* Độ đậm chữ bình thường */
+  word-wrap: break-word; 
+}
+
 .review strong {
   font-size: 1.1em;
 }

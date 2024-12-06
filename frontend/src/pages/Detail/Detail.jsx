@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 import axiosInstance from '../../utils/axiosConfig';
 import { AuthContext } from '../../context/AuthContext';
+import jwt_decode from "jwt-decode";
 
 const Detail = () => {
     const { id } = useParams();  
@@ -18,9 +19,24 @@ const Detail = () => {
     const [quantity, setQuantity] = useState(1);
     const [submitReview, setSubmitReview] = useState("submit");
     const navigate = useNavigate();
+    const [comment, setComment] = useState('');
+    const [rating, setRating] = useState(1);
+    const [message, setMessage] = useState(null);
+    const token = localStorage.getItem('authToken');
+    const decodedToken = jwt_decode(token);
+
     const handleQuantityChange = (event) => {
         setQuantity(event.target.value);
     };
+
+    const handleCommentChange = (event) => {
+        setComment(event.target.value)
+    }
+
+    const handleRatingChange = (event) => {
+        setRating(event.target.value);
+      };
+    
     
     useEffect(() => {
         window.scrollTo(0, 0);  
@@ -82,6 +98,56 @@ const Detail = () => {
             setError(err.message || 'Something went wrong. Please try again.');
           }
       };
+
+      const handleCommentSubmit = async () => {
+        // Validate input fields
+        if (!token) {
+            setMessage('*Please login before posting comment');
+            return;
+        }
+    
+        try {
+            const response = await axiosInstance.post(`/detail/${id}`,
+                { comment, rating },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Pass token for authentication
+                    },
+                }
+            );
+
+            const newReview = {
+                user: {
+                    username: decodedToken.username,
+                },
+                comment: comment,
+                rating: rating,
+            };
+    
+
+            setProduct((prevProduct) => {
+                const updatedReviews = [newReview, ...prevProduct.reviews]; 
+                const totalRating = product.reviews.reduce((total, review) => total + review.rating, 0) + rating
+                const updatedRating = Math.round(totalRating / updatedReviews.length);
+
+                return {
+                    ...prevProduct,
+                    reviews: updatedReviews,
+                    averageRating: product.averageRating,
+                };
+            });
+    
+            // Reset form state after submitting
+            setSubmitReview("submit");
+            setComment('');
+            setRating(1);
+    
+        } catch (error) {
+            // Handle error
+            setMessage(error.response?.data?.message || 'Failed to add comment.');
+        }
+    };
+    
     
   return (
     <div>
@@ -151,19 +217,19 @@ const Detail = () => {
             <br/>
             
             {/* Reviews Section */}
-                <section class={styles.reviews}>
+                <section className={styles.reviews}>
                     <h2>Customer Reviews</h2>
-                        <div class={styles['review-summary']}>
+                        <div className={styles['review-summary']}>
                         Average point: {product.averageRating}⭐ ({product.reviews.length} reviews)
                         </div>
-                        <div class={styles["review-list"]}>
+                        <div className={styles["review-list"]}>
                         {product.reviews.map((review) => (
                             <div className={styles.review} key={review._id}>
                                 <p>
                                     <img src={assets.profile_icon} alt="User profile" />
-                                    <strong>{review.user.username}</strong> ({review.rating}/10)
+                                    <strong>{review.user.username}</strong> ({review.rating}/10⭐)
                                 </p>
-                                <p>{review.comment}</p>
+                                <p className={styles.reviewContent}>{review.comment}</p>
                                 <hr />
                             </div>
                         ))}
@@ -173,9 +239,9 @@ const Detail = () => {
                                     <button onClick={() => setSubmitReview("form")}>Write a review</button>
                                 ) : (
                                     <>
-                                        <input  type="text" placeholder="Your name" />
-                                        <textarea  name="" id="" placeholder="Your review" />
-                                        <select  id="product-option" name="product-option">
+                                        {/* <input  type="text" placeholder="Your name" /> */}
+                                        <textarea onChange={handleCommentChange}  name="" id="" placeholder="Your review" />
+                                        <select onChange={handleRatingChange} id="product-option" name="product-option">
                                             <option value="" disabled selected>Rating (1-10⭐)</option>
                                             <option value="1">1</option>
                                             <option value="2">2</option>
@@ -188,8 +254,9 @@ const Detail = () => {
                                             <option value="9">9</option>
                                             <option value="10">10</option>
                                         </select>
-                                        <button>Submit</button>
-                                        <button onClick={() => setSubmitReview("submit")}>Cancel</button>
+                                        <button onClick={() => handleCommentSubmit()}>Submit</button>
+                                        <button onClick={() => (setSubmitReview("submit"), setMessage('')) }>Cancel</button>
+                                        <div className={styles.Error}>{message}</div>
                                     </>
                                 )}
                             </div>  
