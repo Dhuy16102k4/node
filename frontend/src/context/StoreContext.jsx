@@ -9,7 +9,7 @@ const StoreProvider = ({ children }) => {
   const [error, setError] = useState('');
 
   const formatPrice = (price) => {
-    return price.toLocaleString();
+    return price.toLocaleString() + "₫";
   };
 
   const getAuthToken = () => {

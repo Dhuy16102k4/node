@@ -15,6 +15,7 @@ import { AuthContext } from "./context/AuthContext"; // AuthContext
 import OrderManagementApp from "./pages/order/OrderManagementApp";
 import OutOfStock from "./components/OutOfStock/OutOfStock";
 import ProductAddedPopUp from "./components/ProductAddedPopUp/ProductAddedPopUp";
+import Detail from "./pages/Detail/Detail";
 
 const App = () => {
   const { showLogin, showOut, showAdd, setShowAdd } = useContext(AuthContext); // Show login state from context
@@ -50,6 +51,7 @@ const App = () => {
           <Route path="/menu" element={<Menu />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/order" element={<PlaceOrder />} />
+          <Route path="/detail/:id" element={<Detail />}/> 
         </Routes>
       </div>
       <Footer />

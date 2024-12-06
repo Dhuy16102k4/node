@@ -22,6 +22,7 @@ const PhoneDisplay = ({ category, phoneList }) => {
               name={item.name}
               description={item.description}
               stock={item.stock}
+              rating={item.averageRating}
               price={item.price}
               image={item.img.replace(/\\/g, '/')} // Đảm bảo đường dẫn hình ảnh đúng
             />

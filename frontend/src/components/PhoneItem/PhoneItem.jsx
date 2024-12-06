@@ -3,8 +3,9 @@ import { assets } from '../../assets/assets';
 import './PhoneItem.css';
 import { StoreContext } from '../../context/StoreContext';
 import { AuthContext } from '../../context/AuthContext';
+import { Link } from 'react-router-dom';
 
-const PhoneItem = ({ id, name, price, description, image, stock }) => {
+const PhoneItem = ({ id, name, price, description, image, stock, rating }) => {
   const { cartItems, addToCart, formatPrice } = useContext(StoreContext);
   const [error, setError] = useState('');  // Thêm state để lưu trữ lỗi
   const { setshowOut, setShowAdd } = useContext(AuthContext);
@@ -62,32 +63,34 @@ const PhoneItem = ({ id, name, price, description, image, stock }) => {
   };
 
   return (
-    <div className="phone-item">
-      <div className="phone-item-img-container">
-        <img className="phone-item-image" src={imageUrl} alt={name} />
+      <div className="phone-item">
 
-        <div className="food-item-counter">
-          {quantity === 0 ? (
-            <img className="add" onClick={() => increaseQuantity()} src={assets.add_icon_white} alt="Add to Cart" />
-          ) : (
-            <div className="food-item-counter">
-              <img onClick={() => decreaseQuantity()} src={assets.remove_icon_red} alt="Remove from Cart" />
-              <p>{quantity}</p>
-              <img onClick={() => increaseQuantity()} src={assets.add_icon_green} alt="Add More" />
-            </div>
-          )}
+        <div className="phone-item-img-container">
+          <Link to={`/detail/${id}`}>
+            <img className="phone-item-image" src={imageUrl} alt={name} />
+          </Link>
+          <div className="food-item-counter">
+            {quantity === 0 ? (
+              <img className="add" onClick={() => increaseQuantity()} src={assets.add_icon_white} alt="Add to Cart" />
+            ) : (
+              <div className="food-item-counter">
+                <img onClick={() => decreaseQuantity()} src={assets.remove_icon_red} alt="Remove from Cart" />
+                <p>{quantity}</p>
+                <img onClick={() => increaseQuantity()} src={assets.add_icon_green} alt="Add More" />
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="phone-item-info">
+          <div className="phone-item-name-rating">
+            <p>{name}</p>
+            <p>{rating!=undefined?rating+"⭐":"0⭐"}</p>
+          </div>
+          <p className="phone-item-price">{formatPrice(price)}</p>
+          
+          <button onClick={handleAddToCart}>Add to Cart</button>
         </div>
       </div>
-      <div className="phone-item-info">
-        <div className="phone-item-name-rating">
-          <p>{name}</p>
-          <img src={assets.rating_starts} alt="Rating" />
-        </div>
-        <p className="phone-item-price">{formatPrice(price)}</p>
-        
-        <button onClick={handleAddToCart}>Add to Cart</button>
-      </div>
-    </div>
   );
 };
 
