@@ -104,7 +104,7 @@ const CategoryManagement = () => {
         onClick={() => setIsModalVisible(true)} 
         className={styles.buttonAdd}
       >
-        Add Product
+        Add Category
       </button>
 
       {/* Modal for Add or Edit */}
