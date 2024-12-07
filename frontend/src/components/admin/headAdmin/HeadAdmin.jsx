@@ -3,7 +3,7 @@ import SettingsIcon from "@mui/icons-material/Settings"
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined"
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined"
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined"
-import { assets } from "../../assets/assets"
+import { assets } from "../../../assets/assets"
 
 const HeadAdmin = ({ dark, setMode }) => {
   return (

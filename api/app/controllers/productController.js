@@ -5,7 +5,7 @@ const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
 const { console } = require('inspector');
-
+const { ObjectId } = require('mongodb');
 // Cấu hình multer cho việc tải ảnh lên
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -29,7 +29,12 @@ class ProductController {
             const page = parseInt(req.query.page) || 1;
             const productPerPage = parseInt(req.query.limit) || 3;
             let filter = {};
-
+    
+            if (page <= 0 || productPerPage <= 0) {
+                return res.status(400).json({ message: 'Invalid pagination parameters.' });
+            }
+    
+        
             if (categoryId && mongoose.Types.ObjectId.isValid(categoryId)) {
                 filter.category = new mongoose.Types.ObjectId(categoryId);
             } else if (categoryId) {
@@ -45,9 +50,17 @@ class ProductController {
                 Product.countDocuments(filter),
                 Category.find().lean()
             ]);
-
+    
             const totalPages = Math.ceil(totalProducts / productPerPage);
+
+            if (page > totalPages) {
+                return res.status(400).json({ message: 'Page exceeds total pages.' });
+            }
+    
+      
             console.log({ products, categories, currentPage: page, totalPages, limit: productPerPage });
+    
+           
             res.json({ products, categories, currentPage: page, totalPages, limit: productPerPage });
         } catch (error) {
             console.error('Error in display function:', error);
@@ -58,6 +71,7 @@ class ProductController {
     add(req, res, next) {
         const { name, price, description, category ,stock} = req.body;
         console.log({ name, price, description, category ,stock})
+        console.log('Image file:', req.file);
         if (!name || !price || !description || !category || !stock || !req.file) {
             return res.status(400).json({ message: 'All fields are required, including the image.' });
         }
@@ -75,16 +89,15 @@ class ProductController {
                 res.status(201).json({ savedProduct, message: 'Product added successfully!' });
             })
             .catch(error => {
-                console.error('Error adding product:', error);
-                res.status(500).json({ message: 'Failed to add product.' });
+                res.status(500).json({ message: error.stack });
             });
     }
 
     update(req, res, next) {
         const productId = req.params.id;
-        const { name, price, description, category } = req.body;
+        const { name, price, description, category ,stock } = req.body;
 
-        if (!name || !price || !description || !category) {
+        if (!name || !price || !description || !category || !stock ) {
             return res.status(400).json({ message: 'All fields are required.' });
         }
 
@@ -96,7 +109,7 @@ class ProductController {
 
                 return Product.findByIdAndUpdate(
                     productId,
-                    { name, price, description, category: categoryObj._id, img: imgPath },
+                    { name, price, description, category: categoryObj._id, stock , img: imgPath },
                     { new: true }
                 );
             })
@@ -122,7 +135,7 @@ class ProductController {
             })
             .catch(error => {
                 console.error('Error deleting product:', error);
-                res.status(500).json({ message: 'Failed to delete product.' });
+                res.status(500).json({ message: error.stack });
             });
     }
     

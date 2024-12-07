@@ -1,7 +1,8 @@
 import React from 'react';
 import './PhoneDisplay.css';
-import PhoneItem from '../PhoneItem/PhoneItem';
+
 import { useLocation } from 'react-router-dom';
+import PhoneItem from '../PhoneItem/PhoneItem';
 
 
 

@@ -1,7 +1,7 @@
 import React from 'react'
-import CategoryManagement from '../../components/ManageCatagory/CategoryManagement';
+import CategoryManagement from '../../components/admin/ManageCatagory/CategoryManagement';
 
-import HeaderAdmin from '../../components/headerAdmin/HeaderAdmin';
+import HeaderAdmin from '../../components/admin/headerAdmin/HeaderAdmin';
 import Footer from '../../components/Footer/Footer';
 const CategoryManagementApp = () => {
   return (

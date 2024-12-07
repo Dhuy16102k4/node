@@ -10,7 +10,7 @@ function route(app) {
     app.use('/login', loginRouter);
     app.use('/register',registerRouter);
     app.use('/refresh', tokenRouter);
-
+    //admin
     app.use('/admin/product',productRouter);
     app.use('/category',categoryRouter);
     

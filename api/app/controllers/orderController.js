@@ -49,9 +49,10 @@ async function findUserOrders(userId) {
 class OrderController {
     // Phương thức thêm đơn hàng
     async add(req, res) {
-        const { address, paymentMethod, phone } = req.body;
+        const { address, paymentMethod, phone ,email} = req.body;
         try {
             const cart = await findUserCart(req.user._id);
+           
             if (!cart) {
                 return res.status(400).json({ message: 'Giỏ hàng trống. Không thể đặt đơn hàng.' });
             }
@@ -98,7 +99,7 @@ class OrderController {
             await cart.save();
 
             // Gửi email thông báo đặt hàng thành công
-            await sendEmail(req.user.email, 'Đặt hàng thành công', emailContent.Pending(order._id));
+            await sendEmail(email, 'Đặt hàng thành công', emailContent.Pending(order._id));
 
             res.status(201).json({ message: 'Đơn hàng đã được đặt thành công', order });
         } catch (err) {

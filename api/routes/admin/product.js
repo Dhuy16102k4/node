@@ -1,16 +1,16 @@
 
-const express = require('express');
-const router = express.Router();
-const { upload, productRouter } = require('../../app/controllers/productController');
+    const express = require('express');
+    const router = express.Router();
+    const { upload, productRouter } = require('../../app/controllers/productController');
 
 
 
-router.post('/add', upload.single('img'), productRouter.add);
+    router.post('/add', upload.single('img'), productRouter.add);
 
-router.put('/:id', upload.single('img'), productRouter.update);
+    router.put('/:id', upload.single('img'), productRouter.update);
 
-router.delete('/:id', productRouter.delete);
+    router.delete('/:id', productRouter.delete);
 
-router.get('/', productRouter.display);
+    router.get('/', productRouter.display);
 
-module.exports = router;
+    module.exports = router;
