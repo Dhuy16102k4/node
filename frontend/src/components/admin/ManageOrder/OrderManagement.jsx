@@ -125,7 +125,7 @@ const OrderManagement = () => {
 
                 <td>{order.total} VND</td>
 
-                <td>${order.total}</td>
+
 
                 <td>{order.status}</td>
                 <td>
