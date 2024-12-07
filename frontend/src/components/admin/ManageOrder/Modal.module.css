@@ -156,3 +156,39 @@
     outline: none;
     border: 2px solid #1565C0;
 }
+/* Product Details Styles */
+.productsContainer {
+    margin-top: 20px;
+  }
+  
+  .productsTitle {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+  
+  .productsTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .productsTable th,
+  .productsTable td {
+    padding: 10px;
+    text-align: center  ;
+    border: 1px solid #ddd;
+  }
+  
+  .productsTable th {
+    background-color: #f1f1f1;
+    color: #333;
+  }
+  
+  .productsTable td {
+    background-color: #fff;
+  }
+  
+  .productsTable tr:hover {
+    background-color: #fafafa;
+  }
+  

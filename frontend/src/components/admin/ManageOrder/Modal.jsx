@@ -1,7 +1,7 @@
-import React from 'react';
-import styles from './Modal.module.css';  // Import file CSS module
+import React from "react";
+import styles from "./Modal.module.css";
 
-const Modal = ({ onClose, onSave, order, setOrder, isEditing, isDetails }) => {
+const Modal = ({ onClose, order, isDetails, onSave, setOrder }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setOrder((prevOrder) => ({
@@ -10,34 +10,50 @@ const Modal = ({ onClose, onSave, order, setOrder, isEditing, isDetails }) => {
     }));
   };
 
-  // Render different modal content based on the modal type (edit, add, details)
   return (
     <div className={styles.modal}>
       <div className={styles.modalContent}>
         <span className={styles.close} onClick={onClose}>
           &times;
         </span>
-        
+
         {/* Modal Title */}
         <h2 className={styles.modalTitle}>
-          {isDetails ? 'Order Details' : isEditing ? 'Edit Order' : 'Add Order'}
+          {isDetails ? "Order Details" : "Edit Order"}
         </h2>
 
-        {/* Order details view */}
         {isDetails ? (
           <div className={styles.detailsContainer}>
             <p><strong>Customer Name:</strong> {order.customerName}</p>
-            <p><strong>Product:</strong> {order.product}</p>
-            <p><strong>Quantity:</strong> {order.quantity}</p>
             <p><strong>Total:</strong> {order.total} VND</p>
             <p><strong>Status:</strong> {order.status}</p>
-            <button onClick={onClose} className={styles.modalButton}>
-              Close
-            </button>
+
+            {/* Product Table */}
+            <h3 className={styles.productsTitle}>Products Purchased:</h3>
+            <table className={styles.productsTable}>
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Product</th>
+                  <th>Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+                {order.products && order.products.map((product, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{product.name}</td>
+                    <td>{product.quantity}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <button onClick={onClose} className={styles.modalButton}>Close</button>
           </div>
         ) : (
           <div>
-            {/* Editable fields for add or edit */}
+            {/* Editable fields */}
             <label className={styles.modalLabel}>
               Customer Name:
               <input
@@ -46,35 +62,6 @@ const Modal = ({ onClose, onSave, order, setOrder, isEditing, isDetails }) => {
                 name="customerName"
                 value={order.customerName}
                 onChange={handleChange}
-                required
-                disabled={isDetails}
-              />
-            </label>
-
-            <label className={styles.modalLabel}>
-              Product:
-              <input
-                className={styles.modalInput}
-                type="text"
-                name="product"
-                value={order.product}
-                onChange={handleChange}
-                required
-                disabled={isDetails}
-              />
-            </label>
-
-            <label className={styles.modalLabel}>
-              Quantity:
-              <input
-                className={styles.modalInput}
-                type="number"
-                name="quantity"
-                value={order.quantity}
-                onChange={handleChange}
-                required
-                min="1"
-                disabled={isDetails}
               />
             </label>
 
@@ -86,9 +73,6 @@ const Modal = ({ onClose, onSave, order, setOrder, isEditing, isDetails }) => {
                 name="total"
                 value={order.total}
                 onChange={handleChange}
-                required
-                min="1"
-                disabled={isDetails}
               />
             </label>
 
@@ -99,8 +83,6 @@ const Modal = ({ onClose, onSave, order, setOrder, isEditing, isDetails }) => {
                 name="status"
                 value={order.status}
                 onChange={handleChange}
-                required
-                disabled={isDetails}
               >
                 <option value="Pending">Pending</option>
                 <option value="Shipped">Shipped</option>
@@ -108,12 +90,58 @@ const Modal = ({ onClose, onSave, order, setOrder, isEditing, isDetails }) => {
               </select>
             </label>
 
-            {/* Buttons for add/edit actions */}
-            {!isDetails && (
-              <button onClick={onSave} className={styles.modalButton}>
-                {isEditing ? 'Save Changes' : 'Add Order'}
-              </button>
-            )}
+            <h3 className={styles.productsTitle}>Edit Products:</h3>
+            <table className={styles.productsTable}>
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Product</th>
+                  <th>Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+                {order.products && order.products.map((product, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>
+                      <input
+                        className={styles.modalInput}
+                        type="text"
+                        name={`productName${index}`}
+                        value={product.name}
+                        onChange={(e) => {
+                          const updatedProducts = [...order.products];
+                          updatedProducts[index].name = e.target.value;
+                          setOrder((prevOrder) => ({
+                            ...prevOrder,
+                            products: updatedProducts,
+                          }));
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        className={styles.modalInput}
+                        type="number"
+                        name={`quantity${index}`}
+                        value={product.quantity}
+                        onChange={(e) => {
+                          const updatedProducts = [...order.products];
+                          updatedProducts[index].quantity = parseInt(e.target.value, 10);
+                          setOrder((prevOrder) => ({
+                            ...prevOrder,
+                            products: updatedProducts,
+                          }));
+                        }}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <button onClick={onSave} className={styles.modalButton}>Save</button>
+            <button onClick={onClose} className={styles.modalButton}>Close</button>
           </div>
         )}
       </div>
