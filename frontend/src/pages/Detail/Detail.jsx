@@ -14,7 +14,7 @@ const Detail = () => {
     const [relatedProducts, setRelatedProducts] = useState([]);  
     const [loading, setLoading] = useState(true);  
     const [error, setError] = useState(''); 
-    const { setshowOut, setShowAdd } = useContext(AuthContext);
+    const { setshowOut, setShowAdd, setSuccessMessage } = useContext(AuthContext);
     const location = useLocation();
     const [quantity, setQuantity] = useState(1);
     const [submitReview, setSubmitReview] = useState("submit");
@@ -23,7 +23,6 @@ const Detail = () => {
     const [rating, setRating] = useState(1);
     const [message, setMessage] = useState(null);
     const token = localStorage.getItem('authToken');
-    const decodedToken = jwt_decode(token);
 
     const handleQuantityChange = (event) => {
         setQuantity(event.target.value);
@@ -85,18 +84,23 @@ const Detail = () => {
     }
 
     const handleAddToCart = async (quantity) => {
-        try {
-            if (quantity > product.stock) {
-              throw new Error(`Insufficient stock. Only ${stock} items available.`);
+        if(token){
+            try {
+                if (quantity > product.stock) {
+                    throw new Error(`Insufficient stock. Only ${stock} items available.`);
+                }
+                await addToCart(id, quantity);
+
+                setSuccessMessage("Product added to cart")
+                setShowAdd(true);
+                setError('');
+            } catch (err) {
+                setshowOut(true);
+                setError(err.message || 'Something went wrong. Please try again.');
             }
-            await addToCart(id, quantity);
-            
-            setShowAdd(true);
-            setError('');
-          } catch (err) {
-            setshowOut(true);
-            setError(err.message || 'Something went wrong. Please try again.');
-          }
+        } else {
+            alert("Login before adding to cart")
+        }
       };
 
       const handleCommentSubmit = async () => {
@@ -118,7 +122,7 @@ const Detail = () => {
 
             const newReview = {
                 user: {
-                    username: decodedToken.username,
+                    username: !token?"":jwt_decode(token).username,
                 },
                 comment: comment,
                 rating: rating,

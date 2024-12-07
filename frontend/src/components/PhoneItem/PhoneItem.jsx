@@ -8,8 +8,9 @@ import { Link } from 'react-router-dom';
 const PhoneItem = ({ id, name, price, description, image, stock, rating }) => {
   const { cartItems, addToCart, formatPrice } = useContext(StoreContext);
   const [error, setError] = useState('');  // Thêm state để lưu trữ lỗi
-  const { setshowOut, setShowAdd } = useContext(AuthContext);
-
+  const { setshowOut, setShowAdd, setSuccessMessage } = useContext(AuthContext);
+  
+  const token = localStorage.getItem('authToken');
   // Lấy số lượng từ cartItems hoặc 0 nếu không có trong giỏ
   let currentQuantity = cartItems[id]?.quantity || 0;
 
@@ -33,17 +34,24 @@ const PhoneItem = ({ id, name, price, description, image, stock, rating }) => {
   }, [id]);
 
   const handleAddToCart = async () => {
-    try {
-      if (currentQuantity + 1 > stock || quantity + currentQuantity > stock) {
-        throw new Error(`Insufficient stock. Only ${stock} items available.`);
+    if(token){
+      try {
+        if (currentQuantity + 1 > stock || quantity + currentQuantity > stock) {
+          throw new Error(`Insufficient stock. Only ${stock} items available.`);
+        }
+        quantity==0?await addToCart(id, 1):await addToCart(id, quantity);
+  
+        setSuccessMessage("Product added to Cart")
+        setShowAdd(true);
+        
+        setError('');
+      } catch (err) {
+        setshowOut(true);
+        
+        setError(err.message || 'Something went wrong. Please try again.');
       }
-      quantity==0?await addToCart(id, 1):await addToCart(id, quantity);
-      
-      setShowAdd(true);
-      setError('');
-    } catch (err) {
-      setshowOut(true);
-      setError(err.message || 'Something went wrong. Please try again.');
+    } else {
+      alert("Login before adding to cart")
     }
   };
 
@@ -84,7 +92,7 @@ const PhoneItem = ({ id, name, price, description, image, stock, rating }) => {
         <div className="phone-item-info">
           <div className="phone-item-name-rating">
             <p>{name}</p>
-            <p>{rating!=undefined?rating+"⭐":"0⭐"}</p>
+            <p>{rating!=undefined?Math.round(rating)+"⭐":"0⭐"}</p>
           </div>
           <p className="phone-item-price">{formatPrice(price)}</p>
           

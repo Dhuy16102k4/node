@@ -7,7 +7,7 @@ const authenticateToken = require('../middlerware/authToken');
 //coment
 router.post('/detail/:id',authenticateToken,homeController.addComment);
 
-router.get('/detail/:id',authenticateToken,homeController.productDetail);
+router.get('/detail/:id',homeController.productDetail);
 
 router.get('/menu',homeController.menuDisplay);
 

@@ -75,7 +75,8 @@ export const assets = {
     bag_icon,
     parcel_icon,
     minus_icon,
-    plus_icon
+    plus_icon,
+    phone_4
 }
 
 export const menu_list = [

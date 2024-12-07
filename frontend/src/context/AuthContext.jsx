@@ -10,6 +10,7 @@ const AuthContextProvider = ({ children }) => {
   const [username, setUsername] = useState(localStorage.getItem("username") || null);
   const [showOut, setshowOut] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');
@@ -50,7 +51,9 @@ const AuthContextProvider = ({ children }) => {
       showOut,
       setshowOut,
       showAdd,
-      setShowAdd
+      setShowAdd,
+      successMessage,
+      setSuccessMessage
     }}>
       {children}
     </AuthContext.Provider>

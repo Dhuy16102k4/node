@@ -3,7 +3,7 @@ import './ProductAddedPopUp.css'
 import { AuthContext } from '../../context/AuthContext';
 
 const ProductAddedPopUp = () => {
-    const { showAdd, setShowAdd } = useContext(AuthContext);  // Lấy giá trị showAdd từ AuthContext
+    const { showAdd, setShowAdd, successMessage } = useContext(AuthContext);  // Lấy giá trị showAdd từ AuthContext
     const [isFadingOut, setIsFadingOut] = useState(false);
   
     // Dùng useEffect để thay đổi trạng thái sau 1 giây và bắt đầu hiệu ứng fade-out
@@ -27,7 +27,7 @@ const ProductAddedPopUp = () => {
       <div className={`login-popup1 ${isFadingOut ? 'fade-out' : ''}`}>
         <form className="login-popup-container1">
           <div className="login-popup-title1">
-            <p>Product added to cart</p>
+            <p>{successMessage}</p>
           </div>
         </form>
       </div>
