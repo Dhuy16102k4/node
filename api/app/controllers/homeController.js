@@ -80,7 +80,10 @@ class homeController {
                 return res.status(404).json({ message: 'product not found' });
             }
 
-            const relatedProducts = await Product.find({ category: product.category._id }).populate('category', 'name');            
+            const relatedProducts = await Product.find({ 
+                category: product.category._id,
+                _id: { $ne: productId }
+            }).populate('category', 'name');            
             
             res.status(200).json({product,relatedProducts,categoryName: product.category.name });
 

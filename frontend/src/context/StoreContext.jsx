@@ -63,7 +63,7 @@ const StoreProvider = ({ children }) => {
       setLoading(false);
     }
   };
-
+  
   const handleRemoveFromCart = async (productId, action) => {
     setLoading(true);
     try {
@@ -91,18 +91,39 @@ const StoreProvider = ({ children }) => {
   };
   const getTotalCartAmount = () => {
     return Object.values(cartItems).reduce((total, item) => {
-      return total + item.price * item.quantity;
+      if (item.isSelected) {
+        const price = item.price || 0; // Ensure price is valid
+        const quantity = item.quantity || 0;  // Ensure quantity is valid
+        total += price * quantity;
+      }
+      return total;
     }, 0);
   };
-
-  
-
   useEffect(() => {
     getCart();
   }, []);
+//ORDER
+const createOrder = async (orderData) => {
+  setLoading(true);
+  try {
+    const response = await axiosInstance.post('/order/submit', orderData, { headers: createHeaders() });
+    if (response.data) {
+      console.log('Order created successfully:', response.data);
+      setCartItems({});
+    }
+  } catch (err) {
+    setError('Failed to create order.');
+    console.error('Error creating order:', err);
+  } finally {
+    setLoading(false);
+  }
+};
+  
+
+  
 
   return (
-    <StoreContext.Provider value={{ cartItems, addToCart, handleRemoveFromCart, selectItems, formatPrice,getTotalCartAmount, loading, error }}>
+    <StoreContext.Provider value={{ cartItems, addToCart, handleRemoveFromCart, selectItems, formatPrice,getTotalCartAmount,createOrder, loading, error }}>
       {children}
     </StoreContext.Provider>
   );

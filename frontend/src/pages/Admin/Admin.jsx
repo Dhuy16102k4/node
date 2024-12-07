@@ -1,7 +1,7 @@
 import React from 'react'
 import './Admin.css'
-import HeaderAdmin from '../../components/headerAdmin/HeaderAdmin'
-import HomeAdmin from '../../components/homeAdmin/HomeAdmin'
+import HeaderAdmin from '../../components/admin/headerAdmin/HeaderAdmin'
+import HomeAdmin from '../../components/admin/homeAdmin/HomeAdmin'
 import Footer from '../../components/Footer/Footer'
 
 const Admin = () => {

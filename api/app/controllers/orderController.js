@@ -49,9 +49,10 @@ async function findUserOrders(userId) {
 class OrderController {
     // Phương thức thêm đơn hàng
     async add(req, res) {
-        const { address, paymentMethod, phone } = req.body;
+        const { address, paymentMethod, phone ,email} = req.body;
         try {
             const cart = await findUserCart(req.user._id);
+           
             if (!cart) {
                 return res.status(400).json({ message: 'Giỏ hàng trống. Không thể đặt đơn hàng.' });
             }
@@ -98,7 +99,7 @@ class OrderController {
             await cart.save();
 
             // Gửi email thông báo đặt hàng thành công
-            await sendEmail(req.user.email, 'Đặt hàng thành công', emailContent.Pending(order._id));
+            await sendEmail(email, 'Đặt hàng thành công', emailContent.Pending(order._id));
 
             res.status(201).json({ message: 'Đơn hàng đã được đặt thành công', order });
         } catch (err) {
@@ -162,6 +163,8 @@ class OrderController {
     }
 
     // Phương thức hiển thị tất cả đơn hàng của người dùng
+    
+    //user display
     async display(req, res) {
         try {
             const orders = await findUserOrders(req.user._id);
@@ -173,6 +176,51 @@ class OrderController {
             res.status(500).json({ message: 'Lỗi khi lấy thông tin đơn hàng', error: err.message });
         }
     }
+    async adminDisplay(req, res) {
+        const status = req.query.status || ''; 
+        const page = parseInt(req.query.page) || 1; 
+        const orderPerPage = parseInt(req.query.limit) || 3; 
+    
+    
+        if (page <= 0 || orderPerPage <= 0) {
+            return res.status(400).json({ message: 'Invalid pagination parameters.' });
+        }
+    
+        try {
+            // điều kiện lọc
+            let filter = {};
+            if (status) {
+                filter.status = status; 
+            }
+            const [orders, totalOrders] = await Promise.all([
+                Order.find(filter) 
+                    .populate('status') 
+                    .skip((page - 1) * orderPerPage) 
+                    .limit(orderPerPage) 
+                    .lean(), 
+                Order.countDocuments(filter) 
+            ]);
+    
+            const totalPages = Math.ceil(totalOrders / orderPerPage);
+    
+        
+            if (page > totalPages) {
+                return res.status(400).json({ message: 'Page exceeds total pages.' });
+            }
+    
+        
+            res.status(200).json({
+                orders, 
+                totalOrders, 
+                totalPages, 
+                currentPage: page, 
+                ordersPerPage: orderPerPage 
+            });
+        } catch (err) {
+            res.status(500).json({ message: 'Lỗi khi lấy thông tin đơn hàng', error: err.message });
+        }
+    }
+    
 
     // Phương thức lấy chi tiết đơn hàng
     async getOrderById(req, res) {
@@ -187,6 +235,8 @@ class OrderController {
             res.status(500).json({ message: 'Lỗi khi lấy thông tin đơn hàng', error: err.message });
         }
     }
+    
+
 }
 
 module.exports = new OrderController();

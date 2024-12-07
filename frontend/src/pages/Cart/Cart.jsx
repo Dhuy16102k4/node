@@ -25,8 +25,8 @@ const Cart = () => {
   const getTotalCartAmount = () => {
     return cartArray.reduce((total, item) => {
       if (item.isSelected) {
-        const price = item.product?.price || 0; // Ensure price is valid
-        const quantity = item.quantity || 0;  // Ensure quantity is valid
+        const price = item.product?.price || 0; 
+        const quantity = item.quantity || 0;  
         total += price * quantity;
       }
       return total;

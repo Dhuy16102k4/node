@@ -13,4 +13,9 @@ router.put('/delete/:id',authenticateToken,ordertController.cancelOrders);
 router.put('/update/:id',authenticateToken,ordertController.updateStatus);
 //display
 router.get('/',authenticateToken,ordertController.display);
+//admin display
+
+router.get('/admin/',ordertController.adminDisplay)
+
+
 module.exports = router;

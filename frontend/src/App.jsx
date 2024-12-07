@@ -16,6 +16,7 @@ import OrderManagementApp from "./pages/order/OrderManagementApp";
 import OutOfStock from "./components/OutOfStock/OutOfStock";
 import ProductAddedPopUp from "./components/ProductAddedPopUp/ProductAddedPopUp";
 import Detail from "./pages/Detail/Detail";
+import UserApp from "./pages/user/UserApp";
 
 const App = () => {
   const { showLogin, showOut, showAdd, setShowAdd } = useContext(AuthContext); // Show login state from context
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/admin/product" element={<ProductApp />} />
           <Route path="/admin/category" element={<CategoryManagementApp />} />
           <Route path="/admin/order" element={<OrderManagementApp />} />
+          <Route path="/admin/user" element={<UserApp />} />
         </Routes>
       </div>
     );

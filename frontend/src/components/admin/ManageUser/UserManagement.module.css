@@ -1,0 +1,79 @@
+/* UserManagement.module.css */
+
+.container {
+    padding: 40px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 30px;
+  }
+  
+  .tableWrapper {
+    margin-top: 20px;
+    overflow-x: auto;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  th,
+  td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f1f1f1;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  td {
+    background-color: #fff;
+  }
+  
+  tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  /* Pagination */
+  .pagination {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .pageButton {
+    padding: 8px 16px;
+    margin: 0 5px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    background-color: #f1f1f1;
+    color: #333;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+  }
+  
+  .pageButton:hover {
+    background-color: #ddd;
+  }
+  
+  .activePage {
+    background-color: #4CAF50;
+    color: white;
+  }
+  

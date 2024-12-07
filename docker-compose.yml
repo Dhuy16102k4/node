@@ -1,0 +1,65 @@
+version: "3.8"  # Thêm version để đảm bảo tính tương thích
+
+services:
+  api-app:
+    build:
+      context: ./api
+    container_name: api-app
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./api/.env
+    environment:
+      - NODE_ENV=docker
+      - MONGO_URI=mongodb://mongodb:27017/productList  # Liên kết MongoDB
+      - PORT=3000  # Đảm bảo rằng cổng 3000 được sử dụng trong API
+    depends_on:
+      - mongodb
+    networks:
+      - my-network
+    restart: unless-stopped
+    volumes:
+      - ./public/img:/usr/src/app/public/img  # Liên kết thư mục img với container
+
+  frontend-app:
+    build:
+      context: ./frontEnd
+    container_name: frontend-app
+    ports:
+      - "5173:5173"
+    env_file:
+      - ./frontEnd/.env
+    environment:
+      - REACT_APP_API_URL=${REACT_APP_API_URL}  # Đảm bảo API URL chính xác
+    networks:
+      - my-network
+    restart: unless-stopped
+ 
+
+  mongodb:
+    image: mongo:5.0
+    container_name: mongodb-container
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db  # Lưu trữ dữ liệu MongoDB
+    networks:
+      - my-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.runCommand('ping').ok"]
+      interval: 30s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+      - MONGO_INITDB_DATABASE=productList  # Thêm database mặc định
+
+volumes:
+  mongo-data:  # Định nghĩa volume để lưu trữ dữ liệu MongoDB
+
+networks:
+  my-network:
+    driver: bridge  # Đảm bảo các container có thể giao tiếp với nhau trong mạng nội bộ

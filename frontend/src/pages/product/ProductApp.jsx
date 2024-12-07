@@ -1,7 +1,7 @@
 import React from 'react'
-import Product from '../../components/ManageProduct/product'
+import Product from '../../components/admin/ManageProduct/product'
 
-import HeaderAdmin from '../../components/headerAdmin/HeaderAdmin'
+import HeaderAdmin from '../../components/admin/headerAdmin/HeaderAdmin'
 import Footer from '../../components/Footer/Footer'
 const ProductApp = () => {
   return (
