@@ -1,7 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Modal.module.css";
 
 const Modal = ({ onClose, order, isDetails, onSave, setOrder }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
+
+  // Pagination for products in both "Edit" and "View Details" modes
+  const indexOfLastProduct = currentPage * itemsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
+  const currentProducts = order.products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  // Paginate function
+  const paginate = (pageNumber) => {
+    console.log(`Changing page to: ${pageNumber}`); // Debugging page change
+    setCurrentPage(pageNumber);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setOrder((prevOrder) => ({
@@ -39,15 +53,30 @@ const Modal = ({ onClose, order, isDetails, onSave, setOrder }) => {
                 </tr>
               </thead>
               <tbody>
-                {order.products && order.products.map((product, index) => (
+                {currentProducts.map((product, index) => (
                   <tr key={index}>
-                    <td>{index + 1}</td>
+                    <td>{indexOfFirstProduct + index + 1}</td>
                     <td>{product.name}</td>
                     <td>{product.quantity}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
+
+            {/* Pagination for products */}
+            {order.products.length > itemsPerPage && (
+              <div className={styles.pagination}>
+                {Array.from({ length: Math.ceil(order.products.length / itemsPerPage) }, (_, index) => (
+                  <button
+                    key={index + 1}
+                    onClick={() => paginate(index + 1)}
+                    className={`${styles.pageButton} ${currentPage === index + 1 ? styles.activePage : ""}`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
+            )}
 
             <button onClick={onClose} className={styles.modalButton}>Close</button>
           </div>
@@ -100,9 +129,9 @@ const Modal = ({ onClose, order, isDetails, onSave, setOrder }) => {
                 </tr>
               </thead>
               <tbody>
-                {order.products && order.products.map((product, index) => (
+                {currentProducts.map((product, index) => (
                   <tr key={index}>
-                    <td>{index + 1}</td>
+                    <td>{indexOfFirstProduct + index + 1}</td>
                     <td>
                       <input
                         className={styles.modalInput}
@@ -140,8 +169,22 @@ const Modal = ({ onClose, order, isDetails, onSave, setOrder }) => {
               </tbody>
             </table>
 
+            {/* Pagination for products */}
+            {order.products.length > itemsPerPage && (
+              <div className={styles.pagination}>
+                {Array.from({ length: Math.ceil(order.products.length / itemsPerPage) }, (_, index) => (
+                  <button
+                    key={index + 1}
+                    onClick={() => paginate(index + 1)}
+                    className={`${styles.pageButton} ${currentPage === index + 1 ? styles.activePage : ""}`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
+            )}
+
             <button onClick={onSave} className={styles.modalButton}>Save</button>
-            <button onClick={onClose} className={styles.modalButton}>Close</button>
           </div>
         )}
       </div>

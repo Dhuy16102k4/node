@@ -174,9 +174,35 @@
   
   .productsTable th,
   .productsTable td {
-    padding: 10px;
+    padding: 3px;
     text-align: center  ;
     border: 1px solid #ddd;
+  }
+  /* CSS cho phân trang */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .pageButton {
+    padding: 8px 16px;
+    margin: 0 5px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    background-color: #f1f1f1;
+    color: #333;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+  }
+  
+  .pageButton:hover {
+    background-color: #ddd;
+  }
+  
+  .activePage {
+    background-color: #4CAF50;
+    color: white;
   }
   
   .productsTable th {

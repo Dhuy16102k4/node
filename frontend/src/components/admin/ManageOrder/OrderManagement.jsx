@@ -21,6 +21,12 @@ const fetchOrders = () => {
       products: [
         { name: "Smartphone", quantity: 2 },
         { name: "Headphones", quantity: 1 },
+        { name: "Smartphone", quantity: 2 },
+        { name: "Smartphone", quantity: 2 },
+        { name: "Smartphone", quantity: 2 },
+        { name: "Smartphone", quantity: 2 },
+        { name: "Smartphone", quantity: 2 },
+        
       ],
       total: 1200,
       status: "Shipped",
