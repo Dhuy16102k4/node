@@ -23,6 +23,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     position: relative;
     z-index: 10000;
+    max-height: 750px;
 }
 
 /* Nút đóng (x) */
@@ -42,14 +43,14 @@
 /* Tiêu đề modal */
 .modalTitle {
     font-size: 24px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     text-align: center;
 }
 
 /* Các trường nhập liệu (input và select) */
 .modalLabel {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     font-size: 16px;
 }
 
@@ -57,8 +58,8 @@
 .modalSelect {
     width: 100%;
     padding: 10px;
-    margin-top: 5px;
-    margin-bottom: 15px;
+    margin-top: 3px;
+    margin-bottom: 5px;
     border-radius: 4px;
     border: 1px solid #ccc;
     box-sizing: border-box;
@@ -94,7 +95,6 @@
 .detailsModal .modalContent {
     width: 80%;
     max-width: 500px;
-    padding: 30px;
 }
 
 .detailsModal .modalTitle {
@@ -127,11 +127,11 @@
 
 .detailsContainer p {
     font-size: 18px;
-    margin-bottom: 10px;
+  
 }
 
 .detailsContainer .close {
-    margin-top: 20px;
+  
     width: 100%;
     text-align: center;
 }
@@ -156,3 +156,65 @@
     outline: none;
     border: 2px solid #1565C0;
 }
+/* Product Details Styles */
+.productsContainer {
+    margin-top: 20px;
+  }
+  
+  .productsTitle {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+  
+  .productsTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .productsTable th,
+  .productsTable td {
+    padding: 5px;
+    text-align: center  ;
+    border: 1px solid #ddd;
+  }
+  /* CSS cho phân trang */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .pageButton {
+    padding: 8px 16px;
+    margin: 0 5px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    background-color: #f1f1f1;
+    color: #333;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+  }
+  
+  .pageButton:hover {
+    background-color: #ddd;
+  }
+  
+  .activePage {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .productsTable th {
+    background-color: #f1f1f1;
+    color: #333;
+  }
+  
+  .productsTable td {
+    background-color: #fff;
+  }
+  
+  .productsTable tr:hover {
+    background-color: #fafafa;
+  }
+  

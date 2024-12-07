@@ -1,33 +1,56 @@
 import React, { useState, useEffect } from "react";
 import styles from "./OrderManagement.module.css";
-import Modal from "./Modal.jsx"; // Reuse or create a new Modal for details
+import Modal from "./Modal.jsx";
 
 // Mock API for fetching orders
 const fetchOrders = () => {
   return Promise.resolve([
-    { id: 1, customerName: "John Doe", product: "Laptop", quantity: 1, total: 1000, status: "Pending" },
-    { id: 2, customerName: "Jane Smith", product: "Smartphone", quantity: 2, total: 1200, status: "Shipped" },
-    { id: 3, customerName: "Sam Green", product: "Headphones", quantity: 3, total: 300, status: "Delivered" },
-    { id: 4, customerName: "Amy White", product: "TV", quantity: 1, total: 600, status: "Pending" },
-    { id: 5, customerName: "Chris Black", product: "Tablet", quantity: 2, total: 800, status: "Shipped" },
-    { id: 6, customerName: "Diana Blue", product: "Smartwatch", quantity: 1, total: 250, status: "Delivered" },
+    {
+      id: 1,
+      customerName: "John Doe",
+      products: [
+        { name: "Laptop", quantity: 1 },
+        { name: "Mouse", quantity: 2 },
+      ],
+      total: 1000,
+      status: "Pending",
+    },
+    {
+      id: 2,
+      customerName: "Jane Smith",
+      products: [
+        { name: "Smartphone", quantity: 2 },
+        { name: "Headphones", quantity: 1 },
+        { name: "Smartphone", quantity: 2 },
+        { name: "Smartphone", quantity: 2 },
+        { name: "Smartphone", quantity: 2 },
+        { name: "Smartphone", quantity: 2 },
+        { name: "Smartphone", quantity: 2 },
+        
+      ],
+      total: 1200,
+      status: "Shipped",
+    },
+    {
+      id: 3,
+      customerName: "Sam Green",
+      products: [
+        { name: "Headphones", quantity: 3 },
+        { name: "Charger", quantity: 2 },
+      ],
+      total: 300,
+      status: "Delivered",
+    },
   ]);
 };
 
 const OrderManagement = () => {
   const [orders, setOrders] = useState([]);
-  const [newOrder, setNewOrder] = useState({
-    customerName: "",
-    product: "",
-    quantity: 1,
-    total: 0,
-    status: "Pending",
-  });
-  const [editingOrder, setEditingOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false); // New state for details modal
-  const [orderDetails, setOrderDetails] = useState(null); // State to hold the details of the order
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false); // For details modal
+  const [orderDetails, setOrderDetails] = useState(null); // State for selected order details
+  const [editingOrder, setEditingOrder] = useState(null); // State for editing order
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,31 +65,25 @@ const OrderManagement = () => {
     loadOrders();
   }, []);
 
+  const handleViewDetails = (order) => {
+    setOrderDetails(order);
+    setIsDetailsModalOpen(true);
+  };
+
   const handleEditOrder = (order) => {
     setEditingOrder(order);
-    setNewOrder({ ...order });
+    setOrderDetails({ ...order }); // Pass editable order data to the modal
     setIsModalOpen(true);
   };
 
   const handleSaveOrder = () => {
-    if (!newOrder.customerName.trim() || !newOrder.product.trim() || newOrder.total <= 0) {
-      alert("All fields must be filled correctly");
-      return;
-    }
-    const updatedOrder = { ...newOrder, id: editingOrder.id };
-    setOrders(orders.map((order) => (order.id === updatedOrder.id ? updatedOrder : order)));
-    setEditingOrder(null);
-    setNewOrder({ customerName: "", product: "", quantity: 1, total: 0, status: "Pending" });
+    setOrders(orders.map(order => order.id === editingOrder.id ? orderDetails : order));
     setIsModalOpen(false);
+    setEditingOrder(null);
   };
 
   const handleDeleteOrder = (orderId) => {
     setOrders(orders.filter((order) => order.id !== orderId));
-  };
-
-  const handleViewDetails = (order) => {
-    setOrderDetails(order);
-    setIsDetailsModalOpen(true); // Open the details modal
   };
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -83,23 +100,23 @@ const OrderManagement = () => {
     <div className={styles.container}>
       <h1>Order Management</h1>
 
-      {/* Modal for adding/editing order */}
-      {isModalOpen && (
-        <Modal
-          onClose={() => setIsModalOpen(false)}
-          onSave={handleSaveOrder}
-          order={newOrder}
-          setOrder={setNewOrder}
-          isEditing={editingOrder !== null}
-        />
-      )}
-
       {/* Modal for showing order details */}
       {isDetailsModalOpen && orderDetails && (
         <Modal
           onClose={() => setIsDetailsModalOpen(false)}
           order={orderDetails}
-          isDetails={true} // Indicate that this modal is for showing details
+          isDetails={true} // Details mode
+        />
+      )}
+
+      {/* Modal for editing order */}
+      {isModalOpen && orderDetails && (
+        <Modal
+          onClose={() => setIsModalOpen(false)}
+          order={orderDetails}
+          isDetails={false} // Editing mode
+          onSave={handleSaveOrder}
+          setOrder={setOrderDetails}
         />
       )}
 
@@ -109,8 +126,6 @@ const OrderManagement = () => {
           <thead>
             <tr>
               <th>Customer Name</th>
-              <th>Product</th>
-              <th>Quantity</th>
               <th>Total</th>
               <th>Status</th>
               <th>Actions</th>
@@ -120,12 +135,13 @@ const OrderManagement = () => {
             {currentOrders.map((order) => (
               <tr key={order.id}>
                 <td>{order.customerName}</td>
-                <td>{order.product}</td>
-                <td>{order.quantity}</td>
                 <td>{order.total} VND</td>
                 <td>{order.status}</td>
                 <td>
-                  <button onClick={() => handleEditOrder(order)} className={styles.buttonEdit}>
+                  <button
+                    onClick={() => handleEditOrder(order)}
+                    className={styles.buttonEdit}
+                  >
                     Edit
                   </button>
                   <button
@@ -138,7 +154,7 @@ const OrderManagement = () => {
                     onClick={() => handleViewDetails(order)}
                     className={styles.buttonDetails}
                   >
-                    Details
+                    View Details
                   </button>
                 </td>
               </tr>
