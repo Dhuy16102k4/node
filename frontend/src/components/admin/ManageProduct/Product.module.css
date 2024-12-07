@@ -14,6 +14,28 @@
   color: #333;
   margin-bottom: 20px;
 }
+.imagePreviewContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px; /* Khoảng cách giữa các hình ảnh */
+  margin-top: 10px;
+}
+
+.imageWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.preview {
+  width: 100px; /* Đặt kích thước cố định cho hình ảnh */
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 5px;
+}
 
 /* Modal Overlay */
 .modalOverlay {

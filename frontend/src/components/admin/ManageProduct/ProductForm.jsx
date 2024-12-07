@@ -18,16 +18,15 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
       setName(editingProduct.name);
       setDescription(editingProduct.description);
       setPrice(editingProduct.price);
-      setImage(null);  // Reset image when editing a product (clear the old file preview)
+      setImage(null); // Reset image when editing a product
       setImageName(editingProduct.imageName || '');
-      setId(editingProduct._id || null);  // Ensure '_id' is being used
+      setId(editingProduct._id || null);
       setCategoryId(editingProduct.category?._id || '');
       setCategoryName(editingProduct.category?.name || '');
       setStock(editingProduct.stock || '');
     }
   }, [editingProduct]);
 
-  // Handle image change
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -36,7 +35,6 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
     }
   };
 
-  // Handle category change
   const handleCategoryChange = (e) => {
     const selectedCategoryId = e.target.value;
     const selectedCategory = categories.find((cat) => cat._id === selectedCategoryId);
@@ -44,7 +42,6 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
     setCategoryName(selectedCategory ? selectedCategory.name : '');
   };
 
-  // Handle adding a new product
   const handleAddProduct = (e) => {
     e.preventDefault();
 
@@ -60,21 +57,18 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
     }
 
     addProduct(formData);
-
-    // Reset form after submit
     resetForm();
   };
 
-  // Handle updating an existing product
   const handleUpdateProduct = (e) => {
     e.preventDefault();
     if (!id) {
-      console.error("Product ID is missing!");
-      return; // Do not proceed without a valid ID
+      console.error('Product ID is missing!');
+      return;
     }
 
     const formData = new FormData();
-    formData.append('id', id);  // Ensure the correct 'id' format
+    formData.append('id', id);
     formData.append('name', name);
     formData.append('description', description);
     formData.append('price', price);
@@ -85,11 +79,10 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
       formData.append('img', image);
     }
 
-    updateProduct(formData); // Call updateProduct and pass formData
+    updateProduct(formData);
     resetForm();
   };
 
-  // Reset form fields after add or update
   const resetForm = () => {
     setName('');
     setDescription('');
@@ -100,7 +93,7 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
     setCategoryName('');
     setStock('');
     setId(null);
-    document.getElementById('image-input').value = ''; // Reset file input
+    document.getElementById('image-input').value = '';
   };
 
   return (
@@ -158,38 +151,29 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
           onChange={handleImageChange}
         />
 
-        {imageName && <div className={styles.fileName}>Tệp đã chọn: {imageName}</div>}
-
-        
-
-        {/* Display current image if editing */}
-
         {editingProduct && editingProduct.img && (
-          <div>
-            {/* Kiểm tra và sửa lại đường dẫn nếu cần */}
-            <p>Current Image:</p>
-            <img
-              src={editingProduct.img 
-                ? `${import.meta.env.VITE_API_URL}${editingProduct.img.replace(/\\/g, '/')}`
-                : null} 
-              alt="Current Pic" 
-              className={styles.preview} 
-              
-            />
-            <p>New Image:</p>
+          <div className={styles.imagePreviewContainer}>
+            <div className={styles.imageWrapper}>
+              <p>Current Image:</p>
+              <img
+                src={`${import.meta.env.VITE_API_URL}${editingProduct.img.replace(/\\/g, '/')}`}
+                alt="Current Pic"
+                className={styles.preview}
+              />
+            </div>
+            {image && (
+              <div className={styles.imageWrapper}>
+                <p>New Image:</p>
+                <img src={URL.createObjectURL(image)} alt="Preview" className={styles.preview} />
+              </div>
+            )}
           </div>
-          
         )}
-       
-        {/* Show the preview of the new image if selected */}
-        {image && <img src={URL.createObjectURL(image)} alt="Preview" className={styles.preview} />}
 
         <button className={styles.button} type="submit">
           {editingProduct ? 'Cập nhật' : 'Thêm'}
         </button>
       </form>
-
-      {categoryName && <div className={styles.categoryName}>Danh mục: {categoryName}</div>}
     </div>
   );
 };
