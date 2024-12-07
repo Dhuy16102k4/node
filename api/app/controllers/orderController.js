@@ -163,6 +163,8 @@ class OrderController {
     }
 
     // Phương thức hiển thị tất cả đơn hàng của người dùng
+    
+    //user display
     async display(req, res) {
         try {
             const orders = await findUserOrders(req.user._id);
@@ -174,6 +176,51 @@ class OrderController {
             res.status(500).json({ message: 'Lỗi khi lấy thông tin đơn hàng', error: err.message });
         }
     }
+    async adminDisplay(req, res) {
+        const status = req.query.status || ''; 
+        const page = parseInt(req.query.page) || 1; 
+        const orderPerPage = parseInt(req.query.limit) || 3; 
+    
+    
+        if (page <= 0 || orderPerPage <= 0) {
+            return res.status(400).json({ message: 'Invalid pagination parameters.' });
+        }
+    
+        try {
+            // điều kiện lọc
+            let filter = {};
+            if (status) {
+                filter.status = status; 
+            }
+            const [orders, totalOrders] = await Promise.all([
+                Order.find(filter) 
+                    .populate('status') 
+                    .skip((page - 1) * orderPerPage) 
+                    .limit(orderPerPage) 
+                    .lean(), 
+                Order.countDocuments(filter) 
+            ]);
+    
+            const totalPages = Math.ceil(totalOrders / orderPerPage);
+    
+        
+            if (page > totalPages) {
+                return res.status(400).json({ message: 'Page exceeds total pages.' });
+            }
+    
+        
+            res.status(200).json({
+                orders, 
+                totalOrders, 
+                totalPages, 
+                currentPage: page, 
+                ordersPerPage: orderPerPage 
+            });
+        } catch (err) {
+            res.status(500).json({ message: 'Lỗi khi lấy thông tin đơn hàng', error: err.message });
+        }
+    }
+    
 
     // Phương thức lấy chi tiết đơn hàng
     async getOrderById(req, res) {
@@ -188,6 +235,8 @@ class OrderController {
             res.status(500).json({ message: 'Lỗi khi lấy thông tin đơn hàng', error: err.message });
         }
     }
+    
+
 }
 
 module.exports = new OrderController();
