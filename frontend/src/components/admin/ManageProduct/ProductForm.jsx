@@ -170,7 +170,7 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
           </div>
         )}
 
-        <button className={styles.button} type="submit">
+        <button className={`${styles.button} ${styles.adddButton}`} type="submit">
           {editingProduct ? 'Update' : 'Add'}
         </button>
       </form>

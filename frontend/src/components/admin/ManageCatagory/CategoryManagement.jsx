@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./CategoryManagement.module.css";
-import Modal from "./modal"; // Import the Modal component
+import Modal from "./modal.jsx"; // Import the Modal component
 
 // Mock API calls
 const fetchCategories = () => {

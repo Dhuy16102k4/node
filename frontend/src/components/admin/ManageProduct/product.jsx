@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import ProductList from './ProductList';
-import ProductForm from './ProductForm';
-import Modal from './Modal';
+import ProductList from './ProductList.jsx';
+import ProductForm from './ProductForm.jsx';
+import Modal from './modal.jsx';
 import styles from './Product.module.css';
+
 import axiosInstance from '../../../utils/axiosConfig'; // Axios instance for API calls
 import Pagination from '../../Pagination/Pagination';
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./OrderManagement.module.css";
-import Modal from "./Modal"; // Modal to handle the add/edit forms
+import Modal from "./Modal.jsx"; // Reuse or create a new Modal for details
 
 // Mock API for fetching orders
 const fetchOrders = () => {
@@ -21,11 +21,13 @@ const OrderManagement = () => {
     product: "",
     quantity: 1,
     total: 0,
-    status: "Pending", // Add status to the new order
+    status: "Pending",
   });
   const [editingOrder, setEditingOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false); // New state for details modal
+  const [orderDetails, setOrderDetails] = useState(null); // State to hold the details of the order
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,17 +41,6 @@ const OrderManagement = () => {
     };
     loadOrders();
   }, []);
-
-  const handleAddOrder = () => {
-    if (!newOrder.customerName.trim() || !newOrder.product.trim() || newOrder.total <= 0) {
-      alert("All fields must be filled correctly");
-      return;
-    }
-    const addedOrder = { id: Date.now(), ...newOrder };
-    setOrders([...orders, addedOrder]);
-    setNewOrder({ customerName: "", product: "", quantity: 1, total: 0, status: "Pending" });
-    setIsModalOpen(false);
-  };
 
   const handleEditOrder = (order) => {
     setEditingOrder(order);
@@ -73,6 +64,11 @@ const OrderManagement = () => {
     setOrders(orders.filter((order) => order.id !== orderId));
   };
 
+  const handleViewDetails = (order) => {
+    setOrderDetails(order);
+    setIsDetailsModalOpen(true); // Open the details modal
+  };
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const indexOfLastOrder = currentPage * itemsPerPage;
@@ -87,19 +83,23 @@ const OrderManagement = () => {
     <div className={styles.container}>
       <h1>Order Management</h1>
 
-      {/* Button to open modal for adding new order */}
-      <button onClick={() => setIsModalOpen(true)} className={styles.buttonAdd}>
-        Add Order
-      </button>
-
       {/* Modal for adding/editing order */}
       {isModalOpen && (
         <Modal
           onClose={() => setIsModalOpen(false)}
-          onSave={editingOrder ? handleSaveOrder : handleAddOrder}
+          onSave={handleSaveOrder}
           order={newOrder}
           setOrder={setNewOrder}
           isEditing={editingOrder !== null}
+        />
+      )}
+
+      {/* Modal for showing order details */}
+      {isDetailsModalOpen && orderDetails && (
+        <Modal
+          onClose={() => setIsDetailsModalOpen(false)}
+          order={orderDetails}
+          isDetails={true} // Indicate that this modal is for showing details
         />
       )}
 
@@ -122,11 +122,7 @@ const OrderManagement = () => {
                 <td>{order.customerName}</td>
                 <td>{order.product}</td>
                 <td>{order.quantity}</td>
-
                 <td>{order.total} VND</td>
-
-
-
                 <td>{order.status}</td>
                 <td>
                   <button onClick={() => handleEditOrder(order)} className={styles.buttonEdit}>
@@ -137,6 +133,12 @@ const OrderManagement = () => {
                     className={styles.buttonDelete}
                   >
                     Delete
+                  </button>
+                  <button
+                    onClick={() => handleViewDetails(order)}
+                    className={styles.buttonDetails}
+                  >
+                    Details
                   </button>
                 </td>
               </tr>
