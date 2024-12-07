@@ -32,7 +32,7 @@ const HeaderAdmin = () => {
               </Link>
             </li>
             <li>
-              <Link to="../admin/user" className="navIcon">
+              <Link to="../admin/user" className="navIcon"  onClick={() => setMobile(false)}>
                 <GridViewOutlinedIcon />
                 User Manage
               </Link>

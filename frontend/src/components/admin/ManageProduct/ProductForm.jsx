@@ -98,26 +98,26 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
 
   return (
     <div>
-      <h2>{editingProduct ? 'Sửa sản phẩm' : 'Thêm sản phẩm'}</h2>
+      <h2>{editingProduct ? 'Edit Product' : 'Add Product'}</h2>
       <form className={styles.form} onSubmit={editingProduct ? handleUpdateProduct : handleAddProduct}>
         <input
           type="text"
           className={styles.input}
-          placeholder="Tên sản phẩm"
+          placeholder="Name Product"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
         />
         <textarea
           className={styles.textarea}
-          placeholder="Mô tả sản phẩm"
+          placeholder="Product Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         ></textarea>
         <input
           type="number"
           className={styles.input}
-          placeholder="Giá sản phẩm"
+          placeholder="Price"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
           required
@@ -128,7 +128,7 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
           onChange={handleCategoryChange}
           required
         >
-          <option value="">Chọn danh mục</option>
+          <option value="">Choose Category</option>
           {categories.map((cat) => (
             <option key={cat._id} value={cat._id}>
               {cat.name}
@@ -138,7 +138,7 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
         <input
           type="number"
           className={styles.input}
-          placeholder="Số lượng trong kho"
+          placeholder="Quantity In Stock"
           value={stock}
           onChange={(e) => setStock(e.target.value)}
           required
@@ -171,7 +171,7 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
         )}
 
         <button className={styles.button} type="submit">
-          {editingProduct ? 'Cập nhật' : 'Thêm'}
+          {editingProduct ? 'Update' : 'Add'}
         </button>
       </form>
     </div>

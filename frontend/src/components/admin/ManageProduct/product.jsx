@@ -18,7 +18,7 @@ const Product = () => {
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState(null); // Error state
   const [id, setId] = useState(null);
-  const productsPerPage = 3; // Products per page
+  const productsPerPage = 5; // Products per page
 
   // Fetch products and categories
   useEffect(() => {
@@ -125,7 +125,7 @@ const Product = () => {
 
   return (
     <div className={styles['admin-container']}>
-      <h1 className={styles.header}>Quản lý sản phẩm</h1>
+      <h1 className={styles.header}>Product Management</h1>
 
       {/* Add Product Button */}
       <button className={styles.addProductButton} onClick={openAddProductModal}>

@@ -22,10 +22,10 @@ const ProductList = ({ products, editProduct, deleteProduct, categories, selecte
 
   return (
     <div>
-      <h2>Danh sách sản phẩm</h2>
+      <h2>Product List</h2>
       <div className={styles.filterContainer}>
         <label htmlFor="category" className={styles.filterLabel}>
-          Lọc theo danh mục:
+        Filter by category:
         </label>
         <select
           id="category"
@@ -33,7 +33,7 @@ const ProductList = ({ products, editProduct, deleteProduct, categories, selecte
           value={selectedCategory}
           onChange={handleCategoryChange}
         >
-          <option value="">Tất cả</option>
+          <option value="">All</option>
           {categories.map((category) => (
             <option key={category._id} value={category._id}> {/* Pass ObjectId */}
               {category.name}
@@ -44,13 +44,13 @@ const ProductList = ({ products, editProduct, deleteProduct, categories, selecte
       <table className={styles['product-table']}>
         <thead>
           <tr>
-            <th>Hình ảnh</th>
-            <th>Tên sản phẩm</th>
-            <th>Giá tiền</th>
-            <th>Danh mục</th>
-            <th>Số lượng trong kho</th>
-            <th>Mô tả</th>
-            <th colSpan="2">Thao tác</th> {/* Cột thao tác cho Sửa và Xóa */}
+            <th>Image</th>
+            <th>Name Product</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Stock</th>
+            <th>Description</th>
+            <th colSpan="2">Action</th> {/* Cột thao tác cho Sửa và Xóa */}
           </tr>
         </thead>
         <tbody>
@@ -83,7 +83,7 @@ const ProductList = ({ products, editProduct, deleteProduct, categories, selecte
                     className={`${styles.button} ${styles['edit-button']}`}
                     onClick={() => editProduct(product)}
                   >
-                    Sửa
+                    Edit
                   </button>
                 </td>
                 <td>
@@ -91,7 +91,7 @@ const ProductList = ({ products, editProduct, deleteProduct, categories, selecte
                     className={`${styles.button} ${styles['delete-button']}`}
                     onClick={() => deleteProduct(product._id)}
                   >
-                    Xóa
+                    Delete
                   </button>
                 </td>
               </tr>
