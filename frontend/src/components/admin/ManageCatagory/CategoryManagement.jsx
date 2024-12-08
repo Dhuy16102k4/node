@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from "react";
 import styles from "./CategoryManagement.module.css";
 import Modal from "./modal.jsx"; // Import the Modal component
+import axiosInstance from "../../../utils/axiosConfig"; // Import axiosInstance
 
-// Mock API calls
-const fetchCategories = () => {
-  return Promise.resolve([
-    { id: 1, name: "Electronics", description: "Devices and gadgets" },
-    { id: 2, name: "Clothing", description: "Fashion and apparel" },
-    { id: 3, name: "Books", description: "Printed and digital books" },
-    { id: 4, name: "Home Appliances", description: "Kitchen and home gadgets" },
-    { id: 5, name: "Sports", description: "Sports equipment and gear" },
-    { id: 6, name: "Music", description: "Musical instruments and accessories" },
-    { id: 7, name: "Beauty", description: "Cosmetics and skincare" },
-    { id: 8, name: "Toys", description: "Toys and games for kids" },
-    { id: 9, name: "Food", description: "Groceries and food items" },
-    { id: 10, name: "Books", description: "Printed and digital books" },
-  ]);
+// Fetch categories from API with pagination
+const fetchCategories = async (page, limit) => {
+  try {
+    const response = await axiosInstance.get(`/category?page=${page}&limit=${limit}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return { categories: [], currentPage: 1, totalPages: 1 };
+  }
 };
 
 const CategoryManagement = () => {
@@ -25,70 +21,91 @@ const CategoryManagement = () => {
   const [loading, setLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // Phân trang
+  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 2;
+  const [totalPages, setTotalPages] = useState(1);
 
+  // Fetch categories on page load and whenever the page number changes
   useEffect(() => {
     const loadCategories = async () => {
-      const fetchedCategories = await fetchCategories();
-      setCategories(fetchedCategories);
-      setLoading(false);
+      setLoading(true); // Start loading before fetching categories
+      const fetchedData = await fetchCategories(currentPage, itemsPerPage);
+      setCategories(fetchedData.categories); // Set the fetched categories
+      setCurrentPage(fetchedData.currentPage); // Update the current page
+      setTotalPages(fetchedData.totalPages); // Update the total pages
+      setLoading(false); // Stop loading once the categories are fetched
     };
     loadCategories();
-  }, []);
+  }, [currentPage]); // Re-fetch when the currentPage changes
 
-  const handleAddCategory = () => {
+  // Handle adding a category
+  const handleAddCategory = async () => {
     if (!categoryData.name.trim() || !categoryData.description.trim()) {
       alert("Both category name and description are required");
       return;
     }
-    const addedCategory = { id: Date.now(), ...categoryData };
-    setCategories([...categories, addedCategory]);
-    setCategoryData({ name: "", description: "" });
-    setIsModalVisible(false); // Hide modal after adding
+
+    try {
+      const response = await axiosInstance.post("/category", categoryData);
+      setCategories((prevCategories) => [
+        ...prevCategories,
+        response.data.category,
+      ]);
+      setCategoryData({ name: "", description: "" });
+      setIsModalVisible(false);
+    } catch (error) {
+      console.error('Error adding category:', error);
+    }
   };
 
-  const handleEditCategory = (category) => {
-    setEditingCategory(category);
-    setCategoryData({ name: category.name, description: category.description });
-    setIsModalVisible(true); // Show modal when editing
-  };
-
-  const handleSaveCategory = () => {
+  // Handle editing a category
+  const handleEditCategory = async () => {
     if (!categoryData.name.trim() || !categoryData.description.trim()) {
       alert("Both category name and description are required");
       return;
     }
-    const updatedCategory = { ...categoryData, id: editingCategory.id };
-    setCategories(categories.map((category) =>
-      category.id === updatedCategory.id ? updatedCategory : category
-    ));
-    setEditingCategory(null);
-    setCategoryData({ name: "", description: "" });
-    setIsModalVisible(false); // Hide modal after saving
+
+    try {
+      const response = await axiosInstance.put(`/category/${editingCategory._id}`, categoryData);
+      setCategories((prevCategories) =>
+        prevCategories.map((category) =>
+          category._id === editingCategory._id ? response.data.category : category
+        )
+      );
+      setEditingCategory(null);
+      setCategoryData({ name: "", description: "" });
+      setIsModalVisible(false);
+    } catch (error) {
+      console.error('Error updating category:', error);
+    }
   };
 
-  const handleDeleteCategory = (categoryId) => {
-    setCategories(categories.filter((category) => category.id !== categoryId));
+  // Handle deleting a category
+  const handleDeleteCategory = async (categoryId) => {
+    try {
+      await axiosInstance.delete(`/category/${categoryId}`);
+      setCategories((prevCategories) =>
+        prevCategories.filter((category) => category._id !== categoryId)
+      );
+    } catch (error) {
+      console.error('Error deleting category:', error);
+    }
   };
 
+  // Handle modal cancel button
   const handleCancel = () => {
-    setIsModalVisible(false); // Hide the modal when canceled
-    setCategoryData({ name: "", description: "" }); // Clear form fields
-    setEditingCategory(null); // Clear any editing state
+    setIsModalVisible(false);
+    setCategoryData({ name: "", description: "" });
+    setEditingCategory(null);
   };
 
+  // Handle input changes in the modal
   const handleInputChange = (field, value) => {
     setCategoryData((prevData) => ({ ...prevData, [field]: value }));
   };
 
-  // Lấy danh sách các category cho trang hiện tại
-  const indexOfLastCategory = currentPage * itemsPerPage;
-  const indexOfFirstCategory = indexOfLastCategory - itemsPerPage;
-  const currentCategories = categories.slice(indexOfFirstCategory, indexOfLastCategory);
-
-  // Chuyển sang trang kế tiếp
+  // Handle pagination
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   if (loading) {
@@ -99,7 +116,7 @@ const CategoryManagement = () => {
     <div className={styles.container}>
       <h1>Category Management</h1>
 
-      {/* Nút thêm category */}
+      {/* Button to add category */}
       <button 
         onClick={() => setIsModalVisible(true)} 
         className={styles.buttonAdd}
@@ -111,13 +128,13 @@ const CategoryManagement = () => {
       <Modal
         isVisible={isModalVisible}
         onClose={handleCancel}
-        onSave={editingCategory ? handleSaveCategory : handleAddCategory}
+        onSave={editingCategory ? handleEditCategory : handleAddCategory}
         categoryData={categoryData}
         onInputChange={handleInputChange}
         isEditing={!!editingCategory}
       />
 
-      {/* Bảng hiển thị danh sách category */}
+      {/* Table displaying categories */}
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
@@ -128,19 +145,23 @@ const CategoryManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {currentCategories.map((category) => (
-              <tr key={category.id}>
+            {categories.map((category) => (
+              <tr key={category._id}>
                 <td className={styles.td}>{category.name}</td>
                 <td className={styles.td}>{category.description}</td>
                 <td className={styles.td}>
                   <button
-                    onClick={() => handleEditCategory(category)}
+                    onClick={() => {
+                      setEditingCategory(category);
+                      setCategoryData({ name: category.name, description: category.description });
+                      setIsModalVisible(true);
+                    }}
                     className={styles.buttonEdit}
                   >
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDeleteCategory(category.id)}
+                    onClick={() => handleDeleteCategory(category._id)}
                     className={styles.buttonDelete}
                   >
                     Delete
@@ -152,9 +173,9 @@ const CategoryManagement = () => {
         </table>
       </div>
 
-      {/* Phân trang */}
+      {/* Pagination */}
       <div className={styles.pagination}>
-        {Array.from({ length: Math.ceil(categories.length / itemsPerPage) }, (_, index) => (
+        {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index + 1}
             onClick={() => paginate(index + 1)}
