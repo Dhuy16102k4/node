@@ -74,6 +74,7 @@ class OrderController {
                     quantity: item.quantity,
                     price: item.price
                 })),
+                email,
                 totalPrice,
                 address,
                 phone,
@@ -134,34 +135,7 @@ class OrderController {
         }
     }
 
-    // Phương thức cập nhật trạng thái đơn hàng
-    async updateStatus(req, res) {
-        const orderId = req.params.id;
-        const { status } = req.body;
-        try {
-            const order = await Order.findById(orderId);
-            if (!order) {
-                return res.status(400).json({ message: 'Không tìm thấy đơn hàng để cập nhật.' });
-            }
-
-            const validStatuses = ['Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'];
-            if (!validStatuses.includes(status)) {
-                return res.status(400).json({ message: 'Trạng thái không hợp lệ.' });
-            }
-
-            order.status = status;
-
-            // Gửi email theo trạng thái mới
-            await sendEmail(req.user.email, `Trạng thái đơn hàng: ${status}`, emailContent[status](order._id));
-
-            await order.save();
-
-            res.status(200).json({ message: `Trạng thái đơn hàng đã được cập nhật thành ${status}`, order });
-        } catch (err) {
-            res.status(500).json({ message: 'Lỗi khi cập nhật trạng thái đơn hàng', error: err.message });
-        }
-    }
-
+    
     // Phương thức hiển thị tất cả đơn hàng của người dùng
     
     //user display
@@ -192,8 +166,10 @@ class OrderController {
             if (status) {
                 filter.status = status; 
             }
+            
             const [orders, totalOrders] = await Promise.all([
-                Order.find(filter) 
+                Order.find(filter)
+                    .populate('user', 'username') 
                     .populate('status') 
                     .skip((page - 1) * orderPerPage) 
                     .limit(orderPerPage) 
@@ -207,21 +183,98 @@ class OrderController {
             if (page > totalPages) {
                 return res.status(400).json({ message: 'Page exceeds total pages.' });
             }
-    
+          
+            
+            
         
             res.status(200).json({
                 orders, 
-                totalOrders, 
+
                 totalPages, 
                 currentPage: page, 
-                ordersPerPage: orderPerPage 
+                limit: orderPerPage 
             });
         } catch (err) {
             res.status(500).json({ message: 'Lỗi khi lấy thông tin đơn hàng', error: err.message });
         }
     }
+    // Phương thức cập nhật trạng thái đơn hàng
+   async updateStatus(req, res) {
+    const orderId = req.params.id;
+    
+    const { status, email, phone } = req.body; // Chỉ lấy status, email và phone từ body (nếu cần)
+
+    try {
+        const order = await Order.findById(orderId);
+        if (!order) {
+            return res.status(400).json({ message: 'Không tìm thấy đơn hàng để cập nhật.' });
+        }
+
+        const validStatuses = ['Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ message: 'Trạng thái không hợp lệ.' });
+        }
+
+        // Cập nhật trạng thái đơn hàng mà không thay đổi các trường khác như email, phone
+        order.status = status;
+
+        // Nếu bạn muốn cập nhật email và phone khi có thay đổi
+        if (email) order.email = email;
+        if (phone) order.phone = phone;
+
+        await order.save();
+        console.log('Updated Order:', order);
+
+        res.status(200).json({ message: `Trạng thái đơn hàng đã được cập nhật thành ${status}`, order });
+    } catch (err) {
+        res.status(500).json({ message: 'Lỗi khi cập nhật trạng thái đơn hàng', error: err.message });
+    }
+}
+
     
 
+    async deleteOrder(req, res) {
+        const orderId = req.params.id;
+        if (!mongoose.Types.ObjectId.isValid(orderId)) {
+            return res.status(400).json({ message: 'ID không hợp lệ.' });
+        }
+    
+        try {
+            const order = await Order.findById(orderId);
+            if (!order) {
+                return res.status(400).json({ message: 'Không tìm thấy đơn hàng để xóa.' });
+            }
+           // const email = order.email;
+          //  console.log(email);
+            // Kiểm tra trạng thái đơn hàng, không thể xóa nếu đã được vận chuyển hoặc giao
+            if (['Shipped', 'Delivered'].includes(order.status)) {
+                return res.status(400).json({ message: 'Không thể xóa đơn hàng đã được vận chuyển hoặc giao.' });
+            }
+    
+            // Xóa đơn hàng
+            
+            const deletedOrder = await Order.deleteOne({ _id: orderId });
+            if (deletedOrder.deletedCount === 0) {
+                return res.status(400).json({ message: 'Order not found or already deleted' });
+            }
+            // Kiểm tra nếu có email, và gửi email thông báo hủy đơn hàng
+            if (order.email && validateEmail(order.email)) {
+                try {
+                    await sendEmail(order.email, 'Đơn hàng đã bị xóa', `Đơn hàng ID ${orderId} của bạn đã bị xóa.`);
+                } catch (emailError) {
+                    console.error('Error sending email to', order.email, emailError);
+                }
+            } else {
+                console.error('Invalid or missing email for order:', orderId);
+            }
+            
+            res.status(200).json({ message: 'Đơn hàng đã được xóa thành công.' });
+        } catch (err) {
+            res.status(500).json({ message: 'Lỗi khi xóa đơn hàng', error: err.message });
+        }
+    }
+    
+   
     // Phương thức lấy chi tiết đơn hàng
     async getOrderById(req, res) {
         const { orderId } = req.params;
@@ -235,8 +288,6 @@ class OrderController {
             res.status(500).json({ message: 'Lỗi khi lấy thông tin đơn hàng', error: err.message });
         }
     }
-    
-
 }
 
 module.exports = new OrderController();

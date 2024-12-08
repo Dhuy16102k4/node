@@ -7,14 +7,21 @@ const authenticateToken = require('../middlerware/authToken');
 router.get('/detail/:id',authenticateToken,ordertController.getOrderById);
 //thanh toan
 router.post('/submit',authenticateToken,ordertController.add);
-//huy thanh toan
-router.put('/delete/:id',authenticateToken,ordertController.cancelOrders);
-//cap nhat trang thai don hang 
-router.put('/update/:id',authenticateToken,ordertController.updateStatus);
+//huy đơn hàng
+router.put('/delete/:id',ordertController.cancelOrders);
 //display
 router.get('/',authenticateToken,ordertController.display);
-//admin display
 
+
+
+//cap nhat trang thai don hang 
+router.put('/:id',ordertController.updateStatus);
+
+//xóa đơn hàng
+router.delete('/:id',ordertController.deleteOrder)
+
+
+//admin display
 router.get('/admin/',ordertController.adminDisplay)
 
 

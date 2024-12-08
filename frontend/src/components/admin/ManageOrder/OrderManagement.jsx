@@ -1,46 +1,59 @@
 import React, { useState, useEffect } from "react";
 import styles from "./OrderManagement.module.css";
-import Modal from "./Modal.jsx"; // Reuse or create a new Modal for details
-
-// Mock API for fetching orders
-const fetchOrders = () => {
-  return Promise.resolve([
-    { id: 1, customerName: "John Doe", product: "Laptop", quantity: 1, total: 1000, status: "Pending" },
-    { id: 2, customerName: "Jane Smith", product: "Smartphone", quantity: 2, total: 1200, status: "Shipped" },
-    { id: 3, customerName: "Sam Green", product: "Headphones", quantity: 3, total: 300, status: "Delivered" },
-    { id: 4, customerName: "Amy White", product: "TV", quantity: 1, total: 600, status: "Pending" },
-    { id: 5, customerName: "Chris Black", product: "Tablet", quantity: 2, total: 800, status: "Shipped" },
-    { id: 6, customerName: "Diana Blue", product: "Smartwatch", quantity: 1, total: 250, status: "Delivered" },
-  ]);
-};
+import Modal from "./Modal.jsx"; 
+import axiosInstance from '../../../utils/axiosConfig'; 
 
 const OrderManagement = () => {
   const [orders, setOrders] = useState([]);
-  const [newOrder, setNewOrder] = useState({
-    customerName: "",
-    product: "",
-    quantity: 1,
-    total: 0,
-    status: "Pending",
-  });
+  const [status, setStatus] = useState("");
+  const [allStatuses] = useState(["Pending", "Shipped", "Delivered", "Cancelled"]);
   const [editingOrder, setEditingOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [newOrder, setNewOrder] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false); // New state for details modal
-  const [orderDetails, setOrderDetails] = useState(null); // State to hold the details of the order
-
-  // Pagination states
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [orderDetails, setOrderDetails] = useState(null);
+  const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const orderPerPage = 3; // Update to match with the API limit in the response
+
+  const handleStatusChange = (e) => {
+    setStatus(e.target.value);
+    setCurrentPage(1); // Reset page to 1 on status change
+  };
 
   useEffect(() => {
-    const loadOrders = async () => {
-      const fetchedOrders = await fetchOrders();
-      setOrders(fetchedOrders);
-      setLoading(false);
+    console.log("Current Page in useEffect:", currentPage);
+  
+    const fetchOrders = async () => {
+      setLoading(true);
+      setErrorMessage(null);
+  
+      try {
+        const response = await axiosInstance.get('/order/admin', {
+          params: {
+            status: status === 'All' ? '' : status,  // Đảm bảo status chính xác
+            page: currentPage,  // Sử dụng currentPage từ state
+            limit: orderPerPage,
+          },
+        });
+  
+        console.log("Fetched Orders:", response.data.orders);
+  
+        setOrders(response.data.orders);
+        setTotalPages(response.data.totalPages);
+      } catch (err) {
+        setErrorMessage('Failed to load orders. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
     };
-    loadOrders();
-  }, []);
+  
+    fetchOrders(); // Fetch dữ liệu mỗi khi currentPage hoặc status thay đổi
+  }, [status, currentPage]);
+  
 
   const handleEditOrder = (order) => {
     setEditingOrder(order);
@@ -49,30 +62,81 @@ const OrderManagement = () => {
   };
 
   const handleSaveOrder = () => {
-    if (!newOrder.customerName.trim() || !newOrder.product.trim() || newOrder.total <= 0) {
-      alert("All fields must be filled correctly");
+    if (!newOrder.status) {
+      alert("Please select a status");
       return;
     }
-    const updatedOrder = { ...newOrder, id: editingOrder.id };
-    setOrders(orders.map((order) => (order.id === updatedOrder.id ? updatedOrder : order)));
+
+    const updatedOrder = { ...newOrder, id: editingOrder._id };
+
+    handleUpdateOrderStatus(
+      editingOrder._id,  
+      newOrder.status,   
+      newOrder.email,    
+      newOrder.phone     
+    );
+
+    setOrders(orders.map((order) =>
+      order._id === updatedOrder._id ? updatedOrder : order
+    ));
+
     setEditingOrder(null);
-    setNewOrder({ customerName: "", product: "", quantity: 1, total: 0, status: "Pending" });
     setIsModalOpen(false);
   };
 
-  const handleDeleteOrder = (orderId) => {
-    setOrders(orders.filter((order) => order.id !== orderId));
+  const handleUpdateOrderStatus = async (orderId, newStatus, email, phone) => {
+    try {
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId ? { ...order, status: newStatus } : order
+        )
+      );
+
+      const response = await axiosInstance.put(`order/${orderId}`, {
+        status: newStatus,
+        email: email,
+        phone: phone,
+      });
+
+      if (response.status === 200) {
+        setErrorMessage(""); 
+      } else {
+        setErrorMessage("Failed to update order status");
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order._id === orderId ? { ...order, status: order.status } : order
+          )
+        );
+      }
+    } catch (error) {
+      setErrorMessage("An error occurred while updating the order status");
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId ? { ...order, status: order.status } : order
+        )
+      );
+    }
   };
 
-  const handleViewDetails = (order) => {
-    setOrderDetails(order);
-    setIsDetailsModalOpen(true); // Open the details modal
+  const handleDeleteOrder = async (orderId) => {
+    try {
+      await axiosInstance.delete(`order/${orderId}`);
+      setOrders(orders.filter((order) => order._id !== orderId));
+    } catch (error) {
+      console.error("Error deleting order:", error);
+    }
   };
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const goToNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
 
-  const indexOfLastOrder = currentPage * itemsPerPage;
-  const indexOfFirstOrder = indexOfLastOrder - itemsPerPage;
+  const goToPrevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const indexOfLastOrder = currentPage * orderPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - orderPerPage;
   const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
 
   if (loading) {
@@ -83,7 +147,23 @@ const OrderManagement = () => {
     <div className={styles.container}>
       <h1>Order Management</h1>
 
-      {/* Modal for adding/editing order */}
+      <div className={styles.statusFilter}>
+        <label htmlFor="status">Filter by Status: </label>
+        <select
+          id="status"
+          value={status}
+          onChange={handleStatusChange}
+          className={styles.selectStatus}
+        >
+          <option value="">All</option>
+          {allStatuses.map((statusItem) => (
+            <option key={statusItem} value={statusItem}>
+              {statusItem}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {isModalOpen && (
         <Modal
           onClose={() => setIsModalOpen(false)}
@@ -91,26 +171,25 @@ const OrderManagement = () => {
           order={newOrder}
           setOrder={setNewOrder}
           isEditing={editingOrder !== null}
+          showStatusField={true}
         />
       )}
 
-      {/* Modal for showing order details */}
       {isDetailsModalOpen && orderDetails && (
         <Modal
           onClose={() => setIsDetailsModalOpen(false)}
           order={orderDetails}
-          isDetails={true} // Indicate that this modal is for showing details
+          isDetails={true}
         />
       )}
 
-      {/* Table to display orders */}
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
             <tr>
               <th>Customer Name</th>
-              <th>Product</th>
-              <th>Quantity</th>
+              <th>Order Id</th>
+              <th>Address</th>
               <th>Total</th>
               <th>Status</th>
               <th>Actions</th>
@@ -118,18 +197,18 @@ const OrderManagement = () => {
           </thead>
           <tbody>
             {currentOrders.map((order) => (
-              <tr key={order.id}>
-                <td>{order.customerName}</td>
-                <td>{order.product}</td>
-                <td>{order.quantity}</td>
-                <td>{order.total} VND</td>
+              <tr key={order._id}>
+                <td>{order.user.username}</td>
+                <td>{order._id}</td>
+                <td>{order.address}</td>
+                <td>{order.totalPrice} VND</td>
                 <td>{order.status}</td>
                 <td>
                   <button onClick={() => handleEditOrder(order)} className={styles.buttonEdit}>
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDeleteOrder(order.id)}
+                    onClick={() => handleDeleteOrder(order._id)}
                     className={styles.buttonDelete}
                   >
                     Delete
@@ -147,18 +226,27 @@ const OrderManagement = () => {
         </table>
       </div>
 
-      {/* Pagination */}
       <div className={styles.pagination}>
-        {Array.from({ length: Math.ceil(orders.length / itemsPerPage) }, (_, index) => (
-          <button
-            key={index + 1}
-            onClick={() => paginate(index + 1)}
-            className={`${styles.pageButton} ${currentPage === index + 1 ? styles.activePage : ""}`}
-          >
-            {index + 1}
-          </button>
-        ))}
+        <button
+          className={styles.button}
+          onClick={goToPrevPage}
+          disabled={currentPage === 1}
+        >
+          Trang trước
+        </button>
+
+        <span className={styles.pageNumber}>Page {currentPage} of {totalPages}</span>
+
+        <button
+          className={styles.button}
+          onClick={goToNextPage}
+          disabled={currentPage === totalPages}
+        >
+          Trang sau
+        </button>
       </div>
+
+      {errorMessage && <div className={styles.error}>{errorMessage}</div>}
     </div>
   );
 };
