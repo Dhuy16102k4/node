@@ -1,8 +1,8 @@
 const nodemailer = require('nodemailer');
 const Order = require('../models/orders');
 const Cart = require('../models/carts');
-const User = require('../models/users');
-const mongoose = require('mongoose');
+
+
 // Tạo transporter
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -45,10 +45,7 @@ async function findUserCart(userId) {
 async function findUserOrders(userId) {
     return await Order.find({ user: userId });
 }
-function validateEmail(email) {
-    const regex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
-    return regex.test(email);
-}
+
 class OrderController {
     // Phương thức thêm đơn hàng
     async add(req, res) {
