@@ -3,7 +3,7 @@ import styles from './Modal.module.css';
 
 const Modal = ({ onClose, onSave, order, setOrder, isEditing, isDetails }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const itemsPerPage = 5;
 
   // Pagination logic for products (both in "Edit" and "View Details" modes)
   const indexOfLastProduct = currentPage * itemsPerPage;
@@ -15,7 +15,7 @@ const Modal = ({ onClose, onSave, order, setOrder, isEditing, isDetails }) => {
     setCurrentPage(pageNumber);
   };
 
-  // Handle changes in input fields (e.g., status, email, phone)
+  // Handle changes in input fields (e.g., status)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setOrder((prevOrder) => ({
@@ -77,7 +77,6 @@ const Modal = ({ onClose, onSave, order, setOrder, isEditing, isDetails }) => {
                     </tr>
                   ))}
                 </tbody>
-
             </table>
 
             {/* Pagination for products */}
@@ -122,29 +121,27 @@ const Modal = ({ onClose, onSave, order, setOrder, isEditing, isDetails }) => {
 
             {/* Email and phone fields (for add/edit actions) */}
             {!isDetails && (
-              <>
+              <div className={styles.emailPhoneContainer}>
                 <label className={styles.modalLabel}>
                   Email:
                   <input
-                    type="email"
-                    name="email"
+                    type="text" // Chỉ để xem, không cho chỉnh sửa
                     value={safeOrder.email}  // Use safeOrder for controlled value
-                    onChange={handleChange}
-                    required
+                    readOnly
+                    className={styles.modalInput}  // Add class to input
                   />
                 </label>
 
                 <label className={styles.modalLabel}>
                   Phone:
                   <input
-                    type="tel"
-                    name="phone"
+                    type="text" // Chỉ để xem, không cho chỉnh sửa
                     value={safeOrder.phone}  // Use safeOrder for controlled value
-                    onChange={handleChange}
-                    required
+                    readOnly
+                    className={styles.modalInput}  // Add class to input
                   />
                 </label>
-              </>
+              </div>
             )}
 
             {/* Buttons for add/edit actions */}

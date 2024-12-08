@@ -1,220 +1,213 @@
-/* General Modal Styles */
+/* Modal Container */
 .modal {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Màu nền mờ */
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Mờ nền */
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
-    overflow: hidden;
-}
-
-/* Modal content */
-.modalContent {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 90%;
+    z-index: 1000;
+  }
+  
+  /* Modal Content */
+  .modalContent {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 80%;
     max-width: 600px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-height: 80%;
+    overflow-y: auto;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     position: relative;
-    z-index: 10000;
-    max-height: 750px;
-}
-
-/* Nút đóng (x) */
-.close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    cursor: pointer;
-    color: #888;
-}
-
-.close:hover {
-    color: #333;
-}
-
-/* Tiêu đề modal */
-.modalTitle {
-    font-size: 24px;
-    margin-bottom: 15px;
+    transform: translateY(20px);
+    animation: slideUp 0.1s ease-out; /* Hiệu ứng di chuyển modal lên */
+  }
+  
+  /* Modal Title */
+  .modalTitle {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 20px;
     text-align: center;
-}
-
-/* Các trường nhập liệu (input và select) */
-.modalLabel {
-    display: block;
-    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  /* Close Button */
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 28px;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .close:hover {
+    color: #ff0000; /* Đổi màu khi hover */
+  }
+  
+  /* Labels và Inputs */
+  .modalLabel {
     font-size: 16px;
-}
-
-.modalInput,
-.modalSelect {
+    margin-bottom: 8px;
+    display: block;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  /* Input Fields cho Email và Phone */
+  .modalInput,
+  .modalSelect {
     width: 100%;
-    padding: 10px;
-    margin-top: 3px;
-    margin-bottom: 5px;
-    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 18px;
+    border-radius: 8px;
     border: 1px solid #ccc;
-    box-sizing: border-box;
-}
-
-/* Nút lưu */
-.modalButton {
-    padding: 10px 20px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .modalInput:focus,
+  .modalSelect:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+  }
+  
+  /* Chỉnh cho các trường email và phone */
+  .emailPhoneContainer {
+    display: flex;
+    justify-content: flex-start; /* Căn trái */
+    flex-direction: column;
+    gap: 12px; /* Khoảng cách giữa các trường */
+    margin-bottom: 18px;
+  }
+  
+  .emailPhoneContainer .modalLabel {
+    text-align: left;
+    margin-bottom: 6px;
+  }
+  
+  /* Buttons */
+  .modalButton {
     background-color: #4CAF50;
     color: white;
     border: none;
-    border-radius: 4px;
+    padding: 12px 20px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    font-size: 16px;
     width: 100%;
-    max-width: 200px;
-    margin-top: 20px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.modalButton:hover {
-    background-color: #45a049;
-}
-
-.modalButton:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-/* Specific styles for "Details" modal */
-.detailsModal .modalContent {
-    width: 80%;
-    max-width: 500px;
-}
-
-.detailsModal .modalTitle {
-    font-size: 26px;
-    color: #333;
-}
-
-.detailsModal .modalLabel {
-    font-size: 18px;
-    color: #444;
-}
-
-.detailsModal .modalInput,
-.detailsModal .modalSelect {
-    background-color: #f7f7f7;
-    cursor: not-allowed;
-    border: 1px solid #ddd;
-}
-
-.detailsModal .modalInput:disabled,
-.detailsModal .modalSelect:disabled {
-    background-color: #f0f0f0;
-    color: #999;
-}
-
-/* Details content (view-only) */
-.detailsContainer {
-    padding: 15px 0;
-}
-
-.detailsContainer p {
-    font-size: 18px;
-  
-}
-
-.detailsContainer .close {
-  
-    width: 100%;
-    text-align: center;
-}
-
-/* Details button (in order list) */
-.buttonDetails {
-    background-color: #2196F3;
-    color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s;
-}
-
-.buttonDetails:hover {
-    background-color: #1976D2;
-}
-
-.buttonDetails:focus {
-    outline: none;
-    border: 2px solid #1565C0;
-}
-/* Product Details Styles */
-.productsContainer {
+    transition: background-color 0.3s ease;
     margin-top: 20px;
   }
   
-  .productsTitle {
-    font-size: 1.6rem;
-    font-weight: 600;
-    margin-bottom: 15px;
+  .modalButton:hover {
+    background-color: #45a049;
+  }
+  
+  .modalButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Pagination (for products) */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pageButton {
+    padding: 8px 15px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pageButton:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .pageButton.activePage {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  /* Modal Details View */
+  .detailsContainer {
+    padding: 20px;
+    font-size: 16px;
+    color: #555;
   }
   
   .productsTable {
     width: 100%;
+    margin-top: 20px;
     border-collapse: collapse;
   }
   
   .productsTable th,
   .productsTable td {
-    padding: 5px;
-    text-align: center  ;
+    padding: 12px 15px;
     border: 1px solid #ddd;
-  }
-  /* CSS cho phân trang */
-.pagination {
-    margin-top: 20px;
     text-align: center;
   }
   
-  .pageButton {
-    padding: 8px 16px;
-    margin: 0 5px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    background-color: #f1f1f1;
-    color: #333;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background-color 0.3s;
-  }
-  
-  .pageButton:hover {
-    background-color: #ddd;
-  }
-  
-  .activePage {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
   .productsTable th {
-    background-color: #f1f1f1;
-    color: #333;
+    background-color: #f8f8f8;
+    font-weight: bold;
   }
   
-  .productsTable td {
-    background-color: #fff;
+  /* Optional: Mobile Responsiveness */
+  @media screen and (max-width: 600px) {
+    .modalContent {
+      width: 90%;
+      padding: 20px;
+    }
+  
+    .modalTitle {
+      font-size: 22px;
+    }
+  
+    .modalButton {
+      width: 100%;
+    }
+  
+    .close {
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+    }
   }
   
-  .productsTable tr:hover {
-    background-color: #fafafa;
+  /* Animations for Modal */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
   
