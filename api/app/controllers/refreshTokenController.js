@@ -7,6 +7,7 @@ function generateAccessToken(user) {
         userId: user._id,
         username: user.username,
         email: user.email,
+        role: user.role, 
         exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24), // 24 hours expiry
     };
     return jwt.sign(payload, process.env.SECRET_KEY);

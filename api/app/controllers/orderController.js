@@ -145,7 +145,7 @@ class OrderController {
     //user display
     async display(req, res) {
         try {
-            const orders = await findUserOrders(req.user._id);
+            const orders = await Order.find({ user: req.user._id });
             
             if (!orders || orders.length === 0) {
                 return res.status(404).json({ message: 'Không tìm thấy đơn hàng nào' });

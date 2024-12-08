@@ -35,8 +35,8 @@ const MyOrders = () => {
           try {
             
             const response = await axiosInstance.get('/order/', { headers: createHeaders() });
-            console.log("Fetched Orders:", response.data.orders);
-            setOrders(response.data.orders);
+            console.log("Fetched Orders:", response.data);
+            setOrders(response.data);
           } catch (err) {
             setErrorMessage("Failed to load orders. Please try again later.");
           } finally {

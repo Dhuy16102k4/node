@@ -31,7 +31,7 @@ module.exports = (req, res, next) => {
         if (!decoded.userId || !decoded.username || !decoded.email) {
             return res.status(401).json({ message: 'Invalid token structure.' });
         }
-        req.user = { _id: decoded.userId, username: decoded.username, email: decoded.email }; // Attach user info to req object
+        req.user = { _id: decoded.userId, username: decoded.username, email: decoded.email ,role: decoded.role }; // Attach user info to req object
         console.log('Decoded User Info:', req.user);
         next();  // Proceed to the next middleware or route handler
     } catch (err) {

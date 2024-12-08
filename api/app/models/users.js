@@ -31,7 +31,11 @@ const UserSchema = new Schema({
     verificationCodeExpires: { 
         type: Date, 
         default: null 
-    }
+    },
+    role: { 
+        type: String, 
+        default: "user" 
+    },
 }, {
     timestamps: true
 });

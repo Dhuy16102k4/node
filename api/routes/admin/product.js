@@ -2,7 +2,7 @@
     const express = require('express');
     const router = express.Router();
     const { upload, productRouter } = require('../../app/controllers/productController');
-
+    const authenticateToken = require('../../middlerware/adminToken');
 
 
     router.post('/add', upload.single('img'), productRouter.add);
@@ -11,6 +11,6 @@
 
     router.delete('/:id', productRouter.delete);
 
-    router.get('/', productRouter.display);
+    router.get('/',authenticateToken, productRouter.display);
 
     module.exports = router;

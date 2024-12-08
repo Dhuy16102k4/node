@@ -20,14 +20,22 @@ import UserApp from "./pages/user/UserApp";
 import MyOrders from "./pages/MyOrders/MyOrders";
 
 const App = () => {
-  const { showLogin, showOut, showAdd, setShowAdd } = useContext(AuthContext); // Show login state from context
+  const { showLogin, showOut, showAdd, setShowAdd,user } = useContext(AuthContext); // Show login state from context
   const location = useLocation();
 
   // Check if the current route is part of the admin panel
-  const isAdminRoute = location.pathname.startsWith("/admin");
+  if (user === undefined) {
+    return <div>Loading...</div>;  // Or a loader component, depending on your design
+  }
 
+  const isAdminRoute = location.pathname.startsWith("/admin");
   // If we are on an admin route, no login popup should show
-  if (isAdminRoute) {
+   if (isAdminRoute) {
+    if (!user || user.role !== "admin") {
+      // Redirect non-admin users to home page if they try to access admin routes
+      return <Navigate to="/" />;
+    }
+
     return (
       <div className="admin">
         <Routes>
@@ -45,8 +53,8 @@ const App = () => {
     <>
       {/* Show Login Popup only if showLogin is true */}
       {showLogin && <LoginPopup />}
-      {showOut && <OutOfStock/>}
-      {showAdd && <ProductAddedPopUp onClose={() => setShowAdd(false)}/>}
+      {showOut && <OutOfStock />}
+      {showAdd && <ProductAddedPopUp onClose={() => setShowAdd(false)} />}
       <div className="app">
         <Navbar />
         <Routes>
@@ -54,8 +62,18 @@ const App = () => {
           <Route path="/menu" element={<Menu />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/order" element={<PlaceOrder />} />
-          <Route path="/detail/:id" element={<Detail />}/>
-          <Route path="/myorders" element={<MyOrders />} /> 
+          <Route path="/detail/:id" element={<Detail />} />
+          <Route path="/myorders" element={<MyOrders />} />
+          {/* Conditionally render admin routes */}
+          {user && user.role === 'admin' && (
+            <>
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/admin/product" element={<ProductApp />} />
+              <Route path="/admin/category" element={<CategoryManagementApp />} />
+              <Route path="/admin/order" element={<OrderManagementApp />} />
+              <Route path="/admin/user" element={<UserApp />} />
+            </>
+          )}
         </Routes>
       </div>
       <Footer />
