@@ -35,7 +35,8 @@ const emailContent = {
     Confirmed: (orderId) => `Đơn hàng ID ${orderId} đã được xác nhận. Chúng tôi sẽ sớm xử lý và giao hàng.`,
     Shipped: (orderId) => `Đơn hàng ID ${orderId} đã được vận chuyển. Xin vui lòng chờ đợi.`,
     Delivered: (orderId) => `Đơn hàng ID ${orderId} đã được giao thành công. Cảm ơn bạn đã mua sắm tại cửa hàng của chúng tôi.`,
-    Cancelled: (orderId) => `Đơn hàng ID ${orderId} đã bị hủy. Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi.`
+    Cancelled: (orderId) => `Đơn hàng ID ${orderId} đã bị hủy. Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi.`,
+    StatusUpdated: (orderId, newStatus) => `Đơn hàng ID ${orderId} của bạn đã được cập nhật trạng thái thành "${newStatus}".`
 };
 
 async function findUserCart(userId) {
@@ -144,15 +145,21 @@ class OrderController {
     //user display
     async display(req, res) {
         try {
-            const orders = await findUserOrders(req.user._id);
-            if (!orders) {
+            const orders = await findUserOrders(req.user._id).sort({ createdAt: -1 });
+            
+            if (!orders || orders.length === 0) {
                 return res.status(404).json({ message: 'Không tìm thấy đơn hàng nào' });
             }
+    
             res.status(200).json(orders);
         } catch (err) {
             res.status(500).json({ message: 'Lỗi khi lấy thông tin đơn hàng', error: err.message });
         }
     }
+    
+
+
+
     async adminDisplay(req, res) {
         const status = req.query.status || ''; 
         const page = parseInt(req.query.page) || 1; 
@@ -176,8 +183,10 @@ class OrderController {
                     .populate('user', 'username') 
                     .populate('status') 
                     .skip((page - 1) * orderPerPage) 
-                    .limit(orderPerPage) 
-                    .lean(), 
+                    .limit(orderPerPage)
+                    .sort({ createdAt: -1 })
+                    .lean(),
+                    
                 Order.countDocuments(filter) 
             ]);
     
@@ -228,6 +237,9 @@ class OrderController {
 
         await order.save();
         console.log('Updated Order:', order);
+        if (order.email && validateEmail(order.email)) {
+            await sendEmail(order.email, 'Cập nhật trạng thái đơn hàng', emailContent.StatusUpdated(order._id, status));
+        }
 
         res.status(200).json({ message: `Trạng thái đơn hàng đã được cập nhật thành ${status}`, order });
     } catch (err) {

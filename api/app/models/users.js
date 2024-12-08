@@ -22,6 +22,15 @@ const UserSchema = new Schema({
         type: String,
         required: true,
         minlength: 6
+    },
+    phone: { type: String, required: true ,trim: true,},
+    verificationCode: { 
+        type: String, 
+        default: null 
+    },
+    verificationCodeExpires: { 
+        type: Date, 
+        default: null 
     }
 }, {
     timestamps: true

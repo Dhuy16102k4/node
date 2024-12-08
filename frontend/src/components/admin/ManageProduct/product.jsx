@@ -92,6 +92,7 @@ const Product = () => {
     try {
       await axiosInstance.delete(`/admin/product/${productId}`);
       setProducts((prev) => prev.filter((product) => product._id !== productId));
+      window.location.reload();
     } catch (err) {
       console.error('Error deleting product:', err);
     }

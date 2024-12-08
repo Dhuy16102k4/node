@@ -127,19 +127,27 @@ class ProductController {
     }
 
 
-    delete(req, res, next) {
+    async delete(req, res, next) {
         const productId = req.params.id;
         console.log('Product ID to delete:', productId);
+        try{
+            const result = await Product.deleteOne({ _id: productId });
+            
+            if (result.deletedCount === 0) {
+                return res.status(404).json({ message: 'Product not found.' });
+            }
 
-        Product.deleteOne({ _id: productId })
-            .then(result => {
-                if (result.deletedCount === 0) return res.status(404).json({ message: 'Product not found.' });
-                res.status(200).json({ message: 'Product deleted successfully!' });
-            })
-            .catch(error => {
-                console.error('Error deleting product:', error);
-                res.status(500).json({ message: error.stack });
-            });
+            await Cart.updateMany(
+                { "products.product": productId },
+                { $pull: { products: { product: productId } } }
+            );
+            res.status(200).json({ message: 'Product deleted successfully!' });
+        }catch (error) {
+            console.error('Error during product deletion or cart update:', error);
+            res.status(500).json({ message: error.stack });
+        }
+        // Bước 1: Xóa sản phẩm khỏi bảng Product
+       
     }
     
 }
