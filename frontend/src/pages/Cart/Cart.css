@@ -14,6 +14,23 @@
     font-weight: 500;
 
   }
+  .empty-cart {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .empty-cart-image {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+  }
+  
+  .empty-cart p {
+    font-size: 20px;
+    color: #333;
+    margin-top: 10px;
+  }
   
   .cart-items-item {
     display: grid;

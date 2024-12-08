@@ -9,7 +9,7 @@ const Cart = () => {
   const { cartItems, addToCart, handleRemoveFromCart, formatPrice, selectItems } = useContext(StoreContext); 
   const navigate = useNavigate();
   const [error, setError] = useState('');
-  const {setshowOut} = useContext(AuthContext)
+  const { setshowOut } = useContext(AuthContext);
 
   // Convert cartItems to an array of items for easier mapping
   const cartArray = Object.values(cartItems);
@@ -67,7 +67,14 @@ const Cart = () => {
   return (
     <div className="cart">
       {cartArray.length === 0 ? (
-        <p>Your cart is empty</p>
+        <div className="empty-cart">
+          <a href ="/menu"><img 
+            src="https://static.vecteezy.com/system/resources/previews/005/006/007/non_2x/no-item-in-the-shopping-cart-click-to-go-shopping-now-concept-illustration-flat-design-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon-vector.jpg" 
+            alt="Empty Cart" 
+            className="empty-cart-image" 
+          /></a>
+          <p>Your cart is empty</p>
+        </div>
       ) : (
         <>
           <div className="cart-items">
