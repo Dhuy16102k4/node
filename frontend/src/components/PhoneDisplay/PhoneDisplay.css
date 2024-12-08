@@ -1,44 +1,121 @@
-.phone-display{
-    margin-top: 30px;
+/* General styling for the phone display */
+.phone-display {
+  margin-top: 30px;
+  font-family: Arial, sans-serif;
 }
 
-.phone-display h2{
-    font-size: max(2vw, 24px);
-    font-weight: 600;
+/* Styling for the section title */
+.phone-display h2 {
+  font-size: max(2vw, 24px);
+  font-weight: 600;
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
 }
 
+/* Grid layout for the phone display list */
 .phone-display-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    margin-top: 30px;
-    gap: 30px;
-    row-gap: 50px;
-    margin-bottom: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
+/* Styling for pagination */
 .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-top: 20px;
-  }
-  
-  .pagination button {
-    padding: 8px 12px;
-    border: 2px solid #747474;
-    background-color: transparent;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .pagination button.active {
-    background-color: tomato;
-    color: white;
-  }
-  
-  .pagination button:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Style for pagination buttons */
+.pagination button {
+  padding: 8px 12px;
+  border: 2px solid #747474;
+  background-color: transparent;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+/* Active pagination button style */
+.pagination button.active {
+  background-color: tomato;
+  color: white;
+  border-color: tomato;
+}
+
+/* Disabled pagination button style */
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Pagination hover effect */
+.pagination button:hover:not(:disabled) {
+  background-color: #f0f0f0;
+  border-color: #ccc;
+}
+
+/* Empty state for phone list */
+.phone-display-list.empty {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #888;
+  padding: 50px;
+}
+
+/* Hover effect for each phone item */
+.phone-item {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect on phone item */
+.phone-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for phone images to ensure aspect ratio consistency */
+.phone-item img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Phone item details */
+.phone-item h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+  margin-top: 10px;
+}
+
+.phone-item p {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 5px 0;
+}
+
+/* Price styling */
+.phone-item .price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: tomato;
+  margin-top: 10px;
+}
+
+/* Stock and rating info */
+.phone-item .stock, .phone-item .rating {
+  font-size: 0.9rem;
+  color: #666;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
+}

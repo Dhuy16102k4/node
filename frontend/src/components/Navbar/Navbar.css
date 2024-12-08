@@ -1,46 +1,79 @@
+/* General Navbar styles */
 .navbar {
-    padding: 20px 0px;
+    padding: 20px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
 }
 
 .navbar .logo {
-    width: 150px;
+    width: 160px;
+    transition: width 0.3s ease;
 }
 
+.navbar .logo:hover {
+    opacity: 0.8;
+}
+
+/* Navbar Menu Styling */
 .navbar-menu {
     display: flex;
     list-style: none;
-    gap: 20px;
+    gap: 30px;
     color: #49557e;
     font-size: 18px;
+    font-weight: 500;
 }
 
-.navbar .active {
-    padding-bottom: 2px;
-    border-bottom: 2px solid #49557e;
+.navbar-menu a {
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
 }
 
-.navbar li {
-    cursor: pointer;
+.navbar-menu a:hover,
+.navbar-menu .active {
+    color: tomato;
+    border-bottom: 2px solid tomato;
+    padding-bottom: 5px;
+}
+
+/* Navbar right section (Profile, Cart, Login) */
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 25px;
 }
 
 .navbar-search-icon {
     position: relative;
+    cursor: pointer;
 }
 
+.navbar-search-icon img {
+    width: 20px;
+    transition: all 0.3s ease;
+}
+
+.navbar-search-icon img:hover {
+    transform: scale(1.1);
+}
+
+/* Cart Dot Notification */
 .navbar-search-icon .dot {
     position: absolute;
-    min-width: 10px;
-    min-height: 10px;
+    top: -6px;
+    right: -6px;
+    width: 12px;
+    height: 12px;
     background-color: tomato;
-    border-radius: 5px;
-    top: -8px;
-    right: -8px;
+    border-radius: 50%;
 }
 
-/* Style for username display */
+/* Username and profile dropdown */
 .navbar-right span {
     font-size: 16px;
     font-weight: 600;
@@ -56,64 +89,70 @@
     background-color: #e0e0e0;
 }
 
-.nav-bar-profile{
+/* Profile dropdown styling */
+.nav-bar-profile {
     position: relative;
 }
 
-.nav-profile-dropdown{
+.nav-profile-dropdown {
     position: absolute;
     display: none;
     right: 0;
+    top: 100%;
     z-index: 1;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-width: 180px;
+    padding: 10px 0;
 }
 
-.nav-bar-profile:hover .nav-profile-dropdown{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background-color: #fff2ef;
-    padding: 12px 25px;
-    border-radius: 4px;
-    border-radius: 1px solid grey;
-    outline: 2px solid white;
-    list-style: none;
+.nav-bar-profile:hover .nav-profile-dropdown {
+    display: block;
 }
 
-.nav-profile-dropdown li{
+.nav-profile-dropdown li {
     display: flex;
     align-items: center;
     gap: 10px;
+    padding: 8px 20px;
     cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.3s ease;
 }
 
-.nav-profile-dropdown img{
+.nav-profile-dropdown img {
     width: 20px;
 }
 
-.nav-profile-dropdown li:hover{
-    color: tomato
+.nav-profile-dropdown li:hover {
+    background-color: #f9f9f9;
+    color: tomato;
 }
 
+.nav-profile-dropdown hr {
+    margin: 5px 0;
+    border-color: #ddd;
+}
+
+/* Mobile responsiveness */
 @media (max-width: 1050px) {
     .navbar .logo {
         width: 140px;
     }
 
     .navbar-menu {
-        gap: 20px;
-        font-size: 17px;
+        gap: 25px;
+        font-size: 16px;
     }
 
     .navbar-right {
-        gap: 30px;
-    }
-
-    .navbar-right img {
-        width: 22px;
+        gap: 20px;
     }
 
     .navbar-right button {
-        padding: 8px 25px;
+        padding: 8px 20px;
     }
 }
 
@@ -127,12 +166,8 @@
         font-size: 16px;
     }
 
-    .navbar-right {
-        gap: 20px;
-    }
-
     .navbar-right img {
-        width: 20px;
+        width: 22px;
     }
 
     .navbar-right button {
@@ -144,5 +179,9 @@
 @media (max-width: 750px) {
     .navbar-menu {
         display: none;
+    }
+
+    .navbar-right {
+        gap: 15px;
     }
 }

@@ -1,27 +1,60 @@
 .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+  transition: all 0.3s ease; /* Thêm hiệu ứng cho pagination */
+  margin-bottom: 20px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  font-size: 16px;
+  border: 2px solid #49557e;
+  background-color: transparent;
+  color: #49557e;
+  cursor: pointer;
+  border-radius: 8px; /* Đổi góc bo tròn để tạo cảm giác mềm mại */
+  transition: all 0.3s ease; /* Thêm hiệu ứng chuyển động mượt mà */
+}
+
+.pagination button:hover {
+  background-color: #49557e;
+  color: #fff;
+  transform: scale(1.05); /* Thêm hiệu ứng zoom nhẹ khi hover */
+}
+
+.pagination button.active {
+  background-color: tomato;
+  color: white;
+  border: 2px solid tomato; /* Thêm viền đỏ xung quanh nút active */
+  box-shadow: 0 4px 10px rgba(255, 99, 71, 0.3); /* Bóng đổ nhẹ cho nút active */
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination button:focus {
+  outline: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Tạo hiệu ứng focus dễ nhận diện */
+}
+
+.pagination button:first-child,
+.pagination button:last-child {
+  font-weight: bold; /* Làm đậm nút Previous và Next */
+}
+
+.pagination button:active {
+  transform: scale(0.98); /* Thêm hiệu ứng click cho nút */
+}
+
+/* Responsive styling */
+@media (max-width: 900px) {
+  .pagination button {
+    padding: 6px 12px;
+    font-size: 14px;
   }
-  
-  .pagination-btn {
-    text-decoration: none;
-    padding: 10px 15px;
-    background-color: #f1f1f1;
-    border: 1px solid #ddd;
-    cursor: pointer;
-    margin: 0 5px;
-    color: #007bff; /* Màu sắc mặc định */
-  }
-  
-  .pagination-btn.active {
-    background-color: #ff8c00; /* Màu cam cho nút đang được chọn */
-    color: white;
-  }
-  
-  .pagination-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  
+}

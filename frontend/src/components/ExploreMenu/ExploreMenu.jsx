@@ -18,10 +18,8 @@ const ExploreMenu = ({ category, setCategory, categories }) => {
     setCategory(categoryId);
   
     if (location.pathname === '/menu') {
-      // Nếu đang ở trang Menu, giữ người dùng trên trang Menu
       navigate(`/menu?category=${categoryId === 'All' ? '' : categoryId}`);
     } else {
-      // Nếu không, chuyển về Home
       navigate(`/?category=${categoryId === 'All' ? '' : categoryId}`);
     }
   };

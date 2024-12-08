@@ -1,95 +1,179 @@
-.cart{
+.cart {
     margin-top: 100px;
-
-}
-
-.cart-items-title{
+    min-height: 90vh;
+    padding: 30px;
+    background-color: #fafafa;
+  }
+  
+  .cart-items-title {
     display: grid;
     grid-template-columns: 0.5fr 1fr 1.5fr 1fr 1fr 1fr 0.5fr;
     align-items: center;
-    color: grey;
-    font-size: max(1vw, 12px);
-}
+    color: #777;
+    font-size: max(1vw, 14px);
+    font-weight: 500;
 
-.cart-items-item{
-    margin: 10px 0px;
-    color: black;
-}
-
-.cart-items-item input{
-    width: 15px;
-    height: 15px; 
-    margin: 0px 10px;
-    
   }
+  
+  .cart-items-item {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr 1.5fr 1fr 1fr 1fr 0.5fr;
+    gap: 15px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
 
-.cart-items-item img{
-    width: 50px;
-}
+  }
+  
+  .cart-items-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .cart-items-item input {
+    width: 20px;
+    height: 20px;
+    margin: 0 12px;
+  }
+  
+  .cart-items-item img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 12px;
 
-.quantity {
+  }
+  
+  .cart-items-item img:hover {
+    transform: scale(1.1);
+  }
+  
+  .quantity {
     display: flex;
     align-items: center;
-    justify-content: left;
-    gap: 10px; /* Khoảng cách giữa các phần tử */
-}
-
-.quantity img{
-    width: 13px;
-    height: 15px;
+    gap: 15px;
+  }
+  
+  .quantity img {
+    width: 22px;
+    height: 22px;
     cursor: pointer;
-}
-
-.cart hr{
+    transition: transform 0.2s ease;
+  }
+  
+  .quantity img:hover {
+    transform: scale(1.1);
+  }
+  
+  .cart hr {
     height: 1px;
     background-color: #e2e2e2;
     border: none;
-}
-
-.cart-items-item .cross{
+  }
+  
+  .cart-items-item .cross {
     cursor: pointer;
-}
+    color: tomato;
+    font-size: 20px;
+    font-weight: bold;
 
-.cart-bottom{
-    margin-top: 80px;
+  }
+  .cross {
+    text-align: center;
+  }
+  .select-all-btn {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+
+  }
+  
+  .select-all-btn:hover {
+    background-color: #e2e2e2;
+  }
+  
+  .cart-items-item .cross:hover {
+    color: #d93025;
+  }
+  
+  .cart-bottom {
+    margin-top: 40px;
     display: flex;
     justify-content: space-between;
-    gap: max(12vw, 20px);
-}
-
-.cart-total{
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+  
+  .cart-total {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 20px
-}
+    gap: 25px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
-.css{
-    visibility: hidden;
-}
-
-.cart-total-details{
+  }
+  
+  .cart-total:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .cart-total-details {
     display: flex;
     justify-content: space-between;
-    columns: #555;
-}
-
-.cart-total hr{
-    margin: 10px 0px;
-}
-
-.cart-total button{
+    font-size: 18px;
+  }
+  
+  .cart-total hr {
+    margin: 12px 0;
+  }
+  
+  .cart-total button {
     border: none;
     color: white;
-    background-color: tomato;
-    width: max(15vw, 200px);
-    padding: 12px 0px;
-    border-radius: 4px;
+    background-color: #ff6347;
+    width: 100%;
+    padding: 16px;
+    border-radius: 6px;
     cursor: pointer;
-}
+    font-size: 18px;
+    font-weight: bold;
+    
+  }
+  
+  .cart-total button:hover {
+    background-color: #d9534f;
 
-@media (max-width: 750px) {
-    .cart-bottom{
-        flex-direction: column-reverse;
+  }
+  
+  @media (max-width: 750px) {
+    .cart-items-title {
+      grid-template-columns: 0.5fr 1fr 1.5fr 1fr 1fr;
     }
-}
+  
+    .cart-items-item {
+      grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr;
+    }
+  
+    .cart-bottom {
+      flex-direction: column;
+      gap: 30px;
+    }
+  
+    .cart-total {
+      width: 100%;
+    }
+  
+    .cart-total button {
+      width: 100%;
+    }
+  }
+  

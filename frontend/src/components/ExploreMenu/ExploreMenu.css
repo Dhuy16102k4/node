@@ -1,101 +1,122 @@
-/* ExploreMenu.css */
-
 /* Cấu trúc chính của ExploreMenu */
 .explore-menu {
-    display: flex;
-    flex-direction: row; /* Đảm bảo các nút luôn hiển thị ngang */
-    gap: 20px;  /* Khoảng cách giữa các nút */
-    padding: 20px 0px;
-    overflow-x: auto; /* Cho phép cuộn ngang nếu danh mục quá nhiều */
-}
-
-/* Tiêu đề của ExploreMenu */
-.explore-menu h1 {
-    color: #262626;
-    font-weight: 500;
-    font-size: 2rem; /* Kích thước chữ tiêu đề */
-    margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 20px 0;
+  overflow-x: auto;
+  margin: 0 20px;
+  justify-content: flex-start;
+  transition: all 0.3s ease-in-out;
 }
 
 /* Các nút danh mục (button) */
 .explore-menu button {
-    background: transparent;
-    border: 2px solid #747474;
-    color: #747474;
-    padding: 8px 16px;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 1rem;
+  background: transparent;
+  border: 2px solid #747474;
+  color: #747474;
+  padding: 12px 25px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease-in-out;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
-/* Thêm hiệu ứng hover cho các nút */
+/* Hiệu ứng hover cho các nút */
 .explore-menu button:hover {
-    background-color: #f5f5f5;
-    border-color: tomato;
-    color: tomato;
+  background-color: #f5f5f5;
+  border-color: #FF6347; /* Sử dụng màu đỏ cam nhẹ nhàng */
+  color: #FF6347;
+  box-shadow: 0 4px 10px rgba(255, 99, 71, 0.3); /* Bóng đổ khi hover */
+  transform: translateY(-4px); /* Di chuyển nhẹ lên khi hover */
 }
 
 /* Hiệu ứng khi mục được chọn */
 .explore-menu button.active {
-    border-color: tomato;
-    color: tomato;
-    background-color: rgba(255, 99, 71, 0.1); /* Màu nền nhẹ cho mục được chọn */
+  border-color: #FF6347;
+  color: #FF6347;
+  background: linear-gradient(45deg, rgba(255, 99, 71, 0.2), rgba(255, 99, 71, 0.1)); /* Gradient cho nút active */
+  box-shadow: 0 4px 15px rgba(255, 99, 71, 0.4); /* Bóng đổ mạnh hơn cho nút active */
+  transform: translateY(-4px); /* Di chuyển nhẹ lên khi active */
+}
+
+/* Cải thiện hiệu ứng shadow cho các nút trong menu */
+.explore-menu button:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(255, 99, 71, 0.5); /* Tạo hiệu ứng focus cho nút */
 }
 
 /* Responsive: Giảm kích thước các nút trên màn hình nhỏ */
 @media (max-width: 768px) {
-    .explore-menu button {
-        font-size: 14px;
-        padding: 6px 12px;
-    }
+  .explore-menu button {
+      font-size: 14px;
+      padding: 8px 15px;
+  }
 }
-.explore-menu {
-    margin: 20px;
+
+/* Responsive cho các thiết bị nhỏ hơn */
+@media (max-width: 480px) {
+  .explore-menu {
+      gap: 15px;
+      margin: 0 10px;
   }
-  
-  h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
+
+  .explore-menu button {
+      font-size: 13px;
+      padding: 6px 12px;
   }
-  
-  .category-filter {
-    margin-bottom: 30px;
-  }
-  
-  .category-filter ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .category-filter li {
-    padding: 10px;
-    cursor: pointer;
-  }
-  
-  .category-filter li.active {
-    font-weight: bold;
-    color: #007bff;
-  }
-  
-  .pagination {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-  }
-  
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 2px solid #49557e;
+  background-color: transparent;
+  color: #49557e;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+}
+
+.pagination button:hover {
+  background-color: #49557e;
+  color: white;
+  transform: scale(1.1); /* Hiệu ứng phóng to khi hover */
+}
+
+.pagination button.active {
+  background-color: #FF6347;
+  color: white;
+  box-shadow: 0 4px 10px rgba(255, 99, 71, 0.3); /* Bóng đổ mạnh hơn khi active */
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 900px) {
   .pagination button {
-    padding: 5px 10px;
-    cursor: pointer;
+      font-size: 14px;
+      padding: 8px 16px;
   }
-  
-  .pagination button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  
-  .pagination button.active {
-    background-color: #007bff;
-    color: white;
-  }
-  
+}

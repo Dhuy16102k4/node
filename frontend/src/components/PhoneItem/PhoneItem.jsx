@@ -25,7 +25,6 @@ const PhoneItem = ({ id, name, price, description, image, stock, rating }) => {
     localStorage.setItem(`product_${id}_quantity`, quantity);
   }, [quantity, id]);
 
-  
   useEffect(() => {
     const savedQuantity = localStorage.getItem(`product_${id}_quantity`);
     if (savedQuantity) {
@@ -63,6 +62,12 @@ const PhoneItem = ({ id, name, price, description, image, stock, rating }) => {
     }
   };
 
+  const formatPriceWithDots = (price) => {
+    return price
+      .toString()   // Chuyển giá trị sang chuỗi
+      .replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Thêm dấu chấm sau mỗi 3 chữ số
+  };
+
   const decreaseQuantity = () => {
     if (quantity > 0) {
       setQuantity((prev) => prev - 1);
@@ -71,34 +76,32 @@ const PhoneItem = ({ id, name, price, description, image, stock, rating }) => {
   };
 
   return (
-      <div className="phone-item">
-
-        <div className="phone-item-img-container">
-          <Link to={`/detail/${id}`}>
-            <img className="phone-item-image" src={imageUrl} alt={name} />
-          </Link>
-          <div className="food-item-counter">
-            {quantity === 0 ? (
-              <img className="add" onClick={() => increaseQuantity()} src={assets.add_icon_white} alt="Add to Cart" />
-            ) : (
-              <div className="food-item-counter">
-                <img onClick={() => decreaseQuantity()} src={assets.remove_icon_red} alt="Remove from Cart" />
-                <p>{quantity}</p>
-                <img onClick={() => increaseQuantity()} src={assets.add_icon_green} alt="Add More" />
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="phone-item-info">
-          <div className="phone-item-name-rating">
-            <p>{name}</p>
-            <p>{rating!=undefined?Math.round(rating)+"⭐":"0⭐"}</p>
-          </div>
-          <p className="phone-item-price">{formatPrice(price)}</p>
-          
-          <button onClick={handleAddToCart}>Add to Cart</button>
+    <div className="phone-item">
+      <div className="phone-item-img-container">
+        <Link to={`/detail/${id}`}>
+          <img className="phone-item-image" src={imageUrl} alt={name} />
+        </Link>
+        <div className="food-item-counter">
+          {quantity === 0 ? (
+            <img className="add" onClick={() => increaseQuantity()} src={assets.add_icon_white} alt="Add to Cart" />
+          ) : (
+            <div className="food-item-counter">
+              <img onClick={() => decreaseQuantity()} src={assets.remove_icon_red} alt="Remove from Cart" />
+              <p>{quantity}</p>
+              <img onClick={() => increaseQuantity()} src={assets.add_icon_green} alt="Add More" />
+            </div>
+          )}
         </div>
       </div>
+      <div className="phone-item-info">
+        <div className="phone-item-name-rating">
+          <p>{name}</p>
+          <p>{rating != undefined ? Math.round(rating) + "⭐" : "0⭐"}</p>
+        </div>
+        <p className="phone-item-price">{formatPriceWithDots(price)} VND</p>
+        <button onClick={handleAddToCart}>Add to Cart</button>
+      </div>
+    </div>
   );
 };
 
