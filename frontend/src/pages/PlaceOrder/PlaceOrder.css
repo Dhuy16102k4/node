@@ -1,40 +1,189 @@
-.place-order{
+/* Main layout */
+.place-order {
     display: flex;
-    align-items: start;
     justify-content: space-between;
     gap: 50px;
-    margin-top: 100px;
-}
-
-.place-order-left{
-    width: 100%;
-    max-width: max(30%, 500px);
-}
-
-.place-order-left .title{
-    font-size: 30px;
-    font-weight: 600;
+    margin-top: 80px;
+    font-family: 'Poppins', sans-serif;
+    padding: 30px;
+    background-color: #ccd7d2;
+    min-height: 80vh;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+    position: relative;
+    transition: all 0.3s ease;
     margin-bottom: 50px;
 }
 
-.place-order-left input{
-    margin-bottom: 15px;
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #c5c5c5;
-    outline-color: tomato;
+.place-order:hover {
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
 }
 
-.place-order-left .multi-fields{
+/* Left side - Form */
+.place-order-left {
+    width: 100%;
+    max-width: 600px;
+}
+
+.place-order-left .title {
+    font-size: 36px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 35px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.place-order-left input,
+.place-order-left select {
+    margin-bottom: 20px;
+    width: 100%;
+    padding: 18px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #dcdcdc;
+    background-color: #fff;
+    box-sizing: border-box;
+    outline: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.place-order-left input:focus,
+.place-order-left select:focus {
+    border-color: #1abc9c;
+    background-color: #eaf4f2;
+    box-shadow: 0 0 12px rgba(26, 188, 156, 0.3);
+}
+
+.place-order-left .multi-fields {
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    gap: 18px;
 }
 
-.place-order-right{
+.place-order-left .input-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #34495e;
+    margin-bottom: 10px;
+}
+
+.place-order-left input::placeholder,
+.place-order-left select::placeholder {
+    color: #7f8c8d;
+}
+
+/* Right side - Cart total */
+.place-order-right {
     width: 100%;
-    max-width: max(40%, 500px);
+    max-width: 380px;
 }
 
-.place-order .cart-total button{
+.cart-total {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.cart-total:before {
+    content: "";
+   
+    top: 12px;
+    left: 12px;
+    width: 100%;
+    height: 4px;
+    background: #1abc9c;
+    border-radius: 5px;
+
+}
+
+.cart-total:hover {
+    transform: scale(1.03);
+}
+
+.cart-total h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+}
+
+.cart-total-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.cart-total-details p {
+    color: #7f8c8d;
+}
+
+.cart-total button {
+    width: 100%;
+    padding: 15px;
+    background-color: #1abc9c;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     margin-top: 30px;
+    box-shadow: 0 10px 20px rgba(26, 188, 156, 0.2);
+}
+
+.cart-total button:hover {
+    background-color: #16a085;
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(26, 188, 156, 0.3);
+}
+
+/* Error message */
+.error {
+    color: #e74c3c;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 20px;
+    text-align: center;
+    padding: 12px;
+    background-color: rgba(236, 122, 110, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.2);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.error:hover {
+    background-color: rgba(231, 76, 60, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .place-order {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .place-order-left,
+    .place-order-right {
+        max-width: 100%;
+    }
+
+    .place-order-left .title {
+        text-align: center;
+    }
+
+    .cart-total {
+        margin-top: 30px;
+    }
 }

@@ -12,6 +12,7 @@ const PlaceOrder = () => {
     paymentMethod: 'Cash',
   });
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // New state for loading indicator
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,9 +24,12 @@ const PlaceOrder = () => {
 
     // Kiểm tra nếu giỏ hàng trống
     if (Object.keys(cartItems).length === 0) {
-      setError('Giỏ hàng của bạn đang trống!');
+      setError('Your cart is empty!');
       return;
     }
+
+    // Set loading state to true while processing the order
+    setIsLoading(true);
 
     // Tạo dữ liệu đơn hàng
     const orderData = {
@@ -48,6 +52,9 @@ const PlaceOrder = () => {
       setError(''); // Reset lỗi nếu có
     } catch (err) {
       setError('Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại!');
+    } finally {
+      // Reset loading state once the order process is finished (success or error)
+      setIsLoading(false);
     }
   };
 
@@ -117,7 +124,9 @@ const PlaceOrder = () => {
             <p>Total</p>
             <p>{formatPrice(getTotalCartAmount() + 25000)}</p>
           </div>
-          <button type="submit">PROCEED TO PAYMENT</button>
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? 'Waiting...' : 'PROCEED TO PAYMENT'}
+          </button>
         </div>
         {error && <p className="error">{error}</p>}
       </div>
