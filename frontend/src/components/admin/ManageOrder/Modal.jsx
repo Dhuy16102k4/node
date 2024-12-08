@@ -9,7 +9,7 @@ const Modal = ({ onClose, onSave, order, setOrder, isEditing, isDetails }) => {
       [name]: value,
     }));
   };
-
+  ///aaaaa
   // Ensure order status, email, and phone have a default value if they are undefined
   const safeOrder = {
     ...order,
