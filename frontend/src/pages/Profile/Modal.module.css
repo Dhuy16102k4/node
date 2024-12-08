@@ -1,0 +1,128 @@
+/* Modal Overlay */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6); /* Slightly darker for better contrast */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+/* Modal Content */
+.modalContent {
+    background-color: white;
+    padding: 40px;
+    border-radius: 12px;
+    max-width: 600px; /* Increased max width for a better layout */
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+}
+
+/* Modal Inputs */
+.modalInputs {
+    margin-bottom: 20px;
+}
+
+.modalInputs label {
+    font-size: 16px;
+    color: #2c3e50;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px; /* Reduced margin for cleaner spacing */
+}
+
+/* Input and button on the same line */
+.modalInputs .inputButtonWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px; /* Added gap for spacing between input and button */
+}
+
+/* Input Fields */
+.modalInputs input {
+    width: 100%; /* Full width for better input alignment */
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #ecf0f1;
+    font-size: 16px;
+    color: #2c3e50;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.modalInputs input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
+}
+
+/* Button Styles */
+.modalInputs button {
+    width: auto;
+    padding: 10px 20px; /* More padding for better button size */
+    border-radius: 8px;
+    background-color: #1abc9c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.modalInputs button:hover {
+    background-color: #16a085;
+}
+
+/* Modal Action Buttons */
+.modalActions {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px; /* Added gap for better spacing between action buttons */
+}
+
+.cancelBtn, .saveBtn {
+    padding: 12px 28px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 48%; /* Ensures the buttons are evenly spaced */
+    margin-top: 15px;
+}
+
+.cancelBtn {
+    background-color: #ff4d4d;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.cancelBtn:hover {
+    background-color: #ff3333;
+}
+
+.saveBtn {
+    background-color: #27ae60;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.saveBtn:hover {
+    background-color: #2ecc71;
+}
+
+/* Error Message */
+.errorMessage {
+    color: #e74c3c;
+    font-size: 16px;
+    margin-top: 15px; /* Added more margin for better spacing */
+    margin-bottom: 15;
+    text-align: center;
+  
+}

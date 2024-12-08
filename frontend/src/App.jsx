@@ -18,6 +18,7 @@ import ProductAddedPopUp from "./components/ProductAddedPopUp/ProductAddedPopUp"
 import Detail from "./pages/Detail/Detail";
 import UserApp from "./pages/user/UserApp";
 import MyOrders from "./pages/MyOrders/MyOrders";
+import Profile from "./pages/Profile/Profile";
 
 const App = () => {
   const { showLogin, showOut, showAdd, setShowAdd,user } = useContext(AuthContext); // Show login state from context
@@ -64,6 +65,7 @@ const App = () => {
           <Route path="/order" element={<PlaceOrder />} />
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/myorders" element={<MyOrders />} />
+          <Route path="/profile" element={<Profile />} />
           {/* Conditionally render admin routes */}
           {user && user.role === 'admin' && (
             <>

@@ -12,7 +12,6 @@ const Navbar = () => {
   const cartArray = Object.values(cartItems);
   const navigate = useNavigate();
 
-
   return (
     <div className="navbar">
       <Link to="/"><img src={assets.logo} alt="" className="logo" /></Link>
@@ -25,19 +24,22 @@ const Navbar = () => {
         <img src={assets.search_icon} alt="" />
         <div className="navbar-search-icon">
           <Link to="/cart"><img src={assets.basket_icon} alt="" /></Link>
-          {cartArray.length > 0?<div className="dot"></div>:""}
-          
+          {cartArray.length > 0 ? <div className="dot"></div> : ""}
         </div>
-        {!username?<button onClick={() => setShowLogin(true)}>Sign in</button>
-        :<div className="nav-bar-profile">
-          <img src={assets.profile_icon} alt="" />
-          <ul className="nav-profile-dropdown">
-            <li onClick={() => navigate('/myorders')}><img src={assets.bag_icon} alt="" /><p>Orders</p></li>
-            <hr />
-            <li onClick={handleLogout}><img src={assets.logout_icon} alt="" />Logout</li>
-          </ul>
-        </div>
-        }
+        {!username ? (
+          <button onClick={() => setShowLogin(true)}>Sign in</button>
+        ) : (
+          <div className="nav-bar-profile">
+            <img src={assets.profile_icon} alt="" />
+            <ul className="nav-profile-dropdown">
+              <li onClick={() => navigate('/myorders')}><img src={assets.bag_icon} alt="" /><p>Orders</p></li>
+              <hr />
+              <li onClick={() => navigate('/profile')}><img src={assets.profile_icon} alt="" /><p>Profile</p></li> {/* Added Profile option */}
+              <hr />
+              <li onClick={handleLogout}><img src={assets.logout_icon} alt="" />Logout</li>
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
