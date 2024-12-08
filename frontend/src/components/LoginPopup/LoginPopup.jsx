@@ -42,6 +42,7 @@ const LoginPopup = () => {
           setUsername(usernameInput); 
           setShowLogin(false); // Close the login popup
           alert('Login successful!');
+          window.location.reload();
         }
       } catch (error) {
           console.error('Login error:', error); 

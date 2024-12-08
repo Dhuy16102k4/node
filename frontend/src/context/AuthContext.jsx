@@ -23,6 +23,7 @@ const AuthContextProvider = ({ children }) => {
     setUser(null);  // Reset user state
     setShowLogin(false);
     navigate('/');
+    window.location.reload();
   };
 
   useEffect(() => {

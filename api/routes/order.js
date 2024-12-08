@@ -8,8 +8,7 @@ router.get('/detail/:id',authenticateToken,ordertController.getOrderById);
 //thanh toan
 router.post('/submit',authenticateToken,ordertController.add);
 //huy đơn hàng
-router.put('/delete/:id',ordertController.cancelOrders);
-
+router.put('/delete/:id', authenticateToken,ordertController.cancelOrders);
 //display
 router.get('/',authenticateToken,ordertController.display);
 
