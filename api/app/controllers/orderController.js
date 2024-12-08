@@ -257,7 +257,7 @@ class OrderController {
             if (deletedOrder.deletedCount === 0) {
                 return res.status(400).json({ message: 'Order not found or already deleted' });
             }
-            // Kiểm tra nếu có email, và gửi email thông báo hủy đơn hàng
+            // Kiểm tra nếu có email, và gửi email thông báo hủy đơn hàngsss
             if (order.email && validateEmail(order.email)) {
                 try {
                     await sendEmail(order.email, 'Đơn hàng đã bị xóa', `Đơn hàng ID ${orderId} của bạn đã bị xóa.`);
