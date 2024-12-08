@@ -11,6 +11,7 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
   const [categoryId, setCategoryId] = useState('');
   const [categoryName, setCategoryName] = useState('');
   const [stock, setStock] = useState('');
+  const [loadingCategories, setLoadingCategories] = useState(true); // Đánh dấu trạng thái tải danh mục
 
   // Fill the form if editing a product
   useEffect(() => {
@@ -26,6 +27,13 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
       setStock(editingProduct.stock || '');
     }
   }, [editingProduct]);
+
+  useEffect(() => {
+    // Đảm bảo rằng các category được tải đầy đủ
+    if (categories.length > 0) {
+      setLoadingCategories(false); // Đánh dấu là đã tải danh mục
+    }
+  }, [categories]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -122,6 +130,8 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
           onChange={(e) => setPrice(e.target.value)}
           required
         />
+        
+        {/* Dropdown cho Category */}
         <select
           className={styles.input}
           value={categoryId}
@@ -129,12 +139,17 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
           required
         >
           <option value="">Choose Category</option>
-          {categories.map((cat) => (
-            <option key={cat._id} value={cat._id}>
-              {cat.name}
-            </option>
-          ))}
+          {loadingCategories ? (
+            <option value="">Loading categories...</option>
+          ) : (
+            categories.map((category) => (
+              <option key={category._id} value={category._id}>
+                {category.name}
+              </option>
+            ))
+          )}
         </select>
+
         <input
           type="number"
           className={styles.input}

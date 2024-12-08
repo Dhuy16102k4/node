@@ -5,7 +5,7 @@ class CategoryController {
     async display(req, res, next) {
         try {
             const page = parseInt(req.query.page) || 1;
-            const categoryPerPage = parseInt(req.query.limit) || 3;
+            const categoryPerPage = parseInt(req.query.limit) ;
     
             const [categories, totalCategory] = await Promise.all([
                 Category.find({})

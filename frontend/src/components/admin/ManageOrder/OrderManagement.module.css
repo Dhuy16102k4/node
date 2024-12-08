@@ -9,6 +9,41 @@
   max-width: 1100px;
   margin: 0 auto;
 }
+/* Pagination Styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination .button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 10px;
+  transition: background-color 0.3s ease;
+}
+
+.pagination .button:hover {
+  background-color: #0056b3;
+}
+
+.pagination .button:disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.pagination .pageNumber {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0 10px;
+  color: #333;
+}
 
 h1 {
   font-size: 2.8rem;
@@ -48,13 +83,19 @@ h1 {
 .table tr:hover {
   background-color: #fafafa;
 }
+/* Container for buttons in the same row */
+.buttonContainer {
+  display: flex;
+  justify-content: center; /* Center the buttons */
+  gap: 10px; /* Add spacing between the buttons */
+}
 
-/* Button Styles */
+/* Adjust individual buttons */
 .buttonAdd,
 .buttonEdit,
 .buttonDelete,
 .buttonSave,
-.buttonDetails {  /* Add buttonDetails to button group */
+.buttonDetails {
   padding: 12px 24px;
   font-size: 16px;
   background-color: #4CAF50;
@@ -63,13 +104,14 @@ h1 {
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin: 10px 5px;
+  margin: 0;  /* Remove margin to avoid extra space around the buttons */
+  display: flex;
 }
 
 .buttonAdd:hover,
 .buttonEdit:hover,
 .buttonDelete:hover,
-.buttonDetails:hover {  /* Hover effect for Details button too */
+.buttonDetails:hover {
   background-color: #45a049;
 }
 
@@ -81,12 +123,12 @@ h1 {
   background-color: #FF4500;
 }
 
-.buttonDetails {  /* Custom styling for Details button */
-  background-color: #2196F3;  /* Blue color */
+.buttonDetails {
+  background-color: #2196F3;
 }
 
 .buttonDetails:hover {
-  background-color: #1976D2;  /* Darker blue on hover */
+  background-color: #1976D2;
 }
 
 /* Pagination Styles */

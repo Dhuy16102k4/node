@@ -11,6 +11,10 @@
   background-color: #f44336; /* Màu đỏ cho nút Xóa */
   color: white;
 }
+.modal-content {
+  max-height: 80vh;  /* Điều chỉnh chiều cao tối đa của modal */
+  overflow-y: auto;  /* Cho phép cuộn nếu nội dung vượt quá chiều cao */
+}
 
 .header {
   text-align: center;

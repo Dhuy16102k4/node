@@ -23,7 +23,7 @@ const CategoryManagement = () => {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 2;
+  const itemsPerPage = 10;
   const [totalPages, setTotalPages] = useState(1);
 
   // Fetch categories on page load and whenever the page number changes

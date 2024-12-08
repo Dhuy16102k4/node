@@ -25,7 +25,7 @@ const ProductList = ({ products, editProduct, deleteProduct, categories, selecte
       <h2>Product List</h2>
       <div className={styles.filterContainer}>
         <label htmlFor="category" className={styles.filterLabel}>
-        Filter by category:
+          Filter by category:
         </label>
         <select
           id="category"
@@ -55,7 +55,6 @@ const ProductList = ({ products, editProduct, deleteProduct, categories, selecte
         </thead>
         <tbody>
           {filteredProducts.map((product) => {
-            // Construct the image URL if it exists
             const imageUrl = product.img
               ? `${import.meta.env.VITE_API_URL}${product.img.replace(/\\/g, '/')}`
               : null;
@@ -70,7 +69,7 @@ const ProductList = ({ products, editProduct, deleteProduct, categories, selecte
                       className={styles['product-image']}
                     />
                   ) : (
-                    <span>No image available</span> // Fallback if no image
+                    <span>No image available</span>
                   )}
                 </td>
                 <td>{product.name}</td>
