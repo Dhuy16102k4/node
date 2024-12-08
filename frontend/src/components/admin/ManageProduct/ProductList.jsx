@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './Product.module.css'; // Import CSS module
+import styles from './Product.module.css';
 
 const ProductList = ({ products, editProduct, deleteProduct, categories, selectedCategory, setSelectedCategory }) => {
   const [filteredProducts, setFilteredProducts] = useState(products);
@@ -20,6 +20,24 @@ const ProductList = ({ products, editProduct, deleteProduct, categories, selecte
     setSelectedCategory(event.target.value); // Update selected category to ObjectId
   };
 
+  const handleDeleteProduct = async (productId) => {
+    if (products.length <= 1) {
+      return; // Disable deletion if there's only one product left
+    }
+
+    try {
+      await deleteProduct(productId); // Call the deleteProduct function (from parent component) to delete the product
+      setFilteredProducts((prevProducts) => prevProducts.filter((product) => product._id !== productId));
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
+  };
+
+  // Helper function to format numbers as VND
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' VND';
+  };
+
   return (
     <div>
       <h2>Product List</h2>
@@ -35,7 +53,7 @@ const ProductList = ({ products, editProduct, deleteProduct, categories, selecte
         >
           <option value="">All</option>
           {categories.map((category) => (
-            <option key={category._id} value={category._id}> {/* Pass ObjectId */}
+            <option key={category._id} value={category._id}>
               {category.name}
             </option>
           ))}
@@ -73,7 +91,7 @@ const ProductList = ({ products, editProduct, deleteProduct, categories, selecte
                   )}
                 </td>
                 <td>{product.name}</td>
-                <td>{product.price} VND</td>
+                <td>{formatPrice(product.price)}</td> {/* Format the price here */}
                 <td>{product.category?.name}</td>
                 <td>{product.stock}</td>
                 <td>{product.description}</td>
@@ -88,7 +106,8 @@ const ProductList = ({ products, editProduct, deleteProduct, categories, selecte
                 <td>
                   <button
                     className={`${styles.button} ${styles['delete-button']}`}
-                    onClick={() => deleteProduct(product._id)}
+                    onClick={() => handleDeleteProduct(product._id)} // Use the new delete function
+                    disabled={filteredProducts.length <= 1} // Disable delete button if there's only one product
                   >
                     Delete
                   </button>

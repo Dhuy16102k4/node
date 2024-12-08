@@ -11,7 +11,7 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
   const [categoryId, setCategoryId] = useState('');
   const [categoryName, setCategoryName] = useState('');
   const [stock, setStock] = useState('');
-  const [loadingCategories, setLoadingCategories] = useState(true); // Đánh dấu trạng thái tải danh mục
+  const [loadingCategories, setLoadingCategories] = useState(true); // Category loading state
 
   // Fill the form if editing a product
   useEffect(() => {
@@ -29,17 +29,17 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
   }, [editingProduct]);
 
   useEffect(() => {
-    // Đảm bảo rằng các category được tải đầy đủ
+    // Ensure categories are fully loaded
     if (categories.length > 0) {
-      setLoadingCategories(false); // Đánh dấu là đã tải danh mục
+      setLoadingCategories(false); // Mark categories as loaded
     }
   }, [categories]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(file);
-      setImageName(file.name);
+      setImage(file); // Update the image state with the selected file
+      setImageName(file.name); // Optionally store the file name
     }
   };
 
@@ -61,7 +61,7 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
     formData.append('stock', stock);
 
     if (image) {
-      formData.append('img', image);
+      formData.append('img', image); // Append the image file if selected
     }
 
     addProduct(formData);
@@ -84,7 +84,7 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
     formData.append('stock', stock);
 
     if (image) {
-      formData.append('img', image);
+      formData.append('img', image); // Append the image file if selected
     }
 
     updateProduct(formData);
@@ -101,7 +101,7 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
     setCategoryName('');
     setStock('');
     setId(null);
-    document.getElementById('image-input').value = '';
+    document.getElementById('image-input').value = ''; // Reset image input
   };
 
   return (
@@ -131,7 +131,7 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
           required
         />
         
-        {/* Dropdown cho Category */}
+        {/* Dropdown for Category */}
         <select
           className={styles.input}
           value={categoryId}
@@ -166,7 +166,21 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
           onChange={handleImageChange}
         />
 
-        {editingProduct && editingProduct.img && (
+        {/* Image Preview */}
+        {image && (
+          <div className={styles.imagePreviewContainer}>
+            <div className={styles.imageWrapper}>
+              <p>Selected Image:</p>
+              <img
+                src={URL.createObjectURL(image)} // Preview the selected image
+                alt="Image Preview"
+                className={styles.preview}
+              />
+            </div>
+          </div>
+        )}
+
+        {editingProduct && editingProduct.img && !image && (
           <div className={styles.imagePreviewContainer}>
             <div className={styles.imageWrapper}>
               <p>Current Image:</p>
@@ -176,12 +190,6 @@ const ProductForm = ({ addProduct, editingProduct, updateProduct, categories }) 
                 className={styles.preview}
               />
             </div>
-            {image && (
-              <div className={styles.imageWrapper}>
-                <p>New Image:</p>
-                <img src={URL.createObjectURL(image)} alt="Preview" className={styles.preview} />
-              </div>
-            )}
           </div>
         )}
 
