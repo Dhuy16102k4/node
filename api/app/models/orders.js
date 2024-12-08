@@ -16,6 +16,7 @@ const orderSchema = new Schema({
         enum: ['Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'], 
         default: 'Pending' 
     }, // Trạng thái đơn hàng
+    email: { type: String, required: true },
     address: { type: String, required: true }, // Địa chỉ giao hàng
     phone: { type: String, required: true }, // Số điện thoại người đặt hàng
     paymentMethod: { type: String, enum: ['Cash', 'Credit Card', 'Bank Tranfer'], default: 'Cash' }, // Phương thức thanh toán
