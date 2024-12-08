@@ -2,7 +2,7 @@
 import React, { useContext } from "react";
 import './Navbar.css';
 import { assets } from '../../assets/assets';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from '../../context/AuthContext';
 import { StoreContext } from "../../context/StoreContext";
 
@@ -10,6 +10,7 @@ const Navbar = () => {
   const { setShowLogin, username, handleLogout } = useContext(AuthContext);
   const {cartItems} = useContext(StoreContext);
   const cartArray = Object.values(cartItems);
+  const navigate = useNavigate();
 
 
   return (
@@ -31,7 +32,7 @@ const Navbar = () => {
         :<div className="nav-bar-profile">
           <img src={assets.profile_icon} alt="" />
           <ul className="nav-profile-dropdown">
-            <li><img src={assets.bag_icon} alt="" /><p>Profile</p></li>
+            <li onClick={() => navigate('/myorders')}><img src={assets.bag_icon} alt="" /><p>Orders</p></li>
             <hr />
             <li onClick={handleLogout}><img src={assets.logout_icon} alt="" />Logout</li>
           </ul>

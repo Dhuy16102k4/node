@@ -29,7 +29,6 @@ const StoreProvider = ({ children }) => {
     try {
       const response = await axiosInstance.get('/cart', { headers: createHeaders() });
       const products = response?.data?.products;
-      console.log(products)
       if (Array.isArray(products)) {
         const formattedCart = {};
         products.forEach(item => {
