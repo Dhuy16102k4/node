@@ -70,9 +70,9 @@ const Navbar = () => {
           <div className="nav-bar-profile">
             <img src={assets.profile_icon} alt="" />
             <ul className="nav-profile-dropdown">
-              <li onClick={() => navigate('/myorders')}><img src={assets.bag_icon} alt="" /><p>Orders</p></li>
-              <hr />
               <li onClick={() => navigate('/profile')}><img src={assets.user_icon} alt="" /><p>Profile</p></li> {/* Added Profile option */}
+              <hr />
+              <li onClick={() => navigate('/myorders')}><img src={assets.bag_icon} alt="" /><p>Orders</p></li>
               <hr />
               <li onClick={handleLogoutWithReload}><img src={assets.logout_icon} alt="" />Logout</li>
             </ul>
