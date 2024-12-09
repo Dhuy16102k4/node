@@ -131,12 +131,7 @@ const LoginPopup = () => {
              trangThai === "forgotPassword" ? "Reset password" :
              "Unknown State"}
           </h2>
-          <img
-            onClick={() => setShowLogin(false)}
-            src={assets.cross_icon}
-            alt="Close"
-            style={{ cursor: 'pointer' }}
-          />
+       
         </div>
         <div className="login-popup-inputs">
           <input
