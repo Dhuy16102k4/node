@@ -34,6 +34,11 @@ const Navbar = () => {
     handleSearchSubmit(new Event('submit')); // Trigger the submit when the icon is clicked
   };
 
+  const handleLogoutWithReload = () => {
+    handleLogout(); // Perform the logout logic
+    window.location.reload(); // Reload the page
+  };
+
   return (
     <div className="navbar">
       <Link to="/"><img src={assets.logo} alt="" className="logo" /></Link>
@@ -69,7 +74,7 @@ const Navbar = () => {
               <hr />
               <li onClick={() => navigate('/profile')}><img src={assets.user_icon} alt="" /><p>Profile</p></li> {/* Added Profile option */}
               <hr />
-              <li onClick={handleLogout}><img src={assets.logout_icon} alt="" />Logout</li>
+              <li onClick={handleLogoutWithReload}><img src={assets.logout_icon} alt="" />Logout</li>
             </ul>
           </div>
         )}
