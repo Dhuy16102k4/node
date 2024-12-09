@@ -177,6 +177,12 @@ const LoginPopup = () => {
            trangThai === "forgotPassword" ? "Reset password" : "Unknown State"}
         </button>
 
+        {trangThai === "login" && (
+          <button type="button" onClick={handleFacebookLogin} className="facebook-login-btn">
+            Login with Facebook
+          </button>
+        )}
+        
         {error && <p className="error-message">{"*" + error}</p>}
 
         {trangThai === "login" && (
@@ -216,11 +222,7 @@ const LoginPopup = () => {
         )}
         
         {/* Facebook Login Button - Only show on "login" state */}
-        {trangThai === "login" && (
-          <button type="button" onClick={handleFacebookLogin} className="facebook-login-btn">
-            Login with Facebook
-          </button>
-        )}
+        
       </form>
     </div>
   );
