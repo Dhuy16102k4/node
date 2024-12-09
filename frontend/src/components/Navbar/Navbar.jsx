@@ -8,7 +8,7 @@ import { StoreContext } from "../../context/StoreContext";
 
 const Navbar = () => {
   const { setShowLogin, username, handleLogout } = useContext(AuthContext);
-  const {cartItems} = useContext(StoreContext);
+  const { cartItems } = useContext(StoreContext);
   const cartArray = Object.values(cartItems);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
@@ -30,6 +30,10 @@ const Navbar = () => {
     }
   };
 
+  const handleSearchIconClick = () => {
+    handleSearchSubmit(new Event('submit')); // Trigger the submit when the icon is clicked
+  };
+
   return (
     <div className="navbar">
       <Link to="/"><img src={assets.logo} alt="" className="logo" /></Link>
@@ -39,13 +43,21 @@ const Navbar = () => {
         <a href='#footer' className={window.location.hash === "#footer" ? "active" : ""}>Contact us</a>
       </ul>
       <div className="navbar-right">
-        <input onChange={handleSearchChange} value={searchTerm} onKeyDown={handleKeyDown} type="text"/>
-        <img src={assets.search_icon} alt="" />
+        <input 
+          onChange={handleSearchChange} 
+          value={searchTerm} 
+          onKeyDown={handleKeyDown} 
+          type="text"
+        />
+        <img 
+          src={assets.search_icon} 
+          alt="" 
+          onClick={handleSearchIconClick} // Add onClick handler to the search icon
+        />
         <div className="navbar-search-icon">
           <Link to="/cart"><img src={assets.basket_icon} alt="" /></Link>
           {cartArray.length > 0 ? <div className="dot"></div> : ""}
         </div>
-        
         
         {!username ? (
           <button onClick={() => setShowLogin(true)}>Sign in</button>

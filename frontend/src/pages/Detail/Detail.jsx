@@ -152,6 +152,11 @@ const Detail = () => {
         }
     };
     
+    const formatPriceWithDots = (price) => {
+        return price
+          .toString()   // Chuyển giá trị sang chuỗi
+          .replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Thêm dấu chấm sau mỗi 3 chữ số
+      };
     
   return (
     <div>
@@ -175,7 +180,7 @@ const Detail = () => {
                 </div>
                 <div className={styles['product-info']}> {/* Sử dụng styles['product-info'] */}
                 <h1>{product.name}</h1>
-                <p className={styles.price}>{formatPrice(product.price)}</p> {/* Sử dụng styles.price */}
+                <p className={styles.price}>{formatPriceWithDots(product.price)} VND</p> {/* Sử dụng styles.price */}
                 <div className={styles.rating}> Average point:{product.averageRating}⭐ ({product.reviews.length} reviews)</div> {/* Sử dụng styles.rating */}
                 <p className={styles.description}> {/* Sử dụng styles.description */}
                     {product.description}
@@ -212,7 +217,7 @@ const Detail = () => {
                             />
                         
                         <p>{relatedProduct.name}</p>
-                        <p className={styles.relatedPrice}>{formatPrice(relatedProduct.price)}</p>
+                        <p className={styles.relatedPrice}>{formatPriceWithDots(relatedProduct.price )} VND</p>
                         </div>
                         
                     ))}
