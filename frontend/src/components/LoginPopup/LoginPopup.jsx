@@ -131,8 +131,10 @@ const LoginPopup = () => {
              trangThai === "forgotPassword" ? "Reset password" :
              "Unknown State"}
           </h2>
-       
+          {/* Close Icon (Dấu "X") */}
+          <span className="close-icon" onClick={() => setShowLogin(false)}>&times;</span>
         </div>
+
         <div className="login-popup-inputs">
           <input
             type="text"
@@ -168,7 +170,8 @@ const LoginPopup = () => {
             />
           )}
         </div>
-        <button type="submit">
+
+        <button type="submit" id="btn-all">
           {trangThai === "login" ? "Login" :
            trangThai === "register" ? "Register" :
            trangThai === "forgotPassword" ? "Reset password" : "Unknown State"}

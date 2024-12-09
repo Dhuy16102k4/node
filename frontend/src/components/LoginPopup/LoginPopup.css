@@ -68,13 +68,15 @@
     padding: 10px;
     border-radius: 4px;
 }
-
+#btn-all {
+    background-color: tomato    ;
+}
 .login-popup-container button{
     border: none;
     padding: 10px;
     border-radius: 4px;
     color: white;
-    background-color: tomato;
+ 
     font-size: 15px;
     cursor: pointer;
 }
@@ -87,4 +89,21 @@
 
 .error-message {
     color: red;
+}
+.login-popup-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: black;
+    position: relative;
+}
+
+.close-icon {
+    font-size: 20px; /* Điều chỉnh kích thước của biểu tượng */
+    color: black;
+    cursor: pointer;
+}
+
+.close-icon:hover {
+    color: red; /* Chuyển màu khi hover */
 }

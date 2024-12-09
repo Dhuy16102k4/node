@@ -1,4 +1,17 @@
 services:
+  db-init:
+    build:
+      context: ./api
+    image: data
+    command: ["node", "init-mongo.js"]
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/productList 
+    depends_on:
+      - mongodb
+    networks:
+      - my-network
+    restart: "no"
+
   api-app:
     build:
       context: ./api
@@ -32,7 +45,6 @@ services:
     networks:
       - my-network
     restart: unless-stopped
- 
 
   mongodb:
     image: mongo:5.0
@@ -50,10 +62,6 @@ services:
       retries: 5
       start_period: 30s
       timeout: 10s
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=example
-      - MONGO_INITDB_DATABASE=productList  # Thêm database mặc định
 
 volumes:
   mongo-data:  # Định nghĩa volume để lưu trữ dữ liệu MongoDB

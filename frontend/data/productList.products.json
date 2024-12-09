@@ -1,0 +1,196 @@
+[{
+  "_id": {
+    "$oid": "673340c2d022c4fae2a41d93"
+  },
+  "name": "sp 7",
+  "price": 15000000,
+  "description": "test",
+  "category": {
+    "$oid": "672ddf8d0ea5c21f77761a24"
+  },
+  "img": "\\img\\1731412162114.png",
+  "stock": 6,
+  "createdAt": {
+    "$date": "2024-11-12T11:49:22.125Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-12T11:49:22.125Z"
+  },
+  "__v": 4,
+  "averageRating": 7,
+  "reviews": [
+    {
+      "user": {
+        "$oid": "671e10608703f01389e30623"
+      },
+      "name": "huy",
+      "comment": "cũng ok ",
+      "rating": 7,
+      "createdAt": {
+        "$date": "2024-12-01T13:14:06.997Z"
+      },
+      "_id": {
+        "$oid": "674c611e7994985e9f7f40c5"
+      }
+    },
+    {
+      "user": {
+        "$oid": "671e10608703f01389e30623"
+      },
+      "name": "huy",
+      "comment": "cũng ok ",
+      "rating": 7,
+      "createdAt": {
+        "$date": "2024-12-01T13:15:16.936Z"
+      },
+      "_id": {
+        "$oid": "674c6164aa6412b506ad42ca"
+      }
+    },
+    {
+      "user": {
+        "$oid": "671e10608703f01389e30623"
+      },
+      "name": "huy",
+      "comment": "cũng ok ",
+      "rating": 8,
+      "createdAt": {
+        "$date": "2024-12-01T13:15:26.348Z"
+      },
+      "_id": {
+        "$oid": "674c616eaa6412b506ad42d0"
+      }
+    },
+    {
+      "user": {
+        "$oid": "671e10608703f01389e30623"
+      },
+      "name": "huy",
+      "comment": "ok",
+      "rating": 6,
+      "createdAt": {
+        "$date": "2024-12-02T15:25:44.980Z"
+      },
+      "_id": {
+        "$oid": "674dd17843f2483979b0c5a7"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "673340ced022c4fae2a41d9a"
+  },
+  "name": "sp 8",
+  "price": 15000000,
+  "description": "test",
+  "category": {
+    "$oid": "672de00c0ea5c21f77761a39"
+  },
+  "img": "\\img\\1731412174398.png",
+  "stock": 7,
+  "createdAt": {
+    "$date": "2024-11-12T11:49:34.409Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-12T11:49:34.409Z"
+  },
+  "__v": 1,
+  "reviews": []
+},
+{
+  "_id": {
+    "$oid": "673340d7d022c4fae2a41da1"
+  },
+  "name": "sp 9",
+  "price": 15000000,
+  "description": "test",
+  "category": {
+    "$oid": "672de00c0ea5c21f77761a39"
+  },
+  "img": "\\img\\1731412183031.png",
+  "stock": 0,
+  "createdAt": {
+    "$date": "2024-11-12T11:49:43.035Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-12T11:49:43.035Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "673340edd022c4fae2a41da8"
+  },
+  "name": "sp 10",
+  "price": 15000000,
+  "description": "test",
+  "category": {
+    "$oid": "672de00c0ea5c21f77761a39"
+  },
+  "img": "\\img\\1731412205130.png",
+  "stock": 6,
+  "createdAt": {
+    "$date": "2024-11-12T11:50:05.134Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-12T11:50:05.134Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "673340fdd022c4fae2a41db7"
+  },
+  "name": "sp 11",
+  "price": 15000000,
+  "description": "test",
+  "category": {
+    "$oid": "672ddf8d0ea5c21f77761a24"
+  },
+  "img": "\\img\\1731412221324.png",
+  "stock": 7,
+  "createdAt": {
+    "$date": "2024-11-12T11:50:21.328Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-12T11:50:21.328Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67334114d022c4fae2a41f1e"
+  },
+  "name": "sp 11",
+  "price": 15000000,
+  "description": "test",
+  "category": {
+    "$oid": "672de00c0ea5c21f77761a39"
+  },
+  "img": "\\img\\1731412244531.png",
+  "stock": 1,
+  "createdAt": {
+    "$date": "2024-11-12T11:50:44.535Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-12T11:50:44.535Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "674f3cc001d14efd98a28f86"
+  },
+  "name": "ok",
+  "price": 20000000,
+  "description": "test",
+  "category": {
+    "$oid": "672ddf8d0ea5c21f77761a24"
+  },
+  "img": "\\img\\1733246144091.png",
+  "stock": 10,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+}]

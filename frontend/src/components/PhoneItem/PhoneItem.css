@@ -36,7 +36,7 @@
 
 /* Hiệu ứng khi hover vào nút Add to Cart */
 .phone-item button:hover {
-    background-color: darkred;
+    background-color: #1abc9c;
 }
 
 /* Hiệu ứng gradient cho viền khi hover */
@@ -52,7 +52,7 @@
     padding: 12px; /* Điều chỉnh padding cho nút rộng hơn */
     border-radius: 5px;
     color: white;
-    background-color: tomato;
+    background-color: #1abc9c;
     font-size: 18px; /* Tăng kích thước font chữ */
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -61,7 +61,7 @@
 
 /* Hiệu ứng khi hover vào nút */
 .phone-item button:hover {
-    background-color: darkred;
+    background-color: #149a7f;
 }
 
 /* Hiệu ứng khi focus vào nút */
@@ -96,7 +96,7 @@
 
 /* Giá sản phẩm */
 .phone-item-price {
-    color: #e74c3c; /* Màu đỏ đặc trưng */
+    color: #f31804; /* Màu đỏ đặc trưng */
     font-size: 26px; /* Tăng kích thước font chữ cho giá */
     font-weight: 700; /* Làm đậm hơn để giá nổi bật */
     margin: 10px 0;

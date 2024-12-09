@@ -1,3 +1,4 @@
+/* Global styles */
 .cart {
   margin-top: 100px;
   min-height: 90vh;
@@ -171,6 +172,7 @@
   background-color: #d9534f;
 }
 
+/* Responsive styling */
 @media (max-width: 750px) {
   .cart-items-title {
     flex-direction: column;
@@ -194,5 +196,75 @@
 
   .cart-total button {
     width: 100%;
+  }
+}
+
+/* Media Queries for screens with width below 500px */
+/* Media Queries for screens with width below 500px */
+@media (max-width: 500px) {
+  .cart {
+    padding: 15px;  /* Giảm padding để tiết kiệm không gian */
+    margin-top: 80px; /* Giảm khoảng cách trên */
+  }
+
+  .cart-items-title {
+    font-size: 10px;  /* Giảm font size để phù hợp với màn hình nhỏ */
+    flex-direction: column;
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .cart-items-item {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+    margin: 10px 0;  /* Giảm khoảng cách giữa các sản phẩm */
+  }
+
+  .cart-items-item img {
+    width: 60px;  /* Giảm kích thước ảnh sản phẩm */
+    height: 60px;
+  }
+
+  .quantity img {
+    width: 24px;  /* Giảm kích thước biểu tượng cộng/trừ */
+    height: 24px;
+  }
+
+  .cart-items-item .cross {
+    font-size: 16px;  /* Giảm kích thước nút x */
+  }
+
+  .cart-items-item p {
+    font-size: 12px;  /* Giảm kích thước font cho tên sản phẩm */
+    text-overflow: ellipsis;  /* Thêm ellipsis nếu tên sản phẩm dài */
+    white-space: nowrap;  /* Ngăn không cho văn bản nhảy dòng */
+    overflow: hidden;  /* Ẩn phần văn bản dài */
+  }
+
+  .cart-bottom {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .cart-total {
+    width: 100%;
+    padding: 15px;  /* Giảm padding */
+  }
+
+  .cart-total button {
+    padding: 15px;  /* Giảm padding của nút */
+    font-size: 18px;  /* Giảm font size */
+    font-weight: bold;
+    width: 100%;
+  }
+
+  .cart-total-details {
+    font-size: 16px;  /* Giảm font size của chi tiết tổng tiền */
+  }
+
+  .empty-cart p {
+    font-size: 16px;  /* Giảm kích thước văn bản khi giỏ hàng trống */
   }
 }
