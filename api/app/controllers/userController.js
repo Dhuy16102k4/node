@@ -3,7 +3,7 @@ const User = require('../models/users');
 const Order = require('../models/orders');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
-
+const mongoose = require('mongoose');
 // Tạo transporter cho email
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -140,6 +140,47 @@ class UserController {
             res.status(500).json({ message: 'Lỗi khi lấy thông tin người dùng', error: err.message });
         }
     }
+   
+    
+    async userDetail(req, res) {
+        
+        try {
+            const userDetails = await User.aggregate([
+                { $match: { _id: new mongoose.Types.ObjectId( req.user._id) } },
+                {
+                    $lookup: {
+                        from: 'orders',// Lấy thông tin từ collection 'orders'
+                        localField: '_id', // Trường _id trong collection 'users'
+                        foreignField: 'user',// Trường 'user' trong collection 'orders'
+                        as: 'userOrders'// Tạo trường 'userOrders' chứa danh sách đơn hàng
+                    }
+                },
+                {
+                    $project: {
+                        username: 1,
+                        email: 1,
+                        phone: 1,
+                        address: 1,
+                        orderCount: { $size: '$userOrders' } // Tính số lượng đơn hàng
+                    }
+                }
+            ]);
+
+            if (!userDetails || userDetails.length === 0) {
+                return res.status(404).json({ message: 'Người dùng không tồn tại.' });
+            }
+
+            res.status(200).json({
+                user: userDetails[0]
+            });
+        } catch (err) {
+            res.status(500).json({ message: 'Lỗi khi lấy thông tin chi tiết người dùng', error: err.message });
+        }
+    }
+    
+    
+   
+    
 
    
 }
