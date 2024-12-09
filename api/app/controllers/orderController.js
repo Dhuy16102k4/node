@@ -53,10 +53,10 @@ function validateEmail(email) {
 class OrderController {
     // Phương thức thêm đơn hàng
     async add(req, res) {
-        const { address, paymentMethod, phone ,email} = req.body;
+        const { address, paymentMethod, phone, email } = req.body;
         try {
             const cart = await findUserCart(req.user._id);
-           
+
             if (!cart) {
                 return res.status(400).json({ message: 'Giỏ hàng trống. Không thể đặt đơn hàng.' });
             }
@@ -87,20 +87,20 @@ class OrderController {
             });
 
             await order.save();
-            
+
             selectedProducts.forEach(item => {
                 const product = item.product;
                 const quantityOrdered = item.quantity;
-    
+
                 if (product.stock < quantityOrdered) {
                     return res.status(400).json({ message: `Không đủ số lượng của sản phẩm: ${product.name}` });
                 }
-    
+
                 product.stock -= quantityOrdered;
                 product.save();  // Save the updated stock
             });
             cart.products = cart.products.filter(item => !item.isSelected);
-            
+
             await cart.save();
 
             // Gửi email thông báo đặt hàng thành công
@@ -139,136 +139,165 @@ class OrderController {
         }
     }
 
-    
+
     // Phương thức hiển thị tất cả đơn hàng của người dùng
-    
+
     //user display
     async display(req, res) {
+        const status = req.query.status || '';
+        const page = parseInt(req.query.page) || 1;
+        const MAX_LIMIT = 100;
+        const orderPerPage = Math.min(parseInt(req.query.limit) || 10, MAX_LIMIT);
+        if (page <= 0 || orderPerPage <= 0) {
+            return res.status(400).json({ message: 'Invalid pagination parameters.' });
+        }
         try {
-            const orders = await Order.find({ user: req.user._id });
+
+           let filter = { user: req.user._id }; // Lọc theo user trước
+            if (status) {
+                filter.status = status; // Nếu có status, thêm điều kiện lọc theo status
+            }
+
+            const [orders, totalOrders] = await Promise.all([
+                Order.find(filter)
+                    .populate('products.product', 'name price')
+                    .sort({ createdAt: -1 })
+                    .skip((page - 1) * orderPerPage)
+                    .limit(orderPerPage)
+                    .lean(), // Dùng lean() để trả về kết quả là đối tượng thuần
+                Order.countDocuments(filter)
+            ]);
             
+            const totalPages = Math.ceil(totalOrders / orderPerPage);
+            if (page > totalPages) {
+                return res.status(400).json({ message: 'Page exceeds total pages.' });
+            }
+
+
             if (!orders || orders.length === 0) {
                 return res.status(404).json({ message: 'Không tìm thấy đơn hàng nào' });
             }
-    
-            res.status(200).json(orders);
+            res.status(200).json({
+                totalOrders,
+                orders,
+                totalPages,
+                currentPage: page,
+                limit: orderPerPage
+            });
+            
         } catch (err) {
             res.status(500).json({ message: 'Lỗi khi lấy thông tin đơn hàng', error: err.message });
         }
     }
-    
+
 
 
 
     async adminDisplay(req, res) {
-        const status = req.query.status || ''; 
-        const page = parseInt(req.query.page) || 1; 
-        const orderPerPage = parseInt(req.query.limit) || 3; 
-    
-    
+        const status = req.query.status || '';
+        const page = parseInt(req.query.page) || 1;
+        const orderPerPage = parseInt(req.query.limit) || 3;
+
+
         if (page <= 0 || orderPerPage <= 0) {
             return res.status(400).json({ message: 'Invalid pagination parameters.' });
         }
-    
+
         try {
             // điều kiện lọc
             let filter = {};
             if (status) {
-                filter.status = status; 
+                filter.status = status;
             }
-            
+
             const [orders, totalOrders] = await Promise.all([
                 Order.find(filter)
                     .populate('products.product', 'name price')
-                    .populate('user', 'username') 
-                    .populate('status') 
-                    .skip((page - 1) * orderPerPage) 
+                    .populate('user', 'username')
+                    .populate('status')
+                    .skip((page - 1) * orderPerPage)
                     .limit(orderPerPage)
                     .sort({ createdAt: -1 })
                     .lean(),
-                    
-                Order.countDocuments(filter) 
+
+                Order.countDocuments(filter)
             ]);
-    
+
             const totalPages = Math.ceil(totalOrders / orderPerPage);
-    
-        
+
+
             if (page > totalPages) {
                 return res.status(400).json({ message: 'Page exceeds total pages.' });
             }
-          
-            
-            
-        
-            res.status(200).json({
-                orders, 
 
-                totalPages, 
-                currentPage: page, 
-                limit: orderPerPage 
+            res.status(200).json({
+                orders,
+                totalPages,
+                currentPage: page,
+                limit: orderPerPage
             });
         } catch (err) {
             res.status(500).json({ message: 'Lỗi khi lấy thông tin đơn hàng', error: err.message });
         }
     }
     // Phương thức cập nhật trạng thái đơn hàng
-   async updateStatus(req, res) {
-    const orderId = req.params.id;
-    
-    const { status, email, phone } = req.body; // Chỉ lấy status, email và phone từ body (nếu cần)
+    async updateStatus(req, res) {
+        const orderId = req.params.id;
 
-    try {
-        const order = await Order.findById(orderId);
-        if (!order) {
-            return res.status(400).json({ message: 'Không tìm thấy đơn hàng để cập nhật.' });
+        const { status, email, phone } = req.body; // Chỉ lấy status, email và phone từ body (nếu cần)
+
+        try {
+            const order = await Order.findById(orderId);
+            if (!order) {
+                return res.status(400).json({ message: 'Không tìm thấy đơn hàng để cập nhật.' });
+            }
+
+            const validStatuses = ['Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'];
+            if (!validStatuses.includes(status)) {
+                return res.status(400).json({ message: 'Trạng thái không hợp lệ.' });
+            }
+
+            // Cập nhật trạng thái đơn hàng mà không thay đổi các trường khác như email, phone
+            order.status = status;
+
+            // Nếu bạn muốn cập nhật email và phone khi có thay đổi
+            if (email) order.email = email;
+            if (phone) order.phone = phone;
+
+            await order.save();
+            console.log('Updated Order:', order);
+            if (order.email && validateEmail(order.email)) {
+                await sendEmail(order.email, 'Cập nhật trạng thái đơn hàng', emailContent.StatusUpdated(order._id, status));
+            }
+
+            res.status(200).json({ message: `Trạng thái đơn hàng đã được cập nhật thành ${status}`, order });
+        } catch (err) {
+            res.status(500).json({ message: 'Lỗi khi cập nhật trạng thái đơn hàng', error: err.message });
         }
-
-        const validStatuses = ['Pending', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled'];
-        if (!validStatuses.includes(status)) {
-            return res.status(400).json({ message: 'Trạng thái không hợp lệ.' });
-        }
-
-        // Cập nhật trạng thái đơn hàng mà không thay đổi các trường khác như email, phone
-        order.status = status;
-
-        // Nếu bạn muốn cập nhật email và phone khi có thay đổi
-        if (email) order.email = email;
-        if (phone) order.phone = phone;
-
-        await order.save();
-        console.log('Updated Order:', order);
-        if (order.email && validateEmail(order.email)) {
-            await sendEmail(order.email, 'Cập nhật trạng thái đơn hàng', emailContent.StatusUpdated(order._id, status));
-        }
-
-        res.status(200).json({ message: `Trạng thái đơn hàng đã được cập nhật thành ${status}`, order });
-    } catch (err) {
-        res.status(500).json({ message: 'Lỗi khi cập nhật trạng thái đơn hàng', error: err.message });
     }
-}
 
-    
+
 
     async deleteOrder(req, res) {
         const orderId = req.params.id;
         if (!mongoose.Types.ObjectId.isValid(orderId)) {
             return res.status(400).json({ message: 'ID không hợp lệ.' });
         }
-    
+
         try {
             const order = await Order.findById(orderId);
             if (!order) {
                 return res.status(400).json({ message: 'Không tìm thấy đơn hàng để xóa.' });
             }
-           // const email = order.email;
-          //  console.log(email);
+            // const email = order.email;
+            //  console.log(email);
             // Kiểm tra trạng thái đơn hàng, không thể xóa nếu đã được vận chuyển hoặc giao
             if (['Shipped', 'Delivered'].includes(order.status)) {
                 return res.status(400).json({ message: 'Không thể xóa đơn hàng đã được vận chuyển hoặc giao.' });
             }
-    
+
             // Xóa đơn hàng
-            
+
             const deletedOrder = await Order.deleteOne({ _id: orderId });
             if (deletedOrder.deletedCount === 0) {
                 return res.status(400).json({ message: 'Order not found or already deleted' });
@@ -283,19 +312,21 @@ class OrderController {
             } else {
                 console.error('Invalid or missing email for order:', orderId);
             }
-            
+
             res.status(200).json({ message: 'Đơn hàng đã được xóa thành công.' });
         } catch (err) {
             res.status(500).json({ message: 'Lỗi khi xóa đơn hàng', error: err.message });
         }
     }
-    
-   
+
+
     // Phương thức lấy chi tiết đơn hàng
+    // lỗi giỏ hàng phần logout 
+    // route lại khi thanh toán xong
     async getOrderById(req, res) {
         const { orderId } = req.params;
         try {
-            const order = await Order.findById(orderId).populate('products.product');
+            const order = await Order.findById(orderId).populate('products.product', 'name price').lean();
             if (!order) {
                 return res.status(404).json({ message: 'Không tìm thấy đơn hàng' });
             }

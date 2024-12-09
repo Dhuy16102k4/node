@@ -1,0 +1,213 @@
+/* Modal Container */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Mờ nền */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  /* Modal Content */
+  .modalContent {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80%;
+    overflow-y: auto;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transform: translateY(20px);
+    animation: slideUp 0.1s ease-out; /* Hiệu ứng di chuyển modal lên */
+  }
+  
+  /* Modal Title */
+  .modalTitle {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+  }
+  
+  /* Close Button */
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 28px;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .close:hover {
+    color: #ff0000; /* Đổi màu khi hover */
+  }
+  
+  /* Labels và Inputs */
+  .modalLabel {
+    font-size: 16px;
+    margin-bottom: 8px;
+    display: block;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  /* Input Fields cho Email và Phone */
+  .modalInput,
+  .modalSelect {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .modalInput:focus,
+  .modalSelect:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+  }
+  
+  /* Chỉnh cho các trường email và phone */
+  .emailPhoneContainer {
+    display: flex;
+    justify-content: flex-start; /* Căn trái */
+    flex-direction: column;
+    gap: 12px; /* Khoảng cách giữa các trường */
+    margin-bottom: 18px;
+  }
+  
+  .emailPhoneContainer .modalLabel {
+    text-align: left;
+    margin-bottom: 6px;
+  }
+  
+  /* Buttons */
+  .modalButton {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+  }
+  
+  .modalButton:hover {
+    background-color: #45a049;
+  }
+  
+  .modalButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Pagination (for products) */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pageButton {
+    padding: 8px 15px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pageButton:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .pageButton.activePage {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  /* Modal Details View */
+  .detailsContainer {
+    padding: 20px;
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .productsTable {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+  }
+  
+  .productsTable th,
+  .productsTable td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .productsTable th {
+    background-color: #f8f8f8;
+    font-weight: bold;
+  }
+  
+  /* Optional: Mobile Responsiveness */
+  @media screen and (max-width: 600px) {
+    .modalContent {
+      width: 90%;
+      padding: 20px;
+    }
+  
+    .modalTitle {
+      font-size: 22px;
+    }
+  
+    .modalButton {
+      width: 100%;
+    }
+  
+    .close {
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+    }
+  }
+  
+  /* Animations for Modal */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
