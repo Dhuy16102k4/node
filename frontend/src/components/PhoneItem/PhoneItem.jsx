@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { assets } from '../../assets/assets';
-import './PhoneItem.css';
+import styles from './PhoneItem.module.css';
 import { StoreContext } from '../../context/StoreContext';
 import { AuthContext } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
@@ -76,16 +76,16 @@ const PhoneItem = ({ id, name, price, description, image, stock, rating }) => {
   };
 
   return (
-    <div className="phone-item">
-      <div className="phone-item-img-container">
+    <div className={styles["phone-item"]}>
+      <div className={styles["phone-item-img-container"]}>
         <Link to={`/detail/${id}`}>
-          <img className="phone-item-image" src={imageUrl} alt={name} />
+          <img className={styles["phone-item-image"]} src={imageUrl} alt={name} />
         </Link>
-        <div className="food-item-counter">
+        <div className={styles["food-item-counter"]}>
           {quantity === 0 ? (
-            <img className="add" onClick={() => increaseQuantity()} src={assets.add_icon_white} alt="Add to Cart" />
+            <img className={styles.add} onClick={() => increaseQuantity()} src={assets.add_icon_white} alt="Add to Cart" />
           ) : (
-            <div className="food-item-counter">
+            <div className={styles["food-item-counter"]}>
               <img onClick={() => decreaseQuantity()} src={assets.remove_icon_red} alt="Remove from Cart" />
               <p>{quantity}</p>
               <img onClick={() => increaseQuantity()} src={assets.add_icon_green} alt="Add More" />
@@ -93,12 +93,12 @@ const PhoneItem = ({ id, name, price, description, image, stock, rating }) => {
           )}
         </div>
       </div>
-      <div className="phone-item-info">
-        <div className="phone-item-name-rating">
+      <div className={styles["phone-item-info"]}>
+        <div className={styles["phone-item-name-rating"]}>
           <p>{name}</p>
           <p>{rating != undefined ? Math.round(rating) + "⭐" : "0⭐"}</p>
         </div>
-        <p className="phone-item-price">{formatPriceWithDots(price)} VND</p>
+        <p className={styles["phone-item-price"]}>{formatPriceWithDots(price)} VND</p>
         <button onClick={handleAddToCart}>Add to Cart</button>
       </div>
     </div>

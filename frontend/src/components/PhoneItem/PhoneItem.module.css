@@ -96,8 +96,8 @@
 
 /* Giá sản phẩm */
 .phone-item-price {
-    color: #f31804; /* Màu đỏ đặc trưng */
-    font-size: 26px; /* Tăng kích thước font chữ cho giá */
+    color: tomato; /* Màu đỏ đặc trưng */
+    font-size: 20px; /* Tăng kích thước font chữ cho giá */
     font-weight: 700; /* Làm đậm hơn để giá nổi bật */
     margin: 10px 0;
 }
@@ -116,7 +116,6 @@
     cursor: pointer;
     border-radius: 50%;
     background-color: tomato;
-    padding: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease-in-out;
 }
