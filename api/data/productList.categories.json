@@ -1,22 +1,66 @@
 [{
   "_id": {
-    "$oid": "672ddf8d0ea5c21f77761a24"
+    "$oid": "67574d76d6ee0814ebb52fb1"
   },
-  "name": "android",
-  "description": "ư",
+  "name": "Apple",
+  "description": "It is a mobile phone, meaning that it makes calls and sends text messages without wires. ",
   "createdAt": {
-    "$date": "2024-11-08T09:53:17.738Z"
+    "$date": "2024-12-09T20:05:10.527Z"
   },
   "__v": 0
 },
 {
   "_id": {
-    "$oid": "672de00c0ea5c21f77761a39"
+    "$oid": "67574df7d6ee0814ebb52fb4"
   },
-  "name": "iphone",
-  "description": "ttg",
+  "name": "Samsung",
+  "description": "Samsung gradually diversified its businesses, entering the electronics industry in the late 1960s and building a shipyard in the mid-1970s.",
   "createdAt": {
-    "$date": "2024-11-08T09:55:24.908Z"
+    "$date": "2024-12-09T20:07:19.094Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6757518bd6ee0814ebb5301d"
+  },
+  "name": "Xiaomi",
+  "description": "Xiaomi produces smartphones tablets, laptops, wearable devices, TVs, routers, and other smart home devices on their web store and on third-party websites.",
+  "createdAt": {
+    "$date": "2024-12-09T20:22:35.520Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675751e2d6ee0814ebb53020"
+  },
+  "name": "Huawei",
+  "description": "The Chinese multinational information technology and consumer electronics company Huawei has faced numerous criticisms for various aspects of its operations, particularly in regards to cybersecurity, intellectual property, and human rights violations.",
+  "createdAt": {
+    "$date": "2024-12-09T20:24:02.415Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6757520fd6ee0814ebb53024"
+  },
+  "name": "Oppo",
+  "description": "Its major product lines include smartphones, smart devices, audio devices, power banks, and other electronic products. It was reportedly associated with BBK Electronics, but the company denied this.",
+  "createdAt": {
+    "$date": "2024-12-09T20:24:47.239Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6757522cd6ee0814ebb53027"
+  },
+  "name": "Vivo",
+  "description": "Vivo Mobile Communication Co., Ltd., d/b/a vivo, is a Chinese multinational technology company headquartered in Dongguan, Guangdong, that designs and develops smartphones, smartphone accessories, software, and online services",
+  "createdAt": {
+    "$date": "2024-12-09T20:25:16.504Z"
   },
   "__v": 0
 }]
