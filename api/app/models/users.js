@@ -24,6 +24,7 @@ const UserSchema = new Schema({
         minlength: 6
     },
     phone: { type: String, required: true ,trim: true,},
+    address: { type: String, required: true ,trim: true,},
     verificationCode: { 
         type: String, 
         default: null 

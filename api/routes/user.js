@@ -9,6 +9,7 @@ router.get('/', userController.displayAll);
 
 router.post('/code', userController.sendVerificationCode);
 
+router.get('/detail/',authenticateToken, userController.userDetail);
 
 router.put('/update', authenticateToken, userController.updateUser);
 
