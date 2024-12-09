@@ -14,6 +14,7 @@ const LoginPopup = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [trangThai, setTrangThai] = useState('login');
+  const [code, setCode] = useState('');
 
   useEffect(() => {
     // Load Facebook SDK for JavaScript
@@ -96,6 +97,35 @@ const LoginPopup = () => {
           setError(error.message)
         }
       }
+    } else if(trangThai === "forgotPassword"){
+      try{
+        setSuccessMessage("Loading ...")
+        setShowAdd(true)
+        await axiosInstance.post('/register/code', {email: email});
+        setSuccessMessage("Code sended to email")
+        setShowAdd(true)
+        setTrangThai("resetPassword")
+      } catch(error) {
+          if(error.response.status === 404){
+            setError("Email not found. Try again!")
+          }
+      }
+    } else if(trangThai === "resetPassword"){
+      try{
+        await axiosInstance.put('/register/reset', {email: email, resetCode: code, newPassword: password});
+        setSuccessMessage("Change password sucess")
+        setShowAdd(true)
+        setTrangThai("login")
+        setPassword('')
+        setCode('')
+      } catch(error) {
+        if(error.response.status === 400){
+          setError("Code has expired!")
+        } else{
+          setError(error.message)
+        }
+        
+      }
     }
   };
 
@@ -133,21 +163,24 @@ const LoginPopup = () => {
             {trangThai === "login" ? "Login" :
              trangThai === "register" ? "Register" :
              trangThai === "forgotPassword" ? "Reset password" :
-             "Unknown State"}
+             trangThai === "resetPassword" ? "Reset password" : "Unknown State"
+             }
           </h2>
           {/* Close Icon (Dấu "X") */}
           <span className="close-icon" onClick={() => setShowLogin(false)}>&times;</span>
         </div>
-
+              
         <div className="login-popup-inputs">
-          <input
-            type="text"
-            placeholder="Username"
-            value={usernameInput}
-            onChange={(e) => setUsernameInput(e.target.value)}
-            required
-          />
-          {trangThai === "register" && (
+          {(trangThai != "forgotPassword" && trangThai != "resetPassword") && (
+            <input
+              type="text"
+              placeholder="Username"
+              value={usernameInput}
+              onChange={(e) => setUsernameInput(e.target.value)}
+              required
+            />
+          )}
+          {(trangThai === "register" || trangThai === "forgotPassword") && (
             <input
               type="email"
               placeholder="Email"
@@ -155,7 +188,6 @@ const LoginPopup = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            
           )}
           {trangThai === "register" && (
             <input
@@ -175,7 +207,16 @@ const LoginPopup = () => {
               required
             />
           )}
-          {(trangThai === "login" || trangThai === "register") && (
+          {trangThai === "resetPassword" && (
+            <input
+              type="text"
+              placeholder="Code"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              required
+            />
+          )}
+          {(trangThai === "login" || trangThai === "register" || trangThai === "resetPassword") && (
             <input
               type="password"
               placeholder="Password"
@@ -198,7 +239,8 @@ const LoginPopup = () => {
         <button type="submit" id="btn-all">
           {trangThai === "login" ? "Login" :
            trangThai === "register" ? "Register" :
-           trangThai === "forgotPassword" ? "Reset password" : "Unknown State"}
+           trangThai === "forgotPassword" ? "Reset password" :
+           trangThai === "resetPassword" ? "Change new password" : "Unknown State"}
         </button>
 
         {trangThai === "login" && (
