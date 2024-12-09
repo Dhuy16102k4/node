@@ -1,11 +1,13 @@
+version: "3.9"
+
 services:
   db-init:
     build:
       context: ./api
     image: data
-    command: ["node", "init-mongo.js"]
+    command: ["sh", "-c", "until nc -z mongodb 27017; do echo Waiting for MongoDB; sleep 2; done; node init-mongo.js"]
     environment:
-      - MONGO_URI=mongodb://mongodb:27017/productList 
+      - MONGO_URI=mongodb://mongodb:27017/productList
     depends_on:
       - mongodb
     networks:
@@ -22,15 +24,15 @@ services:
       - ./api/.env
     environment:
       - NODE_ENV=docker
-      - MONGO_URI=mongodb://mongodb:27017/productList  # Liên kết MongoDB
-      - PORT=3000  # Đảm bảo rằng cổng 3000 được sử dụng trong API
+      - MONGO_URI=mongodb://mongodb:27017/productList
+      - PORT=3000
     depends_on:
       - mongodb
     networks:
       - my-network
     restart: unless-stopped
     volumes:
-      - ./public/img:/usr/src/app/public/img  # Liên kết thư mục img với container
+      - ./public/img:/usr/src/app/public/img
 
   frontend-app:
     build:
@@ -41,7 +43,7 @@ services:
     env_file:
       - ./frontEnd/.env
     environment:
-      - REACT_APP_API_URL=${REACT_APP_API_URL}  # Đảm bảo API URL chính xác
+      - REACT_APP_API_URL=${REACT_APP_API_URL}
     networks:
       - my-network
     restart: unless-stopped
@@ -52,7 +54,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - mongo-data:/data/db  # Lưu trữ dữ liệu MongoDB
+      - mongo-data:/data/db
     networks:
       - my-network
     restart: unless-stopped
@@ -64,8 +66,8 @@ services:
       timeout: 10s
 
 volumes:
-  mongo-data:  # Định nghĩa volume để lưu trữ dữ liệu MongoDB
+  mongo-data:
 
 networks:
   my-network:
-    driver: bridge  # Đảm bảo các container có thể giao tiếp với nhau trong mạng nội bộ
+    driver: bridge
