@@ -49,6 +49,7 @@ class ProductController {
                     .populate('category', 'name')
                     .skip((page - 1) * productPerPage)
                     .limit(productPerPage)
+                    .sort({ createdAt: -1 })
                     .lean(),
                 Product.countDocuments(filter),
                 Category.find().lean()
