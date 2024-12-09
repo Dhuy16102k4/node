@@ -5,6 +5,7 @@ import { AuthContext } from '../../context/AuthContext';
 import axiosInstance from '../../utils/axiosConfig';
 import jwtDecode from 'jwt-decode';
 import { StoreContext } from '../../context/StoreContext';
+import Modal from '../../components/admin/ManageOrder/Modal';
 
 const MyOrders = () => {
     const [loading, setLoading] = useState(true);
@@ -13,6 +14,8 @@ const MyOrders = () => {
     const {formatPrice} = useContext(StoreContext);
     const token = localStorage.getItem("authToken");
     const [deletingOrderId, setDeletingOrderId] = useState(null);
+    const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+    const [orderDetails, setOrderDetails] = useState(null);
 
     const createHeaders = () => {
         console.log("Token from localStorage:", token);
@@ -68,11 +71,11 @@ const MyOrders = () => {
           }
         } catch (error) {
           if(error.response.status === 400){
-            setErrorMessage("You can't cancel while the order is delivery!");
+            setErrorMessage("You can't cancel while the order is delivering!");
           } else if(error.response.status === 403){
             setErrorMessage("You don't have permission to cancel this order.");
           } else {
-            setErrorMessage("An error occurred while deleting the order.");
+            setErrorMessage("An error occurred while canceling the order.");
           }
           
         }
@@ -81,25 +84,38 @@ const MyOrders = () => {
     if (loading) {
         return <div className={styles.loading}>Loading...</div>;
     }
+    
+    const handleViewDetails = (order) => {
+      setOrderDetails(order);
+      setIsDetailsModalOpen(true);
+    };
 
     return (
-        <div className={styles['my-orders']}>
-            <h2>My Orders</h2>
-            <div>{errorMessage}</div>
-            <div className={styles.container}>
-            {orders.map((order) => (
-            <div key={order._id} className={styles["my-orders-order"]}>
-                <img src={assets.parcel_icon} alt="" />
-                <p>ID: {order._id}</p>
-                <p>{formatPrice(order.totalPrice)}</p>
-                <p>Items: {order.products.length}</p>
-                <p><span>&#x25cf;</span> <b>{order.status}</b></p>
-                <button className={styles.detail}>Detail</button>
-                <button onClick={() => handleDeleteOrder(order._id)}>Cancel</button>
+        <div>
+          {isDetailsModalOpen && orderDetails && (
+            <Modal
+              onClose={() => setIsDetailsModalOpen(false)}
+              order={orderDetails}
+              isDetails={true}
+            />
+          )}
+          <div className={styles['my-orders']}>
+              <h2>My Orders</h2>
+              <div>{errorMessage}</div>
+              <div className={styles.container}>
+              {orders.map((order) => (
+              <div key={order._id} className={styles["my-orders-order"]}>
+                  <img src={assets.parcel_icon} alt="" />
+                  <p>ID: {order._id}</p>
+                  <p>{formatPrice(order.totalPrice)}</p>
+                  <p>Items: {order.products.length}</p>
+                  <p><span>&#x25cf;</span> <b>{order.status}</b></p>
+                  <button onClick={() => handleViewDetails(order)} className={styles.detail}>Detail</button>
+                  <button onClick={() => handleDeleteOrder(order._id)}>Cancel</button>
+              </div>
+              ))}
             </div>
-            ))}
-                
-            </div>
+        </div>
         </div>
   )
 }

@@ -1,4 +1,25 @@
 /* General Navbar styles */
+.navbar-right input[type="text"] {
+    margin: 0px;
+    width: 150px;
+    height: 30px; /* Fixed height */
+    font-size: 16px; /* Text size */
+    border: 1px solid #ccc; /* Border for visibility */
+    border-radius: 5px; /* Rounded edges for aesthetics */
+    outline: none; /* Remove default outline */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 200px; /* Default width */
+    display: flex;
+    align-items: center; /* Ensure vertical centering */
+    justify-content: center; /* Center text horizontally (optional) */
+}
+
+/* On focus, make the input stand out */
+.navbar-right input[type="text"]:focus {
+    border-color: tomato; /* Highlighted border */
+    box-shadow: 0 0 5px rgba(255, 99, 71, 0.5); /* Subtle shadow effect */
+}
+
 .navbar {
     padding: 20px 30px;
     display: flex;
@@ -54,13 +75,10 @@
 }
 
 .navbar-search-icon img {
-    width: 20px;
+    width: 25px;
     transition: all 0.3s ease;
 }
 
-.navbar-search-icon img:hover {
-    transform: scale(1.1);
-}
 
 /* Cart Dot Notification */
 .navbar-search-icon .dot {
@@ -142,6 +160,12 @@
         width: 140px;
     }
 
+    .navbar-right input[type="text"] {
+        height: 28px; /* Giảm chiều cao input */
+        font-size: 15px; /* Giảm kích thước chữ */
+        width: 180px; /* Thu nhỏ chiều rộng */
+    }
+
     .navbar-menu {
         gap: 25px;
         font-size: 16px;
@@ -159,6 +183,12 @@
 @media (max-width: 900px) {
     .navbar .logo {
         width: 120px;
+    }
+
+    .navbar-right input[type="text"] {
+        height: 26px; /* Giảm chiều cao hơn nữa */
+        font-size: 14px; /* Giảm kích thước chữ thêm */
+        width: 160px; /* Thu nhỏ chiều rộng */
     }
 
     .navbar-menu {
@@ -179,6 +209,12 @@
 @media (max-width: 750px) {
     .navbar-menu {
         display: none;
+    }
+
+    .navbar-right input[type="text"] {
+        height: 24px; /* Rất nhỏ gọn cho màn hình nhỏ */
+        font-size: 13px; /* Chữ nhỏ hơn */
+        width: 140px; /* Rất gọn */
     }
 
     .navbar-right {
