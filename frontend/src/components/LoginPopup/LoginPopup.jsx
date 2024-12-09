@@ -1,9 +1,8 @@
-// src/components/LoginPopup/LoginPopup.jsx
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import './LoginPopup.css';
 import { assets } from '../../assets/assets';
-import axiosInstance from '../../utils/axiosConfig'; // Import axios instance
-import { AuthContext } from '../../context/AuthContext'; // Import AuthContext
+import axiosInstance from '../../utils/axiosConfig'; 
+import { AuthContext } from '../../context/AuthContext';
 
 const LoginPopup = () => {
   const { setShowLogin, setUsername, setShowAdd, setSuccessMessage } = useContext(AuthContext);
@@ -14,11 +13,32 @@ const LoginPopup = () => {
   const [error, setError] = useState('');
   const [trangThai, setTrangThai] = useState('login');
 
+  useEffect(() => {
+    // Load Facebook SDK for JavaScript
+    window.fbAsyncInit = function () {
+      window.FB.init({
+        appId: '1148892766594471', // Thay bằng App ID của bạn
+        cookie: true,
+        xfbml: true,
+        version: 'v10.0',
+      });
+    };
+
+    // Tải SDK Facebook
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = 'https://connect.facebook.net/en_US/sdk.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  }, []);
+
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate inputs
-    if(trangThai == "login"){
+    if(trangThai === "login"){
       if (!usernameInput || !password) {
         setError('Username and password are required.');
         return;
@@ -30,48 +50,41 @@ const LoginPopup = () => {
           password,
         });
 
-        console.log('Response:', response);  // Log the response to inspect data
-
         if (response.status === 200) {
-          // Save token and username in localStorage
           localStorage.setItem('authToken', response.data.token);
-          localStorage.setItem('username', usernameInput); // Save username
-          console.log('Token saved:', response.data.token); // Log token to verify
+          localStorage.setItem('username', usernameInput); 
 
-          // Update the username state in AuthContext and close the login popup
           setUsername(usernameInput); 
-          setShowLogin(false); // Close the login popup
+          setShowLogin(false);
           alert('Login successful!');
           window.location.reload();
         }
       } catch (error) {
-          console.error('Login error:', error); 
-          if (error.response && error.response.data) {
+        if (error.response && error.response.data) {
           setError(error.response.data.message || 'Login failed. Please try again.');
         } else {
           setError('An error occurred. Please try again later.');
         }
       }
-    }else if(trangThai == "register"){
-      try{
-        if(password != confirmPassword){
-          setError('Password confirm is not match, try again!');
-          return;
-        }
+    } else if(trangThai === "register"){
+      if(password !== confirmPassword){
+        setError('Password confirm does not match, try again!');
+        return;
+      }
 
+      try {
         const response = await axiosInstance.post('/register/submit', {
-        username: usernameInput, 
-        email, 
-        password, 
-        confirm_password: confirmPassword,
-      });
+          username: usernameInput, 
+          email, 
+          password, 
+          confirm_password: confirmPassword,
+        });
 
-      setShowAdd(true);
-      setSuccessMessage("Create account success");
-      setTrangThai('login');
-      }catch (error){
+        setShowAdd(true);
+        setSuccessMessage("Account created successfully");
+        setTrangThai('login');
+      } catch (error) {
         if (error.response.status === 409) {
-          // Display the specific error message for username or email conflict
           setError(error.response.data.error || 'Username or email already exists.');
         } else if(error.response.status === 400){
           setError(error.response.data.error || 'Password must contain at least 6 characters');
@@ -82,135 +95,136 @@ const LoginPopup = () => {
     }
   };
 
-  return (
+  const handleFacebookLogin = () => {
+    window.FB.login(function(response) {
+      if (response.authResponse) {
+        console.log('Facebook login successful:', response);
+        const { accessToken } = response.authResponse;
 
-      
-        <div className="login-popup">
-          <form onSubmit={handleLoginSubmit} className="login-popup-container">
-            <div className="login-popup-title">
-              <h2>
-                {(() => {
-                  if (trangThai === "login") {
-                    return "Login";
-                  } else if (trangThai === "register") {
-                    return "Register";
-                  } else if (trangThai === "forgotPassword") {
-                    return "Reset password";
-                  } else {
-                    return "Unknown State";
-                  }
-                })()}
-              </h2>
-              <img
-                onClick={() => setShowLogin(false)}
-                src={assets.cross_icon}
-                alt="Close"
-                style={{ cursor: 'pointer' }}
-              />
-            </div>
-            <div className="login-popup-inputs">
-              <input
-                type="text"
-                placeholder="Username"
-                value={usernameInput}
-                onChange={(e) => setUsernameInput(e.target.value)}
-                required
-              />
-              {trangThai=="register"?
-              <input
-                type="email"
-                placeholder="Email"
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              :
-              null
-              }
-              {(trangThai=="login" || trangThai =="register")?
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              :
-              null
-              }
-              {trangThai =="register"?
-              <input
-                type="password"
-                placeholder="Confirm password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-              :
-              null
-              }
-            </div>
-            <button type="submit">
-            {(() => {
-                if (trangThai === "login") {
-                  return "Login";
-                } else if (trangThai === "register") {
-                  return "Register";
-                } else if (trangThai === "forgotPassword") {
-                  return "Reset password";
-                } else {
-                  return "Unknown State";
-                }
-              })()}
-            </button>
-          
-          
-          {error && <p className="error-message">{"*" + error}</p>}
-          
-          {trangThai == "login"?
+        // Gửi token cho backend của bạn để xác thực và đăng nhập
+        axiosInstance.post('/facebook-login', { accessToken })
+          .then(response => {
+            if (response.status === 200) {
+              localStorage.setItem('authToken', response.data.token);
+              setUsername(response.data.username);
+              setShowLogin(false);
+              alert('Login successful!');
+              window.location.reload();
+            }
+          })
+          .catch(err => {
+            setError('An error occurred during Facebook login.');
+          });
+      } else {
+        setError('Facebook login failed.');
+      }
+    }, {scope: 'public_profile,email'});
+  };
+
+  return (
+    <div className="login-popup">
+      <form onSubmit={handleLoginSubmit} className="login-popup-container">
+        <div className="login-popup-title">
+          <h2>
+            {trangThai === "login" ? "Login" :
+             trangThai === "register" ? "Register" :
+             trangThai === "forgotPassword" ? "Reset password" :
+             "Unknown State"}
+          </h2>
+          <img
+            onClick={() => setShowLogin(false)}
+            src={assets.cross_icon}
+            alt="Close"
+            style={{ cursor: 'pointer' }}
+          />
+        </div>
+        <div className="login-popup-inputs">
+          <input
+            type="text"
+            placeholder="Username"
+            value={usernameInput}
+            onChange={(e) => setUsernameInput(e.target.value)}
+            required
+          />
+          {trangThai === "register" && (
+            <input
+              type="email"
+              placeholder="Email"
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          )}
+          {(trangThai === "login" || trangThai === "register") && (
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          )}
+          {trangThai === "register" && (
+            <input
+              type="password"
+              placeholder="Confirm password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          )}
+        </div>
+        <button type="submit">
+          {trangThai === "login" ? "Login" :
+           trangThai === "register" ? "Register" :
+           trangThai === "forgotPassword" ? "Reset password" : "Unknown State"}
+        </button>
+
+        {error && <p className="error-message">{"*" + error}</p>}
+
+        {trangThai === "login" && (
           <p>
-            Create new account{' '}
+            Create a new account{' '}
             <span onClick={() => setTrangThai('register')} style={{ cursor: 'pointer', color: 'blue' }}>
               Click here
             </span>
           </p>
-          :
-          null
-          }
-          
-          {trangThai == "register"?
-            <p>
+        )}
+
+        {trangThai === "register" && (
+          <p>
             Already have an account?{' '}
             <span onClick={() => setTrangThai('login')} style={{ cursor: 'pointer', color: 'blue' }}>
               Click here
             </span>
-            </p>
-            :
-            null
-          }
+          </p>
+        )}
 
-          {trangThai != "forgotPassword"?
-            <p>
+        {trangThai !== "forgotPassword" && (
+          <p>
             Forgot password?{' '}
             <span onClick={() => setTrangThai("forgotPassword")} style={{ cursor: 'pointer', color: 'blue' }}>
               Click here
             </span>
           </p>
-          :
-          null
-          }
+        )}
 
-          {trangThai == "forgotPassword"?
-            <p>
+        {trangThai === "forgotPassword" && (
+          <p>
             Go back to login?{' '}
             <span onClick={() => setTrangThai("login")} style={{ cursor: 'pointer', color: 'blue' }}>
               Click here
             </span>
           </p>
-          :
-          null
-          }
-        </form>
-      </div>
+        )}
+        
+        {/* Facebook Login Button - Only show on "login" state */}
+        {trangThai === "login" && (
+          <button type="button" onClick={handleFacebookLogin} className="facebook-login-btn">
+            Login with Facebook
+          </button>
+        )}
+      </form>
+    </div>
   );
 };
 

@@ -6,7 +6,30 @@
     background-color: #00000090;
     display: grid;
 }
-
+.facebook-login-btn {
+    background-color: #3b5998; /* Facebook Blue */
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .facebook-login-btn img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .facebook-login-btn:hover {
+    background-color: #365899; /* Darker blue on hover */
+  }
+  
 .login-popup-container{
     place-self: center;
     width: max(23vw, 330px);
