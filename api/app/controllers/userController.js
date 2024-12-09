@@ -52,9 +52,9 @@ class UserController {
             // Gửi email với mã xác nhận
             await sendVerificationEmail(email, verificationCode);
     
-            res.status(200).json({ message: 'Mã xác nhận đã được gửi qua email.' ,verificationCode ,email: req.user.email});
+            res.status(200).json({ message: 'The confirmation code has been sent via email.' ,verificationCode ,email: req.user.email});
         } catch (err) {
-            res.status(500).json({ message: 'Lỗi khi gửi mã xác nhận', error: err.message });
+            res.status(500).json({ message: 'Error sending verification code', error: err.message });
         }
     }
     
@@ -66,12 +66,12 @@ class UserController {
         try {
             const user = await User.findById(req.user._id);
             if (!user) {
-                return res.status(404).json({ message: 'Không tìm thấy người dùng' });
+                return res.status(404).json({ message: 'User not found' });
             }
     
             // Kiểm tra mã xác nhận
             if (user.verificationCode !== verificationCode || user.verificationCodeExpires < Date.now()) {
-                return res.status(400).json({ message: 'Mã xác nhận không hợp lệ hoặc đã hết hạn.' });
+                return res.status(400).json({ message: 'The verification code is invalid or has expired.' });
             }
     
             // Cập nhật thông tin người dùng (nếu có thay đổi)
@@ -84,9 +84,9 @@ class UserController {
     
             await user.save();
     
-            res.status(200).json({ message: 'Thông tin người dùng đã được cập nhật thành công', user });
+            res.status(200).json({ message: 'User information has been updated successfully', user });
         } catch (err) {
-            res.status(500).json({ message: 'Lỗi khi cập nhật thông tin người dùng', error: err.message });
+            res.status(500).json({ message: 'Error updating user information', error: err.message });
         }
     }
     

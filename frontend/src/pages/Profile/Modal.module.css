@@ -125,4 +125,12 @@
     margin-bottom: 15;
     text-align: center;
   
-}
+}.successMessage {
+    color: rgb(222, 168, 168);
+    font-size: 16px;
+    margin-top: 10px;
+    font-weight: bold;
+    padding-bottom: 8px;
+
+  }
+  

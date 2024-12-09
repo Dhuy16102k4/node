@@ -24,25 +24,7 @@
   margin: 0;
 }
 
-.empty-cart {
-  text-align: center;
-  margin-top: 50px;
-}
-
-.empty-cart-image {
-  max-width: 300px;
-  width: 100%;
-  height: auto;
-  margin-bottom: 20px;
-}
-
-.empty-cart p {
-  font-size: 22px;
-  color: #444;
-  margin-top: 10px;
-  font-weight: 500;
-}
-
+/* Style for each cart item */
 .cart-items-item {
   display: flex;
   align-items: center;
@@ -53,8 +35,10 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin: 15px 0;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
-  width: 100%; /* Ensures it occupies full available width */
-  box-sizing: border-box; /* Prevents width from being altered by padding */
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Prevent overflow */
 }
 
 .cart-items-item:hover {
@@ -120,6 +104,7 @@
   background-color: #e2e2e2;
 }
 
+/* Cart bottom section */
 .cart-bottom {
   margin-top: 40px;
   display: flex;
@@ -172,43 +157,98 @@
   background-color: #d9534f;
 }
 
-/* Responsive styling */
+/* Empty cart styles */
+.empty-cart {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.empty-cart-image {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.empty-cart p {
+  font-size: 22px;
+  color: #444;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+/* Media Queries for screens with width below 750px */
 @media (max-width: 750px) {
   .cart-items-title {
+    font-size: 12px;
     flex-direction: column;
     text-align: center;
   }
 
   .cart-items-item {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    padding: 15px; /* Adjust padding for smaller screen sizes */
+    padding: 15px;
+    gap: 15px;
+    justify-content: space-between;
+    flex-wrap: nowrap; /* Prevent wrapping */
+  }
+
+  .cart-items-item img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .quantity img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .cart-items-item .cross {
+    font-size: 16px;
+  }
+
+  .cart-items-item p {
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .cart-bottom {
     flex-direction: column;
-    gap: 30px;
+    gap: 15px;
   }
 
   .cart-total {
     width: 100%;
+    padding: 15px;
   }
 
   .cart-total button {
     width: 100%;
+    padding: 15px;
+    font-size: 18px;
+  }
+
+  .cart-total-details {
+    font-size: 16px;
+  }
+
+  .empty-cart p {
+    font-size: 16px;
   }
 }
 
 /* Media Queries for screens with width below 500px */
-/* Media Queries for screens with width below 500px */
 @media (max-width: 500px) {
   .cart {
-    padding: 15px;  /* Giảm padding để tiết kiệm không gian */
-    margin-top: 80px; /* Giảm khoảng cách trên */
+    padding: 15px;
+    margin-top: 80px;
   }
 
   .cart-items-title {
-    font-size: 10px;  /* Giảm font size để phù hợp với màn hình nhỏ */
+    font-size: 10px;
     flex-direction: column;
     text-align: center;
     padding: 10px 0;
@@ -219,28 +259,29 @@
     align-items: center;
     padding: 10px;
     width: 100%;
-    margin: 10px 0;  /* Giảm khoảng cách giữa các sản phẩm */
+    margin: 10px 0;
+    flex-wrap: nowrap; /* Prevent wrapping */
   }
 
   .cart-items-item img {
-    width: 60px;  /* Giảm kích thước ảnh sản phẩm */
-    height: 60px;
+    width: 50px;
+    height: 50px;
   }
 
   .quantity img {
-    width: 24px;  /* Giảm kích thước biểu tượng cộng/trừ */
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 
   .cart-items-item .cross {
-    font-size: 16px;  /* Giảm kích thước nút x */
+    font-size: 14px;
   }
 
   .cart-items-item p {
-    font-size: 12px;  /* Giảm kích thước font cho tên sản phẩm */
-    text-overflow: ellipsis;  /* Thêm ellipsis nếu tên sản phẩm dài */
-    white-space: nowrap;  /* Ngăn không cho văn bản nhảy dòng */
-    overflow: hidden;  /* Ẩn phần văn bản dài */
+    font-size: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .cart-bottom {
@@ -250,21 +291,20 @@
 
   .cart-total {
     width: 100%;
-    padding: 15px;  /* Giảm padding */
+    padding: 15px;
   }
 
   .cart-total button {
-    padding: 15px;  /* Giảm padding của nút */
-    font-size: 18px;  /* Giảm font size */
-    font-weight: bold;
     width: 100%;
+    padding: 15px;
+    font-size: 16px;
   }
 
   .cart-total-details {
-    font-size: 16px;  /* Giảm font size của chi tiết tổng tiền */
+    font-size: 14px;
   }
 
   .empty-cart p {
-    font-size: 16px;  /* Giảm kích thước văn bản khi giỏ hàng trống */
+    font-size: 14px;
   }
 }

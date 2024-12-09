@@ -12,7 +12,6 @@ const Profile = () => {
   });
 
   const [isEditing, setIsEditing] = useState(false);
- // const [emailCodeSent, setEmailCodeSent] = useState(false);
   const [emailCode, setEmailCode] = useState('');
   const [inputCode, setInputCode] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -90,35 +89,44 @@ const Profile = () => {
       setErrorMessage("Failed to send verification code. Please try again.");
     }
   };
-  
 
   const handleSave = async () => {
-    
-      try {
-        // Gửi yêu cầu PUT để cập nhật thông tin người dùng
-        const response = await axiosInstance.put('user/update', {
-          //userId: 'userId', 
-          username: modalData.name,
-          email: modalData.email,
-          phone: modalData.phone,
-          verificationCode: emailCode,  // Gửi mã xác nhận đã được lưu vào backend
-        }, {
-          headers: createHeaders(),
-        });
-     
-        if (response.status === 200) {
-          setProfile(modalData);  // Cập nhật thông tin người dùng sau khi thành công
-          setIsEditing(false);
-          setErrorMessage('');
-          console.log('Profile updated successfully:', response.data.user);
-        }
+    try {
+      // Check if the verification code entered by the user matches the one sent
+      if (inputCode !== emailCode) {
+        setErrorMessage("Invalid verification code. Please try again.");
+        return;  // Exit if verification codes don't match
+      }
+  
+      // Proceed with the PUT request to update user info if codes match
+      const response = await axiosInstance.put('/user/update', {
+        username: modalData.name,
+        email: modalData.email,
+        phone: modalData.phone,
+        verificationCode: inputCode,  // Send the verification code the user entered
+      }, {
+        headers: createHeaders(),
+      });
+  
+      if (response.status === 200) {
+        setProfile(modalData);  // Update the profile after success
+        setIsEditing(false);
+        setErrorMessage(''); // Reset error message
+        console.log('Profile updated successfully:', response.data.user);
+      }
     } catch (error) {
       console.error("Error updating profile:", error);
-      setErrorMessage("Failed to update profile. Please try again.");
-    }
   
+      // Check if there is an error and display the error message
+      if (error.response && error.response.data) {
+        setErrorMessage(error.response.data.message || 'Failed to update profile. Please try again.');
+      } else {
+        setErrorMessage("Failed to update profile. Please try again.");
+      }
+    }
   };
-
+  
+  
   return (
     <div className="profile-container">
       <div className="profile-header">
@@ -172,17 +180,16 @@ const Profile = () => {
 
       {isEditing && (
         <Modal
-        modalData={modalData}
-        setModalData={setModalData}
-        inputCode={inputCode}
-        setInputCode={setInputCode}
-        emailCode={emailCode}
-        handleSendEmailCode={handleSendEmailCode}
-        handleSave={handleSave}  // Ensure this is being passed correctly
-        errorMessage={errorMessage}
-        setIsEditing={setIsEditing}
-      />
-      
+          modalData={modalData}
+          setModalData={setModalData}
+          inputCode={inputCode}
+          setInputCode={setInputCode}
+          emailCode={emailCode}
+          handleSendEmailCode={handleSendEmailCode}
+          handleSave={handleSave}  // Ensure this is being passed correctly
+          errorMessage={errorMessage}
+          setIsEditing={setIsEditing}
+        />
       )}
     </div>
   );

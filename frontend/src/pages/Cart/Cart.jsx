@@ -68,7 +68,7 @@ const Cart = () => {
     <div className="cart">
       {cartArray.length === 0 ? (
         <div className="empty-cart">
-          <a href ="/menu"><img 
+          <a href="/menu"><img 
             src="https://static.vecteezy.com/system/resources/previews/005/006/007/non_2x/no-item-in-the-shopping-cart-click-to-go-shopping-now-concept-illustration-flat-design-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon-vector.jpg" 
             alt="Empty Cart" 
             className="empty-cart-image" 
@@ -101,7 +101,7 @@ const Cart = () => {
               return (
                 <div 
                   key={key}  // Ensure the key is unique
-                  className="cart-items-title cart-items-item"
+                  className="cart-items-item"
                 >
                   <input 
                     type="checkbox" 
@@ -151,3 +151,4 @@ const Cart = () => {
 };
 
 export default Cart;
+
