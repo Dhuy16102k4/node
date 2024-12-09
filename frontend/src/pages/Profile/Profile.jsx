@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import './Profile.css'; // This is for non-modular global styles
 import Modal from './Modal'; // Import the new Modal component
+import axiosInstance from '../../utils/axiosConfig';
 
 const Profile = () => {
   const [profile, setProfile] = useState({
-    name: 'John Doe',
-    email: 'johndoe@example.com',
-    phone: '0123456789',
-    address: '123 Main St, City, Country',
-    purchaseCount: 5,
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -18,11 +18,50 @@ const Profile = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const [modalData, setModalData] = useState({
-    name: profile.name,
-    email: profile.email,
-    phone: profile.phone,
-    address: profile.address,
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
   });
+  const createHeaders = () => {
+    console.log("Token from localStorage:", token);
+    return {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+    };
+};
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await axiosInstance.get('/user/detail/',{
+          headers: createHeaders()
+        });
+          
+         // Thay đổi URL theo API của bạn
+        const userData = response.data;
+        setProfile({
+          name: userData.username,
+          email: userData.email,
+          phone: userData.phone,
+          address: userData.address,
+          purchaseCount: userData.orderCount,
+        });
+
+        // Cập nhật modalData nếu cần thiết
+        setModalData({
+          name: userData.username,
+          email: userData.email,
+          phone: userData.phone,
+          address: userData.address,
+        });
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+        // Bạn có thể set một thông báo lỗi ở đây
+      }
+    };
+
+    fetchUserProfile();
+  }, []);  // Chỉ gọi một lần khi component mount
 
   const handleSendEmailCode = () => {
     setEmailCodeSent(true);

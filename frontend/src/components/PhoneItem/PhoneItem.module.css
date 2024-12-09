@@ -33,7 +33,11 @@
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
     border-color: tomato;
 }
-
+#quantity {
+    padding-top: 8px;
+    font-weight: bold;
+    font-size: 18px;
+}
 /* Hiệu ứng khi hover vào nút Add to Cart */
 .phone-item button:hover {
     background-color: #1abc9c;
@@ -131,11 +135,14 @@
     right: 15px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
     padding: 6px;
     border-radius: 50px;
     background-color: white;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    padding-bottom: 15px;
+    background-color: #d3d1d1;
+    
 }
 
 /* Các icon của nút đếm số lượng */

@@ -87,7 +87,7 @@ const PhoneItem = ({ id, name, price, description, image, stock, rating }) => {
           ) : (
             <div className={styles["food-item-counter"]}>
               <img onClick={() => decreaseQuantity()} src={assets.remove_icon_red} alt="Remove from Cart" />
-              <p>{quantity}</p>
+              <p id="quantity">{quantity}</p>
               <img onClick={() => increaseQuantity()} src={assets.add_icon_green} alt="Add More" />
             </div>
           )}

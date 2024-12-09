@@ -2,8 +2,8 @@ const User = require('../models/users');
 const bcrypt = require('bcrypt')
 class RegisterController {
     async submit(req, res, next) {
-        const { username, email, password, confirm_password } = req.body;
-        if (!username || !email || !password || !confirm_password) {
+        const { username, email, password, confirm_password , phone , address } = req.body;
+        if (!username || !email || !password || !confirm_password|| !phone || !address) {
             return res.status(400).json({ error: 'All fields are required' });
         }
         if (password !== confirm_password) {
@@ -16,7 +16,7 @@ class RegisterController {
             .then(existsUser => {
                 if (existsUser) {
                     return res.status(409).json({ error: 'Username or email already exists' });
-                } const newUser = new User({ username, email, password });
+                } const newUser = new User({ username, email, password, phone , address });
 
                 return newUser.save();
             })
