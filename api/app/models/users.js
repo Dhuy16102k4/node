@@ -23,8 +23,8 @@ const UserSchema = new Schema({
         required: true,
         minlength: 6
     },
-    phone: { type: String, required: true ,trim: true,},
-    address: { type: String, required: true ,trim: true,},
+    phone: { type: String, required: false ,trim: true,},
+    address: { type: String, required: false ,trim: true,},
     verificationCode: { 
         type: String, 
         default: null 
