@@ -22,7 +22,7 @@ const MyOrders = () => {
     const orderPerPage = 2;
 
     // Define the possible statuses here
-    const allStatuses = ["All", "Pending", "Shipped", "Delivered", "Canceled"];
+    const allStatuses = ["All", "Pending", "Shipped", "Delivered", "Cancelled","Confirmed"];
 
     const handleStatusChange = (e) => {
         setStatus(e.target.value);

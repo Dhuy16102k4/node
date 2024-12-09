@@ -24,15 +24,14 @@ const Modal = ({
   };
 
   const handleSaveWithValidation = () => {
-    // Kiểm tra nếu mã xác minh để trống
+    // Check if verification code is empty
     if (!inputCode.trim()) {
       setValidationError('Không được để trống mã xác minh.');
     } else {
-      setValidationError(''); // Xóa thông báo lỗi nếu mã xác minh đã được nhập
-      handleSave(); // Tiến hành lưu khi không có lỗi
+      setValidationError('');  // Clear validation error if code is valid
+      handleSave();  // Call handleSave when validation passes
     }
   };
-
   return (
     <div className={styles.modal}>
       <div className={styles.modalContent}>
@@ -51,7 +50,7 @@ const Modal = ({
               Send Code
             </button>
           ) : (
-            <p>Code sent to email: {emailCode}</p>
+            <p>Code sented to email</p>
           )}
         </div>
 
