@@ -4,7 +4,7 @@
     border-radius: 15px 15px 0px 0px;
     object-fit: cover; /* Đảm bảo ảnh không bị méo */
     transition: transform 0.3s ease; /* Hiệu ứng mượt mà khi hover */
-   
+   padding-top: 10px;
 }
 
 /* Phần thông tin sản phẩm */

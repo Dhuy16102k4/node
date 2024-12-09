@@ -165,6 +165,9 @@ const OrderManagement = () => {
     <div className={styles.container}>
       <h1>Order Management</h1>
 
+      {errorMessage && <div className={styles.error}>{errorMessage}</div>}
+
+      {/* Show the filter and pagination even if there is an error */}
       <div className={styles.statusFilter}>
         <label htmlFor="status">Filter by Status: </label>
         <select
@@ -182,6 +185,7 @@ const OrderManagement = () => {
         </select>
       </div>
 
+      {/* Show the modal dialogs if open */}
       {isModalOpen && (
         <Modal
           onClose={() => setIsModalOpen(false)}
@@ -201,77 +205,80 @@ const OrderManagement = () => {
         />
       )}
 
-      <div className={styles.tableWrapper}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Customer Name</th>
-              <th>Order Id</th>
-              <th>Address</th>
-              <th>Total</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order._id}>
-                <td>{order.user.username}</td>
-                <td>{order._id}</td>
-                <td>{order.address}</td>
-                <td>{order.totalPrice.toLocaleString('vi-VN')} VND</td>
-                <td>{order.status}</td>
-                <td>
-                  
-                  <button
-                    onClick={() => handleEditOrder(order)}
-                    className={styles.buttonEdit}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteOrder(order._id)}
-                    className={styles.buttonDelete}
-                    disabled={deletingOrderId === order._id} // Disable the button if deleting
-                  >
-                    {deletingOrderId === order._id ? "Waiting..." : "Delete"}
-                  </button>
-                  <button
-                    onClick={() => handleViewDetails(order)}
-                    className={styles.buttonDetails}
-                  >
-                    Details
-                  </button>
-                </td>
+      {/* Only show the table if there is no error */}
+      {!errorMessage && (
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Customer Name</th>
+                <th>Order Id</th>
+                <th>Address</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {orders.map((order) => (
+                <tr key={order._id}>
+                  <td>{order.user.username}</td>
+                  <td>{order._id}</td>
+                  <td>{order.address}</td>
+                  <td>{order.totalPrice.toLocaleString('vi-VN')} VND</td>
+                  <td>{order.status}</td>
+                  <td>
+                    <button
+                      onClick={() => handleEditOrder(order)}
+                      className={styles.buttonEdit}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteOrder(order._id)}
+                      className={styles.buttonDelete}
+                      disabled={deletingOrderId === order._id} // Disable the button if deleting
+                    >
+                      {deletingOrderId === order._id ? "Waiting..." : "Delete"}
+                    </button>
+                    <button
+                      onClick={() => handleViewDetails(order)}
+                      className={styles.buttonDetails}
+                    >
+                      Details
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
-      <div className={styles.pagination}>
-        <button
-          className={styles.button}
-          onClick={goToPrevPage}
-          disabled={currentPage === 1}
-        >
-          Trang trước
-        </button>
+      {/* Only show pagination if there is no error */}
+      {!errorMessage && (
+        <div className={styles.pagination}>
+          <button
+            className={styles.button}
+            onClick={goToPrevPage}
+            disabled={currentPage === 1}
+          >
+            Trang trước
+          </button>
 
-        <span className={styles.pageNumber}>
-          Page {currentPage} of {totalPages}
-        </span>
+          <span className={styles.pageNumber}>
+            Page {currentPage} of {totalPages}
+          </span>
 
-        <button
-          className={styles.button}
-          onClick={goToNextPage}
-          disabled={currentPage === totalPages}
-        >
-          Trang sau
-        </button>
-      </div>
-
-      {errorMessage && <div className={styles.error}>{errorMessage}</div>}
+          <button
+            className={styles.button}
+            onClick={goToNextPage}
+            disabled={currentPage === totalPages}
+          >
+            Trang sau
+          </button>
+        </div>
+      )}
     </div>
   );
 };

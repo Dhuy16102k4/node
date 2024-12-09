@@ -19,10 +19,10 @@ const MyOrders = () => {
     const [orderDetails, setOrderDetails] = useState(null);
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
-    const orderPerPage = 2;
+    const orderPerPage = 5;
 
     // Define the possible statuses here
-    const allStatuses = ["All", "Pending", "Shipped", "Delivered", "Canceled"];
+    const allStatuses = ["All", "Pending", "Shipped", "Delivered", "Cancelled"];
 
     const handleStatusChange = (e) => {
         setStatus(e.target.value);
@@ -97,7 +97,6 @@ const MyOrders = () => {
             } else {
                 setErrorMessage("An error occurred while canceling the order.");
             }
-
         }
     };
 
@@ -149,20 +148,30 @@ const MyOrders = () => {
 
             <div className={styles['my-orders']}>
                 <h2>My Orders</h2>
-                <div>{errorMessage}</div>
-                <div className={styles.container}>
-                    {orders.map((order) => (
-                        <div key={order._id} className={styles["my-orders-order"]}>
-                            <img src={assets.parcel_icon} alt="" />
-                            <p>ID: {order._id}</p>
-                            <p>{formatPrice(order.totalPrice)}</p>
-                            <p>Items: {order.products.length}</p>
-                            <p><span>&#x25cf;</span> <b>{order.status}</b></p>
-                            <button onClick={() => handleViewDetails(order)} className={styles.detail}>Detail</button>
-                            <button onClick={() => handleDeleteOrder(order._id)}>Cancel</button>
+                {errorMessage && (
+                    <div className={styles.errorMessage}>{errorMessage}</div>
+                )}
+
+                {/* Only show orders if there is no error */}
+                {!errorMessage && orders.length === 0 ? (
+                    <div className={styles.noOrdersMessage}>No orders available for the selected status.</div>
+                ) : (
+                    !errorMessage && (
+                        <div className={styles.container}>
+                            {orders.map((order) => (
+                                <div key={order._id} className={styles["my-orders-order"]}>
+                                    <img src={assets.parcel_icon} alt="" />
+                                    <p>ID: {order._id}</p>
+                                    <p>{formatPrice(order.totalPrice)}</p>
+                                    <p>Items: {order.products.length}</p>
+                                    <p><span>&#x25cf;</span> <b>{order.status}</b></p>
+                                    <button onClick={() => handleViewDetails(order)} className={styles.detail}>Detail</button>
+                                    <button onClick={() => handleDeleteOrder(order._id)}>Cancel</button>
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
+                    )
+                )}
             </div>
 
             <div className={styles.pagination}>

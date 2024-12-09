@@ -65,3 +65,54 @@
     }
     
 }
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .pagination button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .pagination button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+  }
+  
+  .pageNumber {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+@media (max-width: 900px) {
+    .my-orders-order {
+        grid-template-columns: 1fr 2fr 1fr;
+        row-gap: 10px;
+        font-size: 12px;
+    }
+
+    .my-orders-order button {
+        font-size: 10px;
+    }
+
+    .pagination button {
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+
+    .pagination .pageNumber {
+        font-size: 14px;
+    }
+}
