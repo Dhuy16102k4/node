@@ -7,6 +7,8 @@ import { AuthContext } from '../../context/AuthContext';
 const LoginPopup = () => {
   const { setShowLogin, setUsername, setShowAdd, setSuccessMessage } = useContext(AuthContext);
   const [usernameInput, setUsernameInput] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -75,9 +77,11 @@ const LoginPopup = () => {
       try {
         const response = await axiosInstance.post('/register/submit', {
           username: usernameInput, 
-          email, 
-          password, 
+          email: email, 
+          password: password, 
           confirm_password: confirmPassword,
+          phone: phone,
+          address: address
         });
 
         setShowAdd(true);
@@ -147,7 +151,27 @@ const LoginPopup = () => {
             <input
               type="email"
               placeholder="Email"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            
+          )}
+          {trangThai === "register" && (
+            <input
+              type="text"
+              value={phone}
+              placeholder="Phone"
+              onChange={(e) => setPhone(e.target.value)}
+              required
+            />
+          )}
+          {trangThai === "register" && (
+            <input
+              type="text"
+              value={address}
+              placeholder="Address"
+              onChange={(e) => setAddress(e.target.value)}
               required
             />
           )}
@@ -182,7 +206,7 @@ const LoginPopup = () => {
             Login with Facebook
           </button>
         )}
-        
+
         {error && <p className="error-message">{"*" + error}</p>}
 
         {trangThai === "login" && (
