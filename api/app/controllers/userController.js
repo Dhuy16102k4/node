@@ -33,7 +33,7 @@ async function sendVerificationEmail(userEmail, verificationCode) {
 class UserController {
     // Phương thức gửi email xác nhận cho việc cập nhật thông tin người dùng
     async sendVerificationCode(req, res) {
-        const { email } = req.body;
+        const  email  = req.user.email;
         try {
             // Kiểm tra xem email có tồn tại trong hệ thống không
             const user = await User.findOne({ email });
@@ -52,7 +52,7 @@ class UserController {
             // Gửi email với mã xác nhận
             await sendVerificationEmail(email, verificationCode);
     
-            res.status(200).json({ message: 'Mã xác nhận đã được gửi qua email.' });
+            res.status(200).json({ message: 'Mã xác nhận đã được gửi qua email.' ,verificationCode ,email: req.user.email});
         } catch (err) {
             res.status(500).json({ message: 'Lỗi khi gửi mã xác nhận', error: err.message });
         }
@@ -60,11 +60,11 @@ class UserController {
     
      // Phương thức cập nhật thông tin người dùng
      async updateUser(req, res) {
-        const { userId } = req.params;
+       // const  userId  = req.user._id;
         const { username, email, password, phone, verificationCode } = req.body;
     
         try {
-            const user = await User.findById(userId);
+            const user = await User.findById(req.user._id);
             if (!user) {
                 return res.status(404).json({ message: 'Không tìm thấy người dùng' });
             }

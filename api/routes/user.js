@@ -7,7 +7,7 @@ const authenticateToken = require('../middlerware/authToken');
 router.get('/', userController.displayAll);
 
 
-router.post('/code', userController.sendVerificationCode);
+router.get('/code', authenticateToken, userController.sendVerificationCode);
 
 router.get('/detail/',authenticateToken, userController.userDetail);
 

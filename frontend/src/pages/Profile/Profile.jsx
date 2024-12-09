@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import './Profile.css'; // This is for non-modular global styles
-import Modal from './Modal'; // Import the new Modal component
+import React, { useState, useEffect } from 'react';
+import './Profile.css';
+import Modal from './Modal';
 import axiosInstance from '../../utils/axiosConfig';
 
 const Profile = () => {
@@ -12,33 +12,42 @@ const Profile = () => {
   });
 
   const [isEditing, setIsEditing] = useState(false);
-  const [emailCodeSent, setEmailCodeSent] = useState(false);
+ // const [emailCodeSent, setEmailCodeSent] = useState(false);
   const [emailCode, setEmailCode] = useState('');
   const [inputCode, setInputCode] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
   const [modalData, setModalData] = useState({
     name: '',
     email: '',
     phone: '',
     address: '',
   });
+
+  const token = localStorage.getItem('authToken');  // Fetch the token from localStorage
+
+  // Function to create headers with Authorization token
   const createHeaders = () => {
+    if (!token) {
+      console.error("Token is missing in localStorage");
+      return {};  // Return an empty object if there's no token
+    }
     console.log("Token from localStorage:", token);
     return {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
     };
-};
+  };
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await axiosInstance.get('/user/detail/',{
-          headers: createHeaders()
+        const response = await axiosInstance.get('/user/detail/', {
+          headers: createHeaders(),
         });
-          
-         // Thay đổi URL theo API của bạn
-        const userData = response.data;
+
+        console.log("API response:", response.data.user);  // Log the API response to see if it's correct
+
+        const userData = response.data.user;
         setProfile({
           name: userData.username,
           email: userData.email,
@@ -47,7 +56,7 @@ const Profile = () => {
           purchaseCount: userData.orderCount,
         });
 
-        // Cập nhật modalData nếu cần thiết
+        // Set modal data as well
         setModalData({
           name: userData.username,
           email: userData.email,
@@ -56,29 +65,58 @@ const Profile = () => {
         });
       } catch (error) {
         console.error("Error fetching profile data:", error);
-        // Bạn có thể set một thông báo lỗi ở đây
+        setErrorMessage("Failed to load profile data. Please try again.");
       }
     };
 
-    fetchUserProfile();
-  }, []);  // Chỉ gọi một lần khi component mount
-
-  const handleSendEmailCode = () => {
-    setEmailCodeSent(true);
-    const randomCode = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
-    setEmailCode(randomCode);
-    console.log('Email verification code sent:', randomCode);
-  };
-
-  const handleSave = () => {
-    if (inputCode === emailCode) {
-      setProfile(modalData);
-      setIsEditing(false);
-      setErrorMessage('');
-      console.log('Profile saved:', profile);
+    if (token) {
+      fetchUserProfile();  // Only call if token exists
     } else {
-      setErrorMessage('The verification code is incorrect. Please try again.');
+      setErrorMessage("No token found. Please log in again.");
     }
+  }, [token]);  // Re-run the effect if the token changes
+
+  const handleSendEmailCode = async () => {
+    try {
+      const response = await axiosInstance.get('/user/code', {
+        headers: createHeaders(),
+      });
+
+      if (response.status === 200) {
+        setEmailCode(response.data.verificationCode); // Save verification code
+      }
+    } catch (error) {
+      console.error("Error sending verification code:", error);
+      setErrorMessage("Failed to send verification code. Please try again.");
+    }
+  };
+  
+
+  const handleSave = async () => {
+    
+      try {
+        // Gửi yêu cầu PUT để cập nhật thông tin người dùng
+        const response = await axiosInstance.put('user/update', {
+          //userId: 'userId', 
+          username: modalData.name,
+          email: modalData.email,
+          phone: modalData.phone,
+          verificationCode: emailCode,  // Gửi mã xác nhận đã được lưu vào backend
+        }, {
+          headers: createHeaders(),
+        });
+     
+        if (response.status === 200) {
+          setProfile(modalData);  // Cập nhật thông tin người dùng sau khi thành công
+          setIsEditing(false);
+          setErrorMessage('');
+          console.log('Profile updated successfully:', response.data.user);
+        }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      setErrorMessage("Failed to update profile. Please try again.");
+    }
+  
   };
 
   return (
@@ -86,6 +124,8 @@ const Profile = () => {
       <div className="profile-header">
         <h2>Your Profile</h2>
       </div>
+
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <div className="profile-content">
         <div className="profile-details">
@@ -111,7 +151,6 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Avatar Image */}
         <img 
           src="https://cdn11.dienmaycholon.vn/filewebdmclnew/public/userupload/files/Image%20FP_2024/anh-dai-dien-tet-18.jpg" 
           alt="Avatar" 
@@ -122,26 +161,28 @@ const Profile = () => {
       <div className="profile-actions">
         <button
           className="edit-btn"
-          onClick={() => setIsEditing(true)}
+          onClick={() => {
+            console.log("Modal data before editing:", modalData); // Log modalData before editing
+            setIsEditing(true);
+          }}
         >
           Edit
         </button>
       </div>
 
-      {/* Render the modal only if editing */}
       {isEditing && (
         <Modal
-          modalData={modalData}
-          setModalData={setModalData}
-          inputCode={inputCode}
-          setInputCode={setInputCode}
-          emailCode={emailCode}
-          emailCodeSent={emailCodeSent}
-          handleSendEmailCode={handleSendEmailCode}
-          handleSave={handleSave}
-          errorMessage={errorMessage}
-          setIsEditing={setIsEditing}
-        />
+        modalData={modalData}
+        setModalData={setModalData}
+        inputCode={inputCode}
+        setInputCode={setInputCode}
+        emailCode={emailCode}
+        handleSendEmailCode={handleSendEmailCode}
+        handleSave={handleSave}  // Ensure this is being passed correctly
+        errorMessage={errorMessage}
+        setIsEditing={setIsEditing}
+      />
+      
       )}
     </div>
   );
