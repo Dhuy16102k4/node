@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 const Order = require('../models/orders');
 const Cart = require('../models/carts');
 const User = require('../models/users');
+const Voucher = require('../models/voucher');
 const mongoose = require('mongoose');
 // Tạo transporter
 const transporter = nodemailer.createTransport({
@@ -52,101 +53,71 @@ function validateEmail(email) {
 }
 class OrderController {
     // Phương thức thêm đơn hàng
-    // async add(req, res) {
-    //     const { address, paymentMethod, phone, email } = req.body;
-    //     try {
-    //         const cart = await findUserCart(req.user._id);
-
-    //         if (!cart) {
-    //             return res.status(400).json({ message: 'Giỏ hàng trống. Không thể đặt đơn hàng.' });
-    //         }
-
-    //         const selectedProducts = cart.products.filter(item => item.isSelected);
-    //         if (selectedProducts.length === 0) {
-    //             return res.status(400).json({ message: 'Không có sản phẩm nào được chọn.' });
-    //         }
-
-    //         const totalPrice = selectedProducts.reduce(
-    //             (total, item) => total + item.quantity * item.price,
-    //             0
-    //         );
-
-    //         const order = new Order({
-    //             user: req.user._id,
-    //             products: selectedProducts.map(item => ({
-    //                 product: item.product._id,
-    //                 quantity: item.quantity,
-    //                 price: item.price
-    //             })),
-    //             email,
-    //             totalPrice,
-    //             address,
-    //             phone,
-    //             paymentMethod,
-    //             status: 'Pending',
-    //         });
-
-    //         await order.save();
-
-    //         selectedProducts.forEach(item => {
-    //             const product = item.product;
-    //             const quantityOrdered = item.quantity;
-
-    //             if (product.stock < quantityOrdered) {
-    //                 return res.status(400).json({ message: `Không đủ số lượng của sản phẩm: ${product.name}` });
-    //             }
-
-    //             product.stock -= quantityOrdered;
-    //             product.save();  // Save the updated stock
-    //         });
-    //         cart.products = cart.products.filter(item => !item.isSelected);
-
-    //         await cart.save();
-
-    //         // Gửi email thông báo đặt hàng thành công
-    //         await sendEmail(email, 'Đặt hàng thành công', emailContent.Pending(order._id));
-
-    //         res.status(201).json({ message: 'Đơn hàng đã được đặt thành công', order });
-    //     } catch (err) {
-    //         res.status(500).json({ message: 'Lỗi khi đặt đơn hàng', error: err.message });
-    //     }
-    // }
     async add(req, res) {
         const { address, paymentMethod, phone, email, voucherCode } = req.body;
-
+    
         try {
-            // Get user's cart
+            // Find user's cart
             const cart = await findUserCart(req.user._id);
             if (!cart) {
-                return res.status(400).json({ message: 'Cart is empty. Cannot place an order.' });
+                return res.status(400).json({ message: 'Giỏ hàng trống. Không thể đặt đơn hàng.' });
             }
-
+    
+            // Filter selected products
             const selectedProducts = cart.products.filter(item => item.isSelected);
             if (selectedProducts.length === 0) {
-                return res.status(400).json({ message: 'No products selected.' });
+                return res.status(400).json({ message: 'Không có sản phẩm nào được chọn.' });
             }
-
-            // Calculate total price before discount
-            const totalPrice = selectedProducts.reduce((total, item) => total + item.quantity * item.price, 0);
-
-            // Voucher discount calculation
+    
+            // Calculate total price
+            const totalPrice = selectedProducts.reduce(
+                (total, item) => total + item.quantity * item.price,
+                0
+            );
+    
+            // Initialize voucher discount value
             let voucherDiscount = 0;
+            let voucher = null;
+    
+            // Check if a voucher code was provided
             if (voucherCode) {
-                const voucher = await Voucher.findOne({ code: voucherCode });
-                if (voucher) {
-                    // Validate voucher (check expiration, usage limit, etc.)
-                    if (voucher.isExpired()) {
-                        return res.status(400).json({ message: 'Voucher has expired.' });
-                    }
-                    voucherDiscount = (voucher.discount / 100) * totalPrice; // Assuming the voucher discount is percentage
-                } else {
-                    return res.status(400).json({ message: 'Invalid voucher code.' });
+                voucher = await Voucher.findOne({ code: voucherCode, isActive: true });
+                if (!voucher) {
+                    return res.status(400).json({ message: 'Mã giảm giá không hợp lệ hoặc không còn hiệu lực.' });
+                }
+    
+                // Check if the voucher is expired
+                if (new Date(voucher.expiryDate) < new Date()) {
+                    return res.status(400).json({ message: 'Mã giảm giá đã hết hạn.' });
+                }
+    
+                // Check if the voucher meets the minimum order value
+                if (totalPrice < voucher.minOrderValue) {
+                    return res.status(400).json({ message: `Đơn hàng phải có giá trị tối thiểu là ${voucher.minOrderValue} để sử dụng mã giảm giá.` });
+                }
+    
+                // Check if the voucher usage limit has been reached
+                if (voucher.usedCount >= voucher.usageLimit) {
+                    return res.status(400).json({ message: 'Mã giảm giá đã hết lượt sử dụng.' });
+                }
+    
+                // Apply voucher discount
+                if (voucher.discountType === 'percentage') {
+                    voucherDiscount = (totalPrice * voucher.discountValue) / 100;
+                } else if (voucher.discountType === 'fixed') {
+                    voucherDiscount = voucher.discountValue;
+                }
+    
+                // Apply the discount to the total price
+                const discountedPrice = totalPrice - voucherDiscount;
+    
+                // Ensure the final price is not negative
+                if (discountedPrice < 0) {
+                    voucherDiscount = totalPrice;
                 }
             }
-
-            const finalPrice = totalPrice - voucherDiscount;
-
-            // Create the order object
+    
+            // Create the order
             const order = new Order({
                 user: req.user._id,
                 products: selectedProducts.map(item => ({
@@ -155,41 +126,49 @@ class OrderController {
                     price: item.price
                 })),
                 email,
-                totalPrice: finalPrice,
+                totalPrice: totalPrice - voucherDiscount,  // Final price after voucher discount
                 address,
                 phone,
                 paymentMethod,
                 status: 'Pending',
-                voucher: voucherCode ? voucher._id : null,
-                voucherDiscount,
+                voucher: voucher ? voucher._id : null,
+                voucherDiscount,  // Store the discount applied from the voucher
             });
-
+    
             await order.save();
-
-            // Update product stock in the cart
-            selectedProducts.forEach(item => {
+    
+            // Update voucher usage count
+            if (voucher) {
+                voucher.usedCount += 1;
+                await voucher.save();
+            }
+    
+            // Update the stock for each product
+            for (let item of selectedProducts) {
                 const product = item.product;
                 const quantityOrdered = item.quantity;
-
+    
                 if (product.stock < quantityOrdered) {
-                    return res.status(400).json({ message: `Insufficient stock for product: ${product.name}` });
+                    return res.status(400).json({ message: `Không đủ số lượng của sản phẩm: ${product.name}` });
                 }
-
+    
                 product.stock -= quantityOrdered;
-                product.save();  // Save the updated stock
-            });
-
-            cart.products = cart.products.filter(item => !item.isSelected); // Remove selected items from cart
+                await product.save();
+            }
+    
+            // Clear selected products from cart
+            cart.products = cart.products.filter(item => !item.isSelected);
             await cart.save();
-
-            // Send email notification about order success
-            await sendEmail(email, 'Order Placed Successfully', emailContent.Pending(order._id));
-
-            res.status(201).json({ message: 'Order placed successfully', order });
+    
+            // Send email notification
+            await sendEmail(email, 'Đặt hàng thành công', emailContent.Pending(order._id));
+    
+            res.status(201).json({ message: 'Đơn hàng đã được đặt thành công', order });
         } catch (err) {
-            res.status(500).json({ message: 'Error placing order', error: err.message });
+            res.status(500).json({ message: 'Lỗi khi đặt đơn hàng', error: err.message });
         }
     }
+    
 
     // Phương thức hủy đơn hàng
     async cancelOrders(req, res) {

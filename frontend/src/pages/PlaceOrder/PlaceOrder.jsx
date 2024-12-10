@@ -1,19 +1,34 @@
 import React, { useContext, useState } from 'react';
-import './PlaceOrder.css';
+import './PlaceOrder.css'; // Đảm bảo bạn đã cập nhật file này
 import { StoreContext } from '../../context/StoreContext';
+import { useHistory } from 'react-router-dom';
 
 const PlaceOrder = () => {
-  const { getTotalCartAmount, formatPrice, createOrder, cartItems } = useContext(StoreContext);
+  const { getTotalCartAmount, formatPrice, createOrder, cartItems, applyVoucher,voucher } = useContext(StoreContext);
+  const [voucherCode, setVoucherCode] = useState('');
+  const [voucherError, setVoucherError] = useState('');
+  const history = useHistory();
+
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     address: '',
     phone: '',
     paymentMethod: 'Cash',
+    voucherCode: '', // Thêm voucherCode vào form
   });
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // New state for loading indicator
+  const [isLoading, setIsLoading] = useState(false);
 
+  const handleApplyVoucher = () => {
+    if (voucherCode.trim()) {
+      applyVoucher(voucherCode)
+        .catch((err) => setVoucherError('Failed to apply voucher.'));
+    } else {
+      setVoucherError('Please enter a voucher code.');
+    }
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevData => ({ ...prevData, [name]: value }));
@@ -28,7 +43,7 @@ const PlaceOrder = () => {
       return;
     }
 
-    // Set loading state to true while processing the order
+    // Set loading state để xử lý đơn hàng
     setIsLoading(true);
 
     // Tạo dữ liệu đơn hàng
@@ -38,6 +53,7 @@ const PlaceOrder = () => {
       address: formData.address,
       phone: formData.phone,
       paymentMethod: formData.paymentMethod,
+      voucherCode: formData.voucherCode, // Thêm voucherCode vào đơn hàng
       products: Object.values(cartItems).map(item => ({
         product: item.product._id,
         quantity: item.quantity,
@@ -48,13 +64,12 @@ const PlaceOrder = () => {
 
     try {
       await createOrder(orderData);
-      setFormData({ name: '', email: '', address: '', phone: '', paymentMethod: 'Cash' }); // Reset form sau khi gửi đơn hàng
-      setError(''); // Reset lỗi nếu có
+      setFormData({ name: '', email: '', address: '', phone: '', paymentMethod: 'Cash', voucherCode: '' }); // Reset form
+      setError(''); // Reset error
     } catch (err) {
       setError('Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại!');
     } finally {
-      // Reset loading state once the order process is finished (success or error)
-      setIsLoading(false);
+      setIsLoading(false); // Reset loading state
     }
   };
 
@@ -107,6 +122,15 @@ const PlaceOrder = () => {
           <option value="Credit Card">Credit Card</option>
           <option value="Bank Transfer">Bank Transfer</option>
         </select>
+        <div className="voucher-field">
+          <input
+            type="text"
+            placeholder="Voucher Code"
+            onChange={handleChange}
+            name="voucherCode"
+            value={formData.voucherCode}
+          />
+        </div>
       </div>
 
       <div className="place-order-right">
@@ -121,8 +145,14 @@ const PlaceOrder = () => {
             <p>{formatPrice(25000)}</p>
           </div>
           <div className="cart-total-details">
-            <p>Total</p>
-            <p>{formatPrice(getTotalCartAmount() + 25000)}</p>
+            {voucher ? (
+              <>
+                <p className="old-price">{formatPrice(getTotalCartAmount() + 25000)}</p>
+                <p className="new-price">{formatPrice(getTotalCartAmount() + 25000 - (voucher.discountType === 'percentage' ? (getTotalCartAmount() * voucher.discountValue / 100) : voucher.discountValue))}</p>
+              </>
+            ) : (
+              <p>Total: {formatPrice(getTotalCartAmount() + 25000)}</p>
+            )}
           </div>
           <button type="submit" disabled={isLoading}>
             {isLoading ? 'Waiting...' : 'PROCEED TO PAYMENT'}
