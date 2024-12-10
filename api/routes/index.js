@@ -8,6 +8,7 @@ const homeRouter = require('./home');
 const userRouter = require('./user');
 const tokenRouter = require('./refreshToken');
 const dashRouter = require('./admin/dashboard');
+const voucherRouter = require('./voucher');
 function route(app) {
 
     app.use('/login', loginRouter);
@@ -15,7 +16,7 @@ function route(app) {
     app.use('/refresh', tokenRouter);
 
     //admin
-
+    app.use('/voucher',voucherRouter);
     app.use('/admin/product',productRouter);
     app.use('/category',categoryRouter);
     app.use('/user',userRouter);
