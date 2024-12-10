@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const Order = require('../models/orders');
 const Cart = require('../models/carts');
 const User = require('../models/users');
-const Voucher = require('../models/voucher');
+const Voucher = require('../models/vouchers');
 const mongoose = require('mongoose');
 // Tạo transporter
 const transporter = nodemailer.createTransport({
@@ -75,7 +75,7 @@ class OrderController {
                 0
             );
     
-            // Initialize voucher discount value
+            // Initialize voucher dissscount value
             let voucherDiscount = 0;
             let voucher = null;
     
