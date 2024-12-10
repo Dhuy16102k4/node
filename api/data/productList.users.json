@@ -1,10 +1,56 @@
 [{
   "_id": {
-    "$oid": "671e10608703f01389e30623"
+    "$oid": "671fc6fc85a3d48a36357fe4"
+  },
+  "username": "522h00383",
+  "email": "huyngosxz1234225@gmail.com",
+  "password": "$2b$10$QwWvQIDfDZXMhpsQlJGws.AU0A5icwdGhGRFWOGFp1jw0yIXjZsle",
+  "createdAt": {
+    "$date": "2024-10-28T17:16:44.789Z"
+  },
+  "updatedAt": {
+    "$date": "2024-10-28T17:16:44.789Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "67337ee3fb1f2bc6df5ee282"
   },
   "username": "huy",
+  "email": "123@gmail.com",
+  "password": "$2b$10$nwa8v/H95JoFVpYnxs2FOuKnINHEYtZx1vyXzHk6SyBjdq93SFmVy",
+  "createdAt": {
+    "$date": "2024-11-12T16:14:27.647Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-12T16:14:27.647Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6733a09f3c4af577e6d5b604"
+  },
+  "username": "huy222",
+  "email": "123455@gmail.com",
+  "password": "$2b$10$3PM35qPj9oCxpOmpXB0MOujgWW5IVKX8lyVE4vvNe.B1p4HasG/Ei",
+  "createdAt": {
+    "$date": "2024-11-12T18:38:23.365Z"
+  },
+  "updatedAt": {
+    "$date": "2024-11-12T18:38:23.365Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "671e10608703f01389e30623"
+  },
+  "username": "admin",
   "email": "dhuy1610@gmail.com",
   "password": "$2b$10$g5Q4lyZ55dsiWBKnJZLAw.ZxifaRB1MFdE/fdTL.s3O4ccm6qCd1a",
+  "role": "admin",
   "createdAt": {
     "$date": "2024-10-27T10:05:20.984Z"
   },
@@ -15,46 +61,64 @@
 },
 {
   "_id": {
-    "$oid": "671fa3f75ee340f24becaf9b"
+    "$oid": "6757403112476d0d8881b5e3"
   },
-  "username": "duc",
-  "email": "d1610@gmail.com",
-  "password": "$2b$10$nKXpQ6qs7QMRjPuzkAma2OCUJ7FCzd8aE8lyqyb2gHBsUgjLnTfra",
+  "username": "huy1",
+  "email": "ngohuysxz@gmail.com",
+  "password": "$2b$10$6j3ZmfQgQxb38EbCnmYXHuvNqas1AXQ9uwiYxtDR3alkSj0y/LvUu",
+  "phone": "0329545212",
+  "address": "132/38 Liên Tỉnh 5, P6, Q8, TP HCM",
+  "verificationCodeExpires": {
+    "$date": "2024-12-09T19:44:08.060Z"
+  },
+  "role": "user",
   "createdAt": {
-    "$date": "2024-10-28T14:47:19.674Z"
+    "$date": "2024-12-09T19:08:33.015Z"
   },
   "updatedAt": {
-    "$date": "2024-10-28T14:47:19.674Z"
+    "$date": "2024-12-09T19:35:41.304Z"
   },
   "__v": 0
 },
 {
   "_id": {
-    "$oid": "672922c86c648e62b6757a03"
+    "$oid": "675746b712476d0d8881b6d8"
   },
-  "username": "test",
-  "email": "test@gmail.com",
-  "password": "$2b$10$36RSfFitRXeluwIaMWCLv.KrdCYZ1t7UeV90MDjoQInlsU7UxEwxi",
+  "username": "huy123",
+  "email": "ngohuysxz1@gmail.com",
+  "password": "$2b$10$bNuY.0QYl7CC1jMn1ATdEO1XFTVm4xqgL451GaRjHtpG2tHdUJc2K",
+  "phone": "0329545212",
+  "address": "132/38 Liên Tỉnh 5, P6, Q8, TP HCM",
+  "verificationCode": null,
+  "verificationCodeExpires": null,
+  "role": "user",
   "createdAt": {
-    "$date": "2024-11-04T19:38:48.367Z"
+    "$date": "2024-12-09T19:36:23.710Z"
   },
   "updatedAt": {
-    "$date": "2024-11-04T19:38:48.367Z"
+    "$date": "2024-12-09T19:36:23.710Z"
   },
   "__v": 0
 },
 {
   "_id": {
-    "$oid": "674ddc74e284807846a59133"
+    "$oid": "675746d512476d0d8881b6ee"
   },
-  "username": "duc1",
-  "email": "duc@gmail.com",
-  "password": "$2b$10$loaZgxmelZBSUNxP2H4zGer5Lz.upidr11xX2ZAmil4cTk8JBWXfS",
+  "username": "huy124413",
+  "email": "ngohuyscxz@gmail.com",
+  "password": "$2b$10$rtd1fsWv5MS4KyNZVN24X.SOTK7.ZMzElg8dunhOvFeLTB8W72GYW",
+  "phone": "0329545212",
+  "address": "132/38 Liên Tỉnh 5, P6, Q8, TP HCM",
+  "verificationCodeExpires": {
+    "$date": "2024-12-09T20:04:00.846Z"
+  },
+  "role": "user",
   "createdAt": {
-    "$date": "2024-12-02T16:12:36.871Z"
+    "$date": "2024-12-09T19:36:53.825Z"
   },
   "updatedAt": {
-    "$date": "2024-12-02T16:12:36.871Z"
+    "$date": "2024-12-09T19:54:00.846Z"
   },
-  "__v": 0
+  "__v": 0,
+  "verificationCode": "74d03e"
 }]

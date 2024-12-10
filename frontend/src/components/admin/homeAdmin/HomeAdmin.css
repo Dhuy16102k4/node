@@ -313,6 +313,19 @@ body {
   text-align: center;
   white-space: nowrap; /* Không xuống dòng */
 }
+.chart-section {
+  margin: 40px 0;
+  background: var(--card-bg);
+  border-radius: var(--card-border-radius);
+  padding: 20px;
+  box-shadow: 0 4px 10px var(--card-shadow);
+}
+
+.chart-section h4 {
+  margin-bottom: 20px;
+  color: var(--secondary-color);
+  text-align: center;
+}
 
 .order-table td {
   color: var(--text-color);

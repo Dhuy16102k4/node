@@ -3,6 +3,8 @@
     "vite": "^6.0.3"
   },
   "dependencies": {
+    "chart.js": "^4.4.7",
+    "react-chartjs-2": "^5.2.0",
     "react-facebook-login": "^4.1.1"
   }
 }
