@@ -23,7 +23,7 @@ const HeadAdmin = ({ dark, setMode }) => {
             <NotificationsNoneOutlinedIcon className='iconHead' />
             <div className='profile flexCenter'>
               <img className='imageCircle' src='https://png.pngtree.com/png-clipart/20190520/original/pngtree-vector-users-icon-png-image_4144740.jpg' alt='' />
-              <span>Huy Ngô</span>
+              <span>ADMIN</span>
               <KeyboardArrowDownOutlinedIcon className='iconHead' />
             </div>
             <button onClick={() => setMode(!dark)}>
