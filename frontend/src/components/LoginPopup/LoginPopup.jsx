@@ -3,6 +3,7 @@ import './LoginPopup.css';
 import { assets } from '../../assets/assets';
 import axiosInstance from '../../utils/axiosConfig'; 
 import { AuthContext } from '../../context/AuthContext';
+import { GoogleLogin } from '@react-oauth/google';
 
 const LoginPopup = () => {
   const { setShowLogin, setUsername, setShowAdd, setSuccessMessage } = useContext(AuthContext);
@@ -16,26 +17,9 @@ const LoginPopup = () => {
   const [trangThai, setTrangThai] = useState('login');
   const [code, setCode] = useState('');
 
-  useEffect(() => {
-    // Load Facebook SDK for JavaScript
-    window.fbAsyncInit = function () {
-      window.FB.init({
-        appId: '1148892766594471', // Thay bằng App ID của bạn
-        cookie: true,
-        xfbml: true,
-        version: 'v10.0',
-      });
-    };
 
-    // Tải SDK Facebook
-    (function (d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s);
-      js.id = id;
-      js.src = 'https://connect.facebook.net/en_US/sdk.js';
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
+  useEffect(() => {
+    
   }, []);
 
   const handleLoginSubmit = async (e) => {
@@ -129,30 +113,29 @@ const LoginPopup = () => {
     }
   };
 
-  const handleFacebookLogin = () => {
-    window.FB.login(function(response) {
-      if (response.authResponse) {
-        console.log('Facebook login successful:', response);
-        const { accessToken } = response.authResponse;
+  const handleGoogleLogin = async (googleResponse) => {
+    try {
+      const { credential } = googleResponse; // The Google token (ID token)
+      console.log(credential);
+      // Send the Google token to your backend for verification
+      const response = await axiosInstance.post('/login/loginGoogle', { accessToken: credential });
 
-        // Gửi token cho backend của bạn để xác thực và đăng nhập
-        axiosInstance.post('/facebook-login', { accessToken })
-          .then(response => {
-            if (response.status === 200) {
-              localStorage.setItem('authToken', response.data.token);
-              setUsername(response.data.username);
-              setShowLogin(false);
-              alert('Login successful!');
-              window.location.reload();
-            }
-          })
-          .catch(err => {
-            setError('An error occurred during Facebook login.');
-          });
-      } else {
-        setError('Facebook login failed.');
+      if (response.status === 200) {
+        const { token, username } = response.data;
+
+        // Save token in localStorage
+        localStorage.setItem('authToken', token);
+        setUsername(username); // Update the context with the username
+
+        // Close the login popup and show success
+        setShowLogin(false);
+        alert('Login successful!');
+        window.location.reload();
       }
-    }, {scope: 'public_profile,email'});
+    } catch (error) {
+      console.error('Google login failed', error);
+      setError('Google login failed. Please try again.');
+    }
   };
 
   return (
@@ -243,11 +226,14 @@ const LoginPopup = () => {
            trangThai === "resetPassword" ? "Change new password" : "Unknown State"}
         </button>
 
-        {trangThai === "login" && (
-          <button type="button" onClick={handleFacebookLogin} className="facebook-login-btn">
-            Login with Facebook
-          </button>
-        )}
+        <GoogleLogin
+          onSuccess={credentialResponse => {
+            console.log(credentialResponse);
+          }}
+          onError={() => {
+            console.log('Login Failed');
+          }}
+        />
 
         {error && <p className="error-message">{"*" + error}</p>}
 
