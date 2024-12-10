@@ -1,14 +1,13 @@
 import React, { useContext, useState } from 'react';
-import './PlaceOrder.css'; // Đảm bảo bạn đã cập nhật file này
+import './PlaceOrder.css'; // Ensure you have updated this file
 import { StoreContext } from '../../context/StoreContext';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';  // Updated import for React Router v6
 
 const PlaceOrder = () => {
-  const { getTotalCartAmount, formatPrice, createOrder, cartItems, applyVoucher,voucher } = useContext(StoreContext);
+  const { getTotalCartAmount, formatPrice, createOrder, cartItems, applyVoucher, voucher } = useContext(StoreContext);
   const [voucherCode, setVoucherCode] = useState('');
   const [voucherError, setVoucherError] = useState('');
-  const history = useHistory();
-
+  const navigate = useNavigate();  // Use useNavigate instead of useHistory
 
   const [formData, setFormData] = useState({
     name: '',
@@ -16,11 +15,12 @@ const PlaceOrder = () => {
     address: '',
     phone: '',
     paymentMethod: 'Cash',
-    voucherCode: '', // Thêm voucherCode vào form
+    voucherCode: '', // Include voucherCode in form
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  // Handle voucher code
   const handleApplyVoucher = () => {
     if (voucherCode.trim()) {
       applyVoucher(voucherCode)
@@ -29,6 +29,7 @@ const PlaceOrder = () => {
       setVoucherError('Please enter a voucher code.');
     }
   };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevData => ({ ...prevData, [name]: value }));
@@ -37,37 +38,49 @@ const PlaceOrder = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Kiểm tra nếu giỏ hàng trống
+    // Check if cart is empty
     if (Object.keys(cartItems).length === 0) {
       setError('Your cart is empty!');
       return;
     }
 
-    // Set loading state để xử lý đơn hàng
+    // Set loading state for order processing
     setIsLoading(true);
 
-    // Tạo dữ liệu đơn hàng
+    // Calculate total price before and after applying voucher
+    let totalPrice = getTotalCartAmount() + 25000; // Adding shipping fee (25,000 VND)
+
+    if (voucher) {
+      if (voucher.discountType === 'percentage') {
+        totalPrice -= (totalPrice * voucher.discountValue / 100);
+      } else if (voucher.discountType === 'fixed') {
+        totalPrice -= voucher.discountValue;
+      }
+    }
+
+    // Create order data
     const orderData = {
       name: formData.name,
       email: formData.email,
       address: formData.address,
       phone: formData.phone,
       paymentMethod: formData.paymentMethod,
-      voucherCode: formData.voucherCode, // Thêm voucherCode vào đơn hàng
+      voucherCode: formData.voucherCode, // Include voucherCode in the order
       products: Object.values(cartItems).map(item => ({
         product: item.product._id,
         quantity: item.quantity,
         price: item.price,
       })),
-      totalPrice: getTotalCartAmount() + 25000, // Thêm phí vận chuyển (giả sử là 25,000 VND)
+      totalPrice: totalPrice, // Use calculated total price with voucher
     };
 
     try {
       await createOrder(orderData);
       setFormData({ name: '', email: '', address: '', phone: '', paymentMethod: 'Cash', voucherCode: '' }); // Reset form
       setError(''); // Reset error
+      navigate('/order-success'); // Redirect to success page
     } catch (err) {
-      setError('Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại!');
+      setError('There was an error while placing the order. Please try again!');
     } finally {
       setIsLoading(false); // Reset loading state
     }
@@ -130,6 +143,8 @@ const PlaceOrder = () => {
             name="voucherCode"
             value={formData.voucherCode}
           />
+          <button type="button" onClick={handleApplyVoucher}>Apply Voucher</button>
+          {voucherError && <p className="error">{voucherError}</p>}
         </div>
       </div>
 
