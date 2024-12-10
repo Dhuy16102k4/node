@@ -75,7 +75,7 @@ class OrderController {
                 0
             );
     
-            // Initialize voucher discount value
+            // Initialize voucher dissscount value
             let voucherDiscount = 0;
             let voucher = null;
     
