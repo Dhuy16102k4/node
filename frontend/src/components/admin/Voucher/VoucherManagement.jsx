@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from "react";
 import styles from "./VoucherManagement.module.css";
+import axiosInstance from "../../../utils/axiosConfig"; 
 
-// Mock API for fetching, adding, and deleting vouchers
-const fetchVouchers = () => {
-  return Promise.resolve([
-    { id: 1, code: "VOUCHER1", discountType: "percentage", discountValue: 10, minOrderValue: 100, expiryDate: "2024-12-31", usageLimit: 5, usedCount: 2, isActive: true },
-    { id: 2, code: "VOUCHER2", discountType: "fixed", discountValue: 50, minOrderValue: 200, expiryDate: "2024-12-30", usageLimit: 10, usedCount: 5, isActive: false },
-    { id: 3, code: "VOUCHER3", discountType: "percentage", discountValue: 15, minOrderValue: 50, expiryDate: "2025-01-15", usageLimit: 3, usedCount: 1, isActive: true },
-    { id: 4, code: "VOUCHER4", discountType: "fixed", discountValue: 30, minOrderValue: 150, expiryDate: "2024-12-25", usageLimit: 7, usedCount: 4, isActive: true },
-    { id: 5, code: "VOUCHER5", discountType: "percentage", discountValue: 20, minOrderValue: 0, expiryDate: "2025-02-01", usageLimit: 2, usedCount: 0, isActive: false },
-    { id: 6, code: "VOUCHER6", discountType: "fixed", discountValue: 10, minOrderValue: 80, expiryDate: "2025-03-20", usageLimit: 4, usedCount: 3, isActive: true },
-    { id: 7, code: "VOUCHER7", discountType: "percentage", discountValue: 25, minOrderValue: 120, expiryDate: "2024-11-30", usageLimit: 6, usedCount: 3, isActive: true },
-    { id: 8, code: "VOUCHER8", discountType: "fixed", discountValue: 100, minOrderValue: 500, expiryDate: "2024-12-10", usageLimit: 1, usedCount: 1, isActive: false },
-    { id: 9, code: "VOUCHER9", discountType: "percentage", discountValue: 10, minOrderValue: 60, expiryDate: "2024-12-15", usageLimit: 5, usedCount: 0, isActive: true },
-    { id: 10, code: "VOUCHER10", discountType: "fixed", discountValue: 40, minOrderValue: 100, expiryDate: "2025-03-01", usageLimit: 3, usedCount: 2, isActive: true },
-    { id: 11, code: "VOUCHER11", discountType: "percentage", discountValue: 30, minOrderValue: 200, expiryDate: "2024-12-05", usageLimit: 8, usedCount: 6, isActive: false },
-  ]);
+// Giả lập lấy danh sách voucher từ server
+const fetchVouchers = async () => {
+  try {
+    const response = await axiosInstance.get("/voucher"); // Giả sử API trả về danh sách voucher
+    return response.data.vouchers; // Giả sử API trả về thuộc tính "vouchers"
+  } catch (error) {
+    console.error("Error fetching vouchers:", error);
+    return []; // Trả về danh sách rỗng nếu có lỗi
+  }
 };
 
 const VoucherManagement = () => {
@@ -28,13 +23,12 @@ const VoucherManagement = () => {
     minOrderValue: 0,
     expiryDate: "",
     usageLimit: 1,
-    usedCount: 0,
-    isActive: true,
   });
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
+  // Load danh sách voucher từ backend khi component load
   useEffect(() => {
     const loadVouchers = async () => {
       const fetchedVouchers = await fetchVouchers();
@@ -44,36 +38,57 @@ const VoucherManagement = () => {
     loadVouchers();
   }, []);
 
-  // Get current vouchers for the page
   const indexOfLastVoucher = currentPage * itemsPerPage;
   const indexOfFirstVoucher = indexOfLastVoucher - itemsPerPage;
   const currentVouchers = vouchers.slice(indexOfFirstVoucher, indexOfLastVoucher);
 
-  // Handle pagination
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Add new voucher
-  const handleAddVoucher = () => {
-    setVouchers((prevVouchers) => [
-      ...prevVouchers,
-      { ...newVoucher, id: prevVouchers.length + 1, expiryDate: new Date(newVoucher.expiryDate).toISOString() },
-    ]);
-    setNewVoucher({
-      code: "",
-      discountType: "percentage",
-      discountValue: 0,
-      minOrderValue: 0,
-      expiryDate: "",
-      usageLimit: 1,
-      usedCount: 0,
-      isActive: true,
-    });
+  // Thêm voucher mới vào hệ thống
+  const handleAddVoucher = async () => {
+    try {
+      const response = await axiosInstance.post("/voucher/add", {
+        code: newVoucher.code,
+        discountType: newVoucher.discountType,
+        discountValue: newVoucher.discountValue,
+        minOrderValue: newVoucher.minOrderValue,
+        expiryDate: newVoucher.expiryDate,
+        usageLimit: newVoucher.usageLimit,
+      });
+
+      if (response.status === 201) {
+        const createdVoucher = response.data.voucher;
+        setVouchers((prevVouchers) => [
+          ...prevVouchers,
+          { ...createdVoucher, id: createdVoucher._id, expiryDate: new Date(createdVoucher.expiryDate).toISOString() },
+        ]);
+        setNewVoucher({
+          code: "",
+          discountType: "percentage",
+          discountValue: 0,
+          minOrderValue: 0,
+          expiryDate: "",
+          usageLimit: 1,
+        });
+      }
+    } catch (error) {
+      console.error("Error adding voucher:", error);
+    }
   };
 
-  // Delete voucher
-  const handleDeleteVoucher = (id) => {
-    setVouchers((prevVouchers) => prevVouchers.filter((voucher) => voucher.id !== id));
-  };
+  // Xóa voucher
+  const handleDeleteVoucher = async (id) => {
+    try {
+        // Gửi yêu cầu DELETE với id
+        await axiosInstance.delete(`/voucher/${id}`);
+        
+        // Cập nhật lại state sau khi xóa thành công
+        setVouchers((prevVouchers) => prevVouchers.filter((voucher) => voucher._id !== id));
+    } catch (error) {
+        console.error("Error deleting voucher:", error);
+    }
+};
+
 
   if (loading) {
     return <div className={styles.loading}>Loading...</div>;
@@ -83,7 +98,7 @@ const VoucherManagement = () => {
     <div className={styles.container}>
       <h1>Voucher Management</h1>
 
-      {/* Add Voucher Form */}
+      {/* Form thêm voucher */}
       <div className={styles.formContainer}>
         <h2>Add New Voucher</h2>
         <form>
@@ -128,26 +143,13 @@ const VoucherManagement = () => {
             value={newVoucher.usageLimit}
             onChange={(e) => setNewVoucher({ ...newVoucher, usageLimit: e.target.value })}
           />
-          <input
-            type="number"
-            placeholder="Used Count"
-            value={newVoucher.usedCount}
-            onChange={(e) => setNewVoucher({ ...newVoucher, usedCount: e.target.value })}
-          />
-          <label>
-            Active
-            <input
-              type="checkbox"
-              checked={newVoucher.isActive}
-              onChange={() => setNewVoucher({ ...newVoucher, isActive: !newVoucher.isActive })}
-            />
-          </label>
           <button type="button" onClick={handleAddVoucher}>
             Add Voucher
           </button>
         </form>
       </div>
 
+      {/* Hiển thị danh sách voucher */}
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
@@ -159,25 +161,21 @@ const VoucherManagement = () => {
               <th>Min Order Value</th>
               <th>Expiry Date</th>
               <th>Usage Limit</th>
-              <th>Used Count</th>
-              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {currentVouchers.map((voucher) => (
-              <tr key={voucher.id}>
-                <td>{voucher.id}</td>
+              <tr key={voucher._id}>
+                <td>{voucher._id}</td>
                 <td>{voucher.code}</td>
                 <td>{voucher.discountType}</td>
                 <td>{voucher.discountType === "percentage" ? `${voucher.discountValue}%` : `$${voucher.discountValue}`}</td>
                 <td>{voucher.minOrderValue}</td>
                 <td>{new Date(voucher.expiryDate).toLocaleDateString()}</td>
                 <td>{voucher.usageLimit}</td>
-                <td>{voucher.usedCount}</td>
-                <td>{voucher.isActive ? "Active" : "Inactive"}</td>
                 <td>
-                  <button onClick={() => handleDeleteVoucher(voucher.id)}>Delete</button>
+                  <button onClick={() => handleDeleteVoucher(voucher._id)}>Delete</button>
                 </td>
               </tr>
             ))}
@@ -185,7 +183,7 @@ const VoucherManagement = () => {
         </table>
       </div>
 
-      {/* Pagination */}
+      {/* Phân trang */}
       <div className={styles.pagination}>
         {Array.from({ length: Math.ceil(vouchers.length / itemsPerPage) }, (_, index) => (
           <button

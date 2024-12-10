@@ -52,25 +52,101 @@ function validateEmail(email) {
 }
 class OrderController {
     // Phương thức thêm đơn hàng
-    async add(req, res) {
-        const { address, paymentMethod, phone, email } = req.body;
-        try {
-            const cart = await findUserCart(req.user._id);
+    // async add(req, res) {
+    //     const { address, paymentMethod, phone, email } = req.body;
+    //     try {
+    //         const cart = await findUserCart(req.user._id);
 
+    //         if (!cart) {
+    //             return res.status(400).json({ message: 'Giỏ hàng trống. Không thể đặt đơn hàng.' });
+    //         }
+
+    //         const selectedProducts = cart.products.filter(item => item.isSelected);
+    //         if (selectedProducts.length === 0) {
+    //             return res.status(400).json({ message: 'Không có sản phẩm nào được chọn.' });
+    //         }
+
+    //         const totalPrice = selectedProducts.reduce(
+    //             (total, item) => total + item.quantity * item.price,
+    //             0
+    //         );
+
+    //         const order = new Order({
+    //             user: req.user._id,
+    //             products: selectedProducts.map(item => ({
+    //                 product: item.product._id,
+    //                 quantity: item.quantity,
+    //                 price: item.price
+    //             })),
+    //             email,
+    //             totalPrice,
+    //             address,
+    //             phone,
+    //             paymentMethod,
+    //             status: 'Pending',
+    //         });
+
+    //         await order.save();
+
+    //         selectedProducts.forEach(item => {
+    //             const product = item.product;
+    //             const quantityOrdered = item.quantity;
+
+    //             if (product.stock < quantityOrdered) {
+    //                 return res.status(400).json({ message: `Không đủ số lượng của sản phẩm: ${product.name}` });
+    //             }
+
+    //             product.stock -= quantityOrdered;
+    //             product.save();  // Save the updated stock
+    //         });
+    //         cart.products = cart.products.filter(item => !item.isSelected);
+
+    //         await cart.save();
+
+    //         // Gửi email thông báo đặt hàng thành công
+    //         await sendEmail(email, 'Đặt hàng thành công', emailContent.Pending(order._id));
+
+    //         res.status(201).json({ message: 'Đơn hàng đã được đặt thành công', order });
+    //     } catch (err) {
+    //         res.status(500).json({ message: 'Lỗi khi đặt đơn hàng', error: err.message });
+    //     }
+    // }
+    async add(req, res) {
+        const { address, paymentMethod, phone, email, voucherCode } = req.body;
+
+        try {
+            // Get user's cart
+            const cart = await findUserCart(req.user._id);
             if (!cart) {
-                return res.status(400).json({ message: 'Giỏ hàng trống. Không thể đặt đơn hàng.' });
+                return res.status(400).json({ message: 'Cart is empty. Cannot place an order.' });
             }
 
             const selectedProducts = cart.products.filter(item => item.isSelected);
             if (selectedProducts.length === 0) {
-                return res.status(400).json({ message: 'Không có sản phẩm nào được chọn.' });
+                return res.status(400).json({ message: 'No products selected.' });
             }
 
-            const totalPrice = selectedProducts.reduce(
-                (total, item) => total + item.quantity * item.price,
-                0
-            );
+            // Calculate total price before discount
+            const totalPrice = selectedProducts.reduce((total, item) => total + item.quantity * item.price, 0);
 
+            // Voucher discount calculation
+            let voucherDiscount = 0;
+            if (voucherCode) {
+                const voucher = await Voucher.findOne({ code: voucherCode });
+                if (voucher) {
+                    // Validate voucher (check expiration, usage limit, etc.)
+                    if (voucher.isExpired()) {
+                        return res.status(400).json({ message: 'Voucher has expired.' });
+                    }
+                    voucherDiscount = (voucher.discount / 100) * totalPrice; // Assuming the voucher discount is percentage
+                } else {
+                    return res.status(400).json({ message: 'Invalid voucher code.' });
+                }
+            }
+
+            const finalPrice = totalPrice - voucherDiscount;
+
+            // Create the order object
             const order = new Order({
                 user: req.user._id,
                 products: selectedProducts.map(item => ({
@@ -79,36 +155,39 @@ class OrderController {
                     price: item.price
                 })),
                 email,
-                totalPrice,
+                totalPrice: finalPrice,
                 address,
                 phone,
                 paymentMethod,
                 status: 'Pending',
+                voucher: voucherCode ? voucher._id : null,
+                voucherDiscount,
             });
 
             await order.save();
 
+            // Update product stock in the cart
             selectedProducts.forEach(item => {
                 const product = item.product;
                 const quantityOrdered = item.quantity;
 
                 if (product.stock < quantityOrdered) {
-                    return res.status(400).json({ message: `Không đủ số lượng của sản phẩm: ${product.name}` });
+                    return res.status(400).json({ message: `Insufficient stock for product: ${product.name}` });
                 }
 
                 product.stock -= quantityOrdered;
                 product.save();  // Save the updated stock
             });
-            cart.products = cart.products.filter(item => !item.isSelected);
 
+            cart.products = cart.products.filter(item => !item.isSelected); // Remove selected items from cart
             await cart.save();
 
-            // Gửi email thông báo đặt hàng thành công
-            await sendEmail(email, 'Đặt hàng thành công', emailContent.Pending(order._id));
+            // Send email notification about order success
+            await sendEmail(email, 'Order Placed Successfully', emailContent.Pending(order._id));
 
-            res.status(201).json({ message: 'Đơn hàng đã được đặt thành công', order });
+            res.status(201).json({ message: 'Order placed successfully', order });
         } catch (err) {
-            res.status(500).json({ message: 'Lỗi khi đặt đơn hàng', error: err.message });
+            res.status(500).json({ message: 'Error placing order', error: err.message });
         }
     }
 

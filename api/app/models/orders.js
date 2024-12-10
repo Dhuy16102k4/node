@@ -19,9 +19,9 @@ const orderSchema = new Schema({
     email: { type: String, required: true },
     address: { type: String, required: true }, // Địa chỉ giao hàng
     phone: { type: String, required: true }, // Số điện thoại người đặt hàng
-    // voucher: { type: Schema.Types.ObjectId, ref: 'Voucher' }, // Reference to applied voucher
-    // voucherDiscount: { type: Number, default: 0 }, // Discount applied from the voucher
-    // finalPrice: { type: Number, required: true }, // Final price after applying voucher
+    voucher: { type: Schema.Types.ObjectId, ref: 'Voucher' }, // Reference to applied voucher
+    voucherDiscount: { type: Number, default: 0 }, // Discount applied from the voucher
+    //finalPrice: { type: Number, required: true }, // Final price after applying voucher
     paymentMethod: { type: String, enum: ['Cash', 'Credit Card', 'Bank Tranfer'], default: 'Cash' }, // Phương thức thanh toán
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
