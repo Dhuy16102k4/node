@@ -7,6 +7,7 @@ const StoreProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [vouchers, setVouchers] = useState([]); 
   const [voucher, setVoucher] = useState(null);
   const formatPrice = (price) => {
     return price.toLocaleString() + "₫";
@@ -49,12 +50,21 @@ const StoreProvider = ({ children }) => {
     }
   };
 
+  const fetchVouchers = async () => {
+    try {
+      const response = await axiosInstance.get("/voucher");
+      setVouchers(response.data.vouchers); // Cập nhật danh sách voucher
+    } catch (error) {
+      console.error("Error fetching vouchers:", error);
+      setError("Error fetching vouchers.");
+    }
+  };
   const applyVoucher = async (voucherCode) => {
     setLoading(true);
     try {
-      const response = await axiosInstance.post('/voucher/apply', { voucherCode }, { headers: createHeaders() });
-      if (response.data?.voucher) {
-        setVoucher(response.data.voucher); // Cập nhật voucher
+      const matchedVoucher = vouchers.find(v => v.code === voucherCode); // Tìm voucher trong danh sách
+      if (matchedVoucher) {
+        setVoucher(matchedVoucher); // Nếu voucher đúng, cập nhật voucher
       } else {
         setVoucher(null);
         setError('Invalid voucher code');
@@ -145,6 +155,7 @@ const StoreProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    fetchVouchers(); // Lấy danh sách voucher khi component mount
     getCart();
   }, []);
 
@@ -159,6 +170,7 @@ const StoreProvider = ({ children }) => {
       createOrder,
       applyVoucher,
       voucher,
+      vouchers, 
       loading,
       error
     }}>

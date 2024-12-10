@@ -33,6 +33,10 @@ const PlaceOrder = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevData => ({ ...prevData, [name]: value }));
+    if (name === "voucherCode") {
+      setVoucherCode(value); // Update voucherCode directly on change
+      setVoucherError(''); // Reset error when user starts typing a new voucher code
+    }
   };
 
   const handleSubmit = async (e) => {

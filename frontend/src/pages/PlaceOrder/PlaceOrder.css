@@ -35,7 +35,48 @@
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: left;
 }
-
+/* Style for the voucher input and button */
+.voucher-field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .voucher-field input {
+    width: 200px;
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .voucher-field button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .voucher-field button:hover {
+    background-color: #0056b3; /* Darker shade of blue */
+  }
+  
+  .voucher-field button:disabled {
+    background-color: #c0c0c0; /* Grey out button when disabled */
+    cursor: not-allowed;
+  }
+  
+  .voucher-field .error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
 .place-order-left input,
 .place-order-left select {
     margin-bottom: 20px;
