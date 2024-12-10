@@ -9,6 +9,7 @@ const Profile = () => {
     email: '',
     phone: '',
     address: '',
+    purchaseCount: 0, // Ensure purchaseCount is part of the state
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -52,7 +53,7 @@ const Profile = () => {
           email: userData.email,
           phone: userData.phone,
           address: userData.address,
-          purchaseCount: userData.orderCount,
+          purchaseCount: userData.orderCount, // Ensure purchaseCount is being fetched
         });
 
         // Set modal data as well
@@ -126,7 +127,6 @@ const Profile = () => {
     }
   };
   
-  
   return (
     <div className="profile-container">
       <div className="profile-header">
@@ -139,7 +139,7 @@ const Profile = () => {
         <div className="profile-details">
           <div className="profile-info">
             <label>Name:</label>
-            <p>{profile.name}</p>
+            <p>{profile.purchaseCount > 5 ? `${profile.name} ⭐` : profile.name}</p> {/* Added the condition here */}
           </div>
           <div className="profile-info">
             <label>Email:</label>
