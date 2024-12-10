@@ -28,11 +28,11 @@ const dashboardController = {
                 { $project: { productName: '$productInfo.name', totalQuantity: 1, price: '$productInfo.price' } }
             ]);
 
-            // Người dùng mua nhiều nhất
-            const topUser = await Order.aggregate([
+            // Top 5 người dùng mua nhiều nhất
+            const topUsers = await Order.aggregate([
                 { $group: { _id: '$user', totalOrders: { $sum: 1 } } },
                 { $sort: { totalOrders: -1 } },
-                { $limit: 1 },
+                { $limit: 5 },  // Get top 5 users
                 { $lookup: {
                     from: 'users',
                     localField: '_id',
@@ -48,14 +48,22 @@ const dashboardController = {
             const totalUsers = await User.countDocuments();
             const totalOrders = await Order.countDocuments();
 
+            // Lấy 5 đơn hàng mới nhất và trạng thái của chúng
+            const latestOrders = await Order.find()
+                .sort({ createdAt: -1 }) // Sắp xếp theo thời gian tạo mới nhất
+                .limit(5) // Lấy 5 đơn hàng mới nhất
+                .populate('user', 'username') // Lấy thông tin tên người dùng
+                .select('totalPrice status user createdAt'); // Chỉ lấy các trường cần thiết
+
             // Gửi kết quả về
             res.status(200).json({
                 totalRevenue: totalRevenueAmount,
                 topSellingProducts,
-                topUser: topUser.length > 0 ? topUser[0] : {},
+                topUsers,  // Changed topUser to topUsers to return an array of users
                 totalProducts,
                 totalUsers,
-                totalOrders
+                totalOrders,
+                latestOrders
             });
         } catch (err) {
             res.status(500).json({ error: 'Something went wrong', message: err.message });

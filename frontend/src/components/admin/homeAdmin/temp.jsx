@@ -1,32 +1,33 @@
 import React, { useState, useEffect } from "react";
 import "./HomeAdmin.css";
-import axiosInstance from "../../../utils/axiosConfig"; // Ensure axiosConfig is set correctly
+import axiosInstance from "../../../utils/axiosConfig"; // Đảm bảo axiosConfig được cấu hình đúng
 
 const HomeAdmin = () => {
-  // State to store data from API
+  // State để lưu dữ liệu từ API
   const [dashboardData, setDashboardData] = useState({
     totalRevenue: 0,
     totalUsers: 0,
     totalOrders: 0,
-    totalProducts: [],  // Empty array for products
-    topUsers: [],      // Updated to null for a single object
-    topSellingProducts: [],    // Corrected to match the response
-    latestOrders: [],   // Empty array for latest orders
+    totalProducts: [],  // Không còn cần thiết trong phần này
+    topUsers: [],
+    topProducts: [],
+    latestOrders: [],  // Dữ liệu mới cho phần đơn hàng
   });
 
-  // Fetch data from API on component mount
+  // Fetch dữ liệu từ API khi component được mount
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await axiosInstance.get("/admin"); // Adjust URL to your API
-        setDashboardData(response.data); // Update state with fetched data
+        // Gọi API để lấy dữ liệu thống kê dashboard
+        const response = await axiosInstance.get("/admin"); // Điều chỉnh URL theo API của bạn
+        setDashboardData(response.data); // Cập nhật state với dữ liệu nhận được
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       }
     };
 
-    fetchDashboardData(); // Call the function to fetch data
-  }, []); // Call only once when component is mounted
+    fetchDashboardData(); // Gọi hàm fetch dữ liệu
+  }, []); // Chỉ gọi khi component mount lần đầu
 
   return (
     <section className="home">
@@ -58,31 +59,27 @@ const HomeAdmin = () => {
 
         {/* Detailed Sections */}
         <div className="details-grid">
-           {/* Top Users */}
-           <div className="card">
+          {/* Top Users */}
+          <div className="card">
             <h4>Top Purchasing Users</h4>
             <ul>
               {dashboardData.topUsers.map((user, index) => (
                 <li key={index}>
-                  {user.username} - <strong>{user.totalOrders}</strong> Orders
+                  {user.name} - <strong>{user.totalOrders}</strong> Orders
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Top Selling Products */}
+          {/* Top Products */}
           <div className="card">
             <h4>Top Selling Products</h4>
             <ul>
-              {Array.isArray(dashboardData.topSellingProducts) && dashboardData.topSellingProducts.length > 0 ? (
-                dashboardData.topSellingProducts.map((product, index) => (
-                  <li key={index}>
-                    {product.productName} - <strong>{product.totalQuantity}</strong> Sold - ${product.price.toLocaleString()}
-                  </li>
-                ))
-              ) : (
-                <li>No products found</li>
-              )}
+              {dashboardData.topProducts.map((product, index) => (
+                <li key={index}>
+                  {product.name} - <strong>{product.soldCount}</strong> Sold
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -94,12 +91,12 @@ const HomeAdmin = () => {
                 <tr>
                   <th>Order ID</th>
                   <th>Username</th>
-                  <th>Total Price</th>
+                  <th>TotalPrice</th>
                   <th>Status</th>
                 </tr>
               </thead>
               <tbody>
-                {Array.isArray(dashboardData.latestOrders) && dashboardData.latestOrders.length > 0 ? (
+                {dashboardData.latestOrders?.length > 0 ? (
                   dashboardData.latestOrders.map((order, index) => (
                     <tr key={index}>
                       <td>{order._id}</td>
@@ -113,6 +110,7 @@ const HomeAdmin = () => {
                     <td colSpan="4">No orders found</td>
                   </tr>
                 )}
+
               </tbody>
             </table>
           </div>
