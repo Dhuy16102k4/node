@@ -82,7 +82,7 @@ const PlaceOrder = () => {
       await createOrder(orderData);
       setFormData({ name: '', email: '', address: '', phone: '', paymentMethod: 'Cash', voucherCode: '' }); // Reset form
       setError(''); // Reset error
-      navigate('/order-success'); // Redirect to success page
+      navigate('/'); // Redirect to success page
     } catch (err) {
       setError('There was an error while placing the order. Please try again!');
     } finally {
