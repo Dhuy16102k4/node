@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/users');
 const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Ensure SECRET_KEY is set
 if (!process.env.SECRET_KEY) {
@@ -68,6 +70,43 @@ class LoginController {
     // Handle logout (optional, but good to add)
     async logout(req, res, next) {
         res.status(200).json({ message: 'Logout successful' });
+    }
+
+    async loginGoogle(req, res) {
+        const { accessToken } = req.body;
+      
+        try {
+          const ticket = await client.verifyIdToken({
+            idToken: accessToken,
+            audience: process.env.GOOGLE_CLIENT_ID, // Ensure this matches your Google client ID
+          });
+      
+          const payload = ticket.getPayload();
+          const { sub, name, email } = payload; // Extract data from the token payload
+      
+          // Check if the user already exists in your database
+          let user = await User.findOne({ email });
+      
+          if (!user) {
+            const defaultPassword = 'google_auth_user_password';
+            // If the user doesn't exist, create a new one
+            user = new User({
+              username: name,
+              email,
+              password: defaultPassword
+            });
+            await user.save();
+          }
+      
+          // Generate a JWT token
+          const token = generateToken(user);
+          generateRefreshToken(user);
+          // Send the response with the token
+          res.status(200).json({ message: 'Login successful', token, username: user.username });
+        } catch (error) {
+          console.error('Google login failed', error);
+          res.status(500).json({ message: 'Failed to authenticate with Google' });
+        }
     }
 }
 

@@ -13,4 +13,6 @@ router.get('/logout', authenticateToken, loginController.logout);
 // Ensure 'submit' function is defined and imported properly
 router.post('/submit', loginController.submit);
 
+router.post('/loginGoogle', loginController.loginGoogle)
+
 module.exports = router;

@@ -22,6 +22,7 @@ class homeController {
             const [products, totalProducts, categories] = await Promise.all([
                 Product.find(filter)
                     .populate('category', 'name')
+                    .sort({ createdAt: -1 })
                     .skip((page - 1) * productPerPage)
                     .limit(productPerPage)
                     .lean(),
