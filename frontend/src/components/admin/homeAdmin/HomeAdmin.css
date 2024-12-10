@@ -318,7 +318,9 @@ body {
   color: var(--text-color);
   text-align: center;
 }
-
+h4 {
+  text-align: center;
+}
 .order-table td small {
   display: block;
   font-size: 0.75rem; /* Kích thước chữ nhỏ hơn cho thông tin phụ */
