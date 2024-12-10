@@ -1,195 +1,527 @@
 [{
   "_id": {
-    "$oid": "673340c2d022c4fae2a41d93"
+    "$oid": "675752bed6ee0814ebb5303c"
   },
-  "name": "sp 7",
-  "price": 15000000,
-  "description": "test",
-  "category": {
-    "$oid": "672ddf8d0ea5c21f77761a24"
-  },
-  "img": "\\img\\1731412162114.png",
-  "stock": 6,
-  "createdAt": {
-    "$date": "2024-11-12T11:49:22.125Z"
-  },
-  "updatedAt": {
-    "$date": "2024-11-12T11:49:22.125Z"
-  },
-  "__v": 4,
-  "averageRating": 7,
-  "reviews": [
-    {
-      "user": {
-        "$oid": "671e10608703f01389e30623"
-      },
-      "name": "huy",
-      "comment": "cũng ok ",
-      "rating": 7,
-      "createdAt": {
-        "$date": "2024-12-01T13:14:06.997Z"
-      },
-      "_id": {
-        "$oid": "674c611e7994985e9f7f40c5"
-      }
-    },
-    {
-      "user": {
-        "$oid": "671e10608703f01389e30623"
-      },
-      "name": "huy",
-      "comment": "cũng ok ",
-      "rating": 7,
-      "createdAt": {
-        "$date": "2024-12-01T13:15:16.936Z"
-      },
-      "_id": {
-        "$oid": "674c6164aa6412b506ad42ca"
-      }
-    },
-    {
-      "user": {
-        "$oid": "671e10608703f01389e30623"
-      },
-      "name": "huy",
-      "comment": "cũng ok ",
-      "rating": 8,
-      "createdAt": {
-        "$date": "2024-12-01T13:15:26.348Z"
-      },
-      "_id": {
-        "$oid": "674c616eaa6412b506ad42d0"
-      }
-    },
-    {
-      "user": {
-        "$oid": "671e10608703f01389e30623"
-      },
-      "name": "huy",
-      "comment": "ok",
-      "rating": 6,
-      "createdAt": {
-        "$date": "2024-12-02T15:25:44.980Z"
-      },
-      "_id": {
-        "$oid": "674dd17843f2483979b0c5a7"
-      }
-    }
-  ]
-},
-{
-  "_id": {
-    "$oid": "673340ced022c4fae2a41d9a"
-  },
-  "name": "sp 8",
-  "price": 15000000,
-  "description": "test",
-  "category": {
-    "$oid": "672de00c0ea5c21f77761a39"
-  },
-  "img": "\\img\\1731412174398.png",
-  "stock": 7,
-  "createdAt": {
-    "$date": "2024-11-12T11:49:34.409Z"
-  },
-  "updatedAt": {
-    "$date": "2024-11-12T11:49:34.409Z"
-  },
-  "__v": 1,
-  "reviews": []
-},
-{
-  "_id": {
-    "$oid": "673340d7d022c4fae2a41da1"
-  },
-  "name": "sp 9",
-  "price": 15000000,
-  "description": "test",
-  "category": {
-    "$oid": "672de00c0ea5c21f77761a39"
-  },
-  "img": "\\img\\1731412183031.png",
-  "stock": 0,
-  "createdAt": {
-    "$date": "2024-11-12T11:49:43.035Z"
-  },
-  "updatedAt": {
-    "$date": "2024-11-12T11:49:43.035Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "673340edd022c4fae2a41da8"
-  },
-  "name": "sp 10",
-  "price": 15000000,
-  "description": "test",
-  "category": {
-    "$oid": "672de00c0ea5c21f77761a39"
-  },
-  "img": "\\img\\1731412205130.png",
-  "stock": 6,
-  "createdAt": {
-    "$date": "2024-11-12T11:50:05.134Z"
-  },
-  "updatedAt": {
-    "$date": "2024-11-12T11:50:05.134Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "673340fdd022c4fae2a41db7"
-  },
-  "name": "sp 11",
-  "price": 15000000,
-  "description": "test",
-  "category": {
-    "$oid": "672ddf8d0ea5c21f77761a24"
-  },
-  "img": "\\img\\1731412221324.png",
-  "stock": 7,
-  "createdAt": {
-    "$date": "2024-11-12T11:50:21.328Z"
-  },
-  "updatedAt": {
-    "$date": "2024-11-12T11:50:21.328Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "67334114d022c4fae2a41f1e"
-  },
-  "name": "sp 11",
-  "price": 15000000,
-  "description": "test",
-  "category": {
-    "$oid": "672de00c0ea5c21f77761a39"
-  },
-  "img": "\\img\\1731412244531.png",
-  "stock": 1,
-  "createdAt": {
-    "$date": "2024-11-12T11:50:44.535Z"
-  },
-  "updatedAt": {
-    "$date": "2024-11-12T11:50:44.535Z"
-  },
-  "__v": 0
-},
-{
-  "_id": {
-    "$oid": "674f3cc001d14efd98a28f86"
-  },
-  "name": "ok",
+  "name": "Oppo Find X8",
   "price": 20000000,
-  "description": "test",
+  "description": "OPPO Find X8 hữu chip Dimensity 9400 3nm với lõi Cortex-X925 sẽ đảm bảo xử lý mọi tác vụ một cách nhanh chóng.\r\nFind X8 sẽ được trang bị cụm 3 camera sau 50MP đảm bảo được sự đồng đều về chất lượng hình ảnh giữa các chế độ chụp.\r\nViên Pin 5630 mAh sẽ giúp dòng bạn kéo dài ra đáng kể thời gian dùng điện thoại, đáp ứng nhu cầu sử dụng hỗn hợp suốt cả ngày của người dùng.",
   "category": {
-    "$oid": "672ddf8d0ea5c21f77761a24"
+    "$oid": "6757520fd6ee0814ebb53024"
   },
-  "img": "\\img\\1733246144091.png",
-  "stock": 10,
+  "img": "../public/img/1733776062069.png",
+  "stock": 999,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575341d6ee0814ebb53041"
+  },
+  "name": "Iphone 7s 64GB",
+  "price": 7000000,
+  "description": "The iPhone 7 and iPhone 7 Plus are smartphones that were developed and marketed by Apple Inc. They are the tenth generation of the iPhone. They were announced on September 7, 2016, at the Bill Graham Civic Auditorium in San Francisco by Apple CEO Tim Cook, and were released on September 16, 2016, succeeding the iPhone 6, iPhone 6 Plus, iPhone 6S and iPhone 6S Plus as the flagship devices in the iPhone series. Apple also released the iPhone 7 and iPhone 7 Plus in numerous countries worldwide throughout September and October 2016. ",
+  "category": {
+    "$oid": "67574d76d6ee0814ebb52fb1"
+  },
+  "img": "..\\public\\img\\1733776193969.png",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675753f8d6ee0814ebb53063"
+  },
+  "name": "Oppo Reno 3 A",
+  "price": 3500000,
+  "description": "OPPO vừa cho ra đời mẫu điện thoại phân khúc tầm trung vào tháng 05/2020 là OPPO Reno3 A. Sở hữu ngoại hình sang trọng, hiệu năng mạnh mẽ và hệ thống với 4 camera sau đẳng cấp mang đến những trải nghiệm tuyệt vời.",
+  "category": {
+    "$oid": "6757520fd6ee0814ebb53024"
+  },
+  "img": "\\img\\1733776376517.jpg",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575442d6ee0814ebb53066"
+  },
+  "name": "Iphone 16 Promax 256GB",
+  "price": 35000000,
+  "description": "Màn hình Super Retina XDR 6,9 inch lớn hơn có viền mỏng hơn, đem đến cảm giác tuyệt vời khi cầm trên tay.\r\nĐiều khiển Camera - Chỉ cần trượt ngón tay để điều chỉnh camera giúp chụp ảnh hoặc quay video đẹp hoàn hảo và siêu nhanh.\r\niPhone 16 Pro Max có thiết kế titan cấp 5 với lớp hoàn thiện mới, tinh tế được xử lý bề mặt vi điểm.\r\niPhone 16 Pro Max được cài đặt sẵn hệ điều hành iOS 18, cho giao diện trực quan, dễ sử dụng và nhiều tính năng hữu ích.",
+  "category": {
+    "$oid": "67574d76d6ee0814ebb52fb1"
+  },
+  "img": "\\img\\1733776450621.png",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6757547ed6ee0814ebb53069"
+  },
+  "name": "Samsung Galaxy S23 Ultra",
+  "price": 19800000,
+  "description": "Galaxy AI tiện ích - Khoanh vùng search đa năng, là trợ lý chỉnh ảnh, note thông minh, phiên dịch trực tiếp\r\nThoả sức chụp ảnh, quay video chuyên nghiệp - Camera đến 200MP, chế độ chụp đêm cải tiến, bộ xử lí ảnh thông minh\r\nChiến game bùng nổ - chip Snapdragon 8 Gen 2 8 nhân tăng tốc độ xử lí, màn hình 120Hz, pin 5.000mAh\r\nNâng cao hiệu suất làm việc với Siêu bút S Pen tích hợp, dễ dàng đánh dấu sự kiện từ hình ảnh hoặc video\r\nThiết kế bền bỉ, thân thiện - Màu sắc lấy cảm hứng từ thiên nhiên, chất liệu kính và lớp phim phủ PET tái chế",
+  "category": {
+    "$oid": "67574df7d6ee0814ebb52fb4"
+  },
+  "img": "\\img\\1733776510843.png",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675754b5d6ee0814ebb5306c"
+  },
+  "name": "Iphone 15 Plus 256GB",
+  "price": 23000000,
+  "description": "iPhone 15 Plus 256 GB được làm bằng khung kim loại và mặt lưng kính cường lực chắc chắn, tạo ra một cảm giác cực kỳ sang trọng khi cầm trên tay. Kiểu dáng vuông vắn của iPhone 15 Plus mang đến một vẻ ngoài mạnh mẽ và hiện đại, phù hợp với những người dùng yêu thích sự tinh tế và đẳng cấp.",
+  "category": {
+    "$oid": "67574d76d6ee0814ebb52fb1"
+  },
+  "img": "\\img\\1733776565833.png",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675754ffd6ee0814ebb5309a"
+  },
+  "name": "Iphone 16 256GB",
+  "price": 19750000,
+  "description": "Được kết hợp giữa vỏ máy làm từ nhôm chuẩn hàng không vũ trụ và mặt lưng kính pha màu đẹp mắt, iPhone 16 256GB không chỉ mang đến cảm giác cầm nắm chắc chắn trong tay mà còn góp phần tạo nên một thiết kế thanh lịch, tinh tế và nhẹ nhàng. Mang đến một chiếc điện thoại vừa bền bỉ, vừa sang trọng, đáp ứng mọi yêu cầu của người dùng.",
+  "category": {
+    "$oid": "67574d76d6ee0814ebb52fb1"
+  },
+  "img": "\\img\\1733776639776.png",
+  "stock": 997,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575533d6ee0814ebb5309d"
+  },
+  "name": "Iphone 6s 32GB",
+  "price": 3450000,
+  "description": "Điện thoại iPhone 6s 32 GB được nâng cấp độ phân giải camera sau lên 12 MP (thay vì 8 MP như trên iPhone 6), camera có tốc độ lấy nét và chụp nhanh, thao tác chạm để chụp nhẹ nhàng. Chất lượng ảnh trong các điều kiện chụp khác nhau tốt.",
+  "category": {
+    "$oid": "67574d76d6ee0814ebb52fb1"
+  },
+  "img": "\\img\\1733776691864.png",
+  "stock": 998,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575595d6ee0814ebb530b0"
+  },
+  "name": "IPhone 11 64GB",
+  "price": 11000999,
+  "description": "Trong khi iPhone 11 đã mang đến những cải tiến vượt bậc, Apple không ngừng nâng cao trải nghiệm người dùng và đã ra mắt iPhone 16 với những đột phá mới. Sản phẩm tiếp tục là một cuộc cách mạng với chip Apple A18 Bionic, hiệu suất năng lượng được cải thiện đáng kể và công nghệ camera tiên tiến, đặt ra chuẩn mực mới cho thị trường smartphone.",
+  "category": {
+    "$oid": "67574d76d6ee0814ebb52fb1"
+  },
+  "img": "\\img\\1733776789160.webp",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675755f6d6ee0814ebb530d5"
+  },
+  "name": "Samsung Galaxy A15 8GB/256GB",
+  "price": 4390000,
+  "description": "Samsung Galaxy A15 256GB sẽ là mẫu điện thoại giá rẻ được Samsung giới thiệu chính hãng tại thị trường Việt Nam trong năm 2023. Điện thoại tiếp tục được giữ lại nét đặc trưng thông qua kiểu dáng vuông vắn, đi cùng với sự nâng cấp mạnh về hiệu năng và màn hình, hứa hẹn mang lại trải nghiệm tốt vượt ngoài mong đợi.",
+  "category": {
+    "$oid": "67574df7d6ee0814ebb52fb4"
+  },
+  "img": "\\img\\1733776886930.jpg",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575636d6ee0814ebb530d8"
+  },
+  "name": "Samsung Galaxy A05S - RAM 4GB - 128GB",
+  "price": 2990000,
+  "description": "Samsung Galaxy A05S là tân binh mới dòng A ra mắt năm 2023,  sở hữu ngoại hình cuốn hút, màn hình 720 x 1600p, thời lượng pin khủng và hiệu năng mạnh mẽ trong phân khúc",
+  "category": {
+    "$oid": "67574df7d6ee0814ebb52fb4"
+  },
+  "img": "\\img\\1733776950714.png",
+  "stock": 998,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575681d6ee0814ebb530db"
+  },
+  "name": "Samsung Galaxy Fold",
+  "price": 23999000,
+  "description": "Sau rất nhiều chờ đợi thì Samsung Galaxy Fold - chiếc smartphone màn hình gập đầu tiên của Samsung cũng đã chính thức trình làng với thiết kế mới lạ.\r\nSamsung Galaxy Fold không chỉ sở hữu một màn hình có thể uốn dẻo mà còn có một màn hình riêng, để có thể sử dụng độc lập khi gập máy lại.",
+  "category": {
+    "$oid": "67574df7d6ee0814ebb52fb4"
+  },
+  "img": "\\img\\1733777025701.jpg",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675756c9d6ee0814ebb530ee"
+  },
+  "name": "Samsung Galaxy Z Flip 5 5G 256GB",
+  "price": 13500000,
+  "description": "Galaxy Z Flip5 là chiếc máy ghi nhận nhiều thay đổi theo hướng tích cực của Samsung đối với trải nghiệm người dùng. Máy đã có một màn hình ngoài lớn hơn, khai thác toàn bộ không gian của mặt trước, một bản lề mới để có thể gập lại phẳng hoàn toàn, những nâng cấp phần mềm phù hợp với trải nghiệm mà người dùng cần.",
+  "category": {
+    "$oid": "67574df7d6ee0814ebb52fb4"
+  },
+  "img": "\\img\\1733777097122.png",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6757570dd6ee0814ebb53101"
+  },
+  "name": "Samsung Galaxy S24 Plus 12/256GB",
+  "price": 19990009,
+  "description": "Mở ra Kỷ nguyên Điện thoại AI Cao cấp -Hỗ trợ Phiên dịch cuộc gọi, trợ lí chỉnh ảnh, khoanh vùng để tìm kiếm\r\nChụp ảnh bất kể không gian và thời gian - Camera 50MP với với công nghệ ProVisual, chụp đêm và siêu thu phóng\r\nPin tối ưu thông minh cho cả ngày tràn đầy năng lượng - Viên pin 4900 mAh cho phép bạn xem video liên tục đến 29 giờ\r\nNâng cấp màn hình trải nghiệm tuyệt đỉnh - Màn hình 6.7\" inch Dynamic AMOLED 2X cùng tần số quét 120Hz",
+  "category": {
+    "$oid": "67574df7d6ee0814ebb52fb4"
+  },
+  "img": "\\img\\1733777165609.webp",
+  "stock": 997,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575747d6ee0814ebb53111"
+  },
+  "name": "Xiaomi 14T 5G 12GB/512GB",
+  "price": 13990000,
+  "description": "Với sự kết hợp giữa Xiaomi và Leica - thương hiệu máy ảnh nổi tiếng của Đức, Xiaomi 14T 512GB mang đến khả năng chụp ảnh sắc nét, giàu chất nghệ thuật, thậm chí trong điều kiện ánh sáng yếu. Máy sở hữu nhiều tính năng AI thế hệ mới, chip MediaTek đầy mạnh mẽ và pin bền bỉ, mang lại trải nghiệm liền mạch và hoàn hảo cho người dùng.",
+  "category": {
+    "$oid": "6757518bd6ee0814ebb5301d"
+  },
+  "img": "\\img\\1733777223568.png",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575788d6ee0814ebb53114"
+  },
+  "name": "Xiaomi 14",
+  "price": 17090000,
+  "description": "Xiaomi 14 được ra mắt với tâm hướng mang đến những trải nghiệm mới mẻ và chất lượng. Như một lá cờ đầu trong ngành công nghệ, điện thoại không chỉ có thiết kế đẹp mà còn ấn tượng về màn hình, cấu hình mạnh mẽ, máy ảnh chất lượng và pin có thời gian sử dụng lâu dài.",
+  "category": {
+    "$oid": "6757518bd6ee0814ebb5301d"
+  },
+  "img": "\\img\\1733777288699.jpg",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675757c0d6ee0814ebb53117"
+  },
+  "name": "Xiaomi Redmi 14C (4GB+128GB)",
+  "price": 2909000,
+  "description": "Xiaomi Redmi 14C 128GB sở hữu ngoại hình ấn tượng với mặt lưng kính thanh lịch, nổi bật với cụm camera to tròn được đặt gọn gàng ở phần trên thân máy. Thiết bị được chế tác với khung viền phẳng cùng các góc bo tròn tinh tế. Điều này giúp Redmi 14C mang lại cảm giác thanh lịch, hài hòa hơn.",
+  "category": {
+    "$oid": "6757518bd6ee0814ebb5301d"
+  },
+  "img": "\\img\\1733777344024.webp",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675757f9d6ee0814ebb5311a"
+  },
+  "name": "Mi 11 Lite 5G",
+  "price": 2309000,
+  "description": "Nhỏ gọn và thanh lịch, chiếc Mi 11 Lite 5G với thiết kế siêu nhẹ, cầm nắm thoải mái. Ngoài việc sở hữu bộ ba camera sau 64 MP và camera trước 16 MP, Mi 11 Lite còn có màn hình 6.55 inch FHD+ AMOLED DotDisplay, được thiết kế chống hư hỏng và rơi vỡ với lớp kính Corning® Gorilla® Glass 6.",
+  "category": {
+    "$oid": "6757518bd6ee0814ebb5301d"
+  },
+  "img": "\\img\\1733777401409.jpg",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575826d6ee0814ebb5312d"
+  },
+  "name": "Xiaomi Redmi Note 12",
+  "price": 3490000,
+  "description": "Để nâng tầm trải nghiệm và tận hưởng không gian sống hoàn hảo, Redmi Note 12 là sản phẩm không thể thiếu. Điện thoại sở hữu những thông số mạnh mẽ trong phân khúc 5 triệu đồng. Đây là lựa chọn khó bỏ qua với MiFan nói riêng và người dùng nói chung.",
+  "category": {
+    "$oid": "6757518bd6ee0814ebb5301d"
+  },
+  "img": "\\img\\1733777446368.jpg",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6757584cd6ee0814ebb53130"
+  },
+  "name": "Xiaomi Redmi Turbo 3",
+  "price": 17900000,
+  "description": "Xiaomi Redmi Turbo 3 là sản phẩm tiếp nối sản phẩm Redmi Note 12 Turbo của năm ngoái. Sản phẩm này được quảng cáo là mẫu smartphone nằm trong phân khúc tầm trung. Điều này hoàn toàn được kiểm chứng khi nhìn vào các thông số kỹ thuật cùng mức giá tầm trung mà nó đem đến, ngoài ra mẫu sản phẩm này mang đến nhiều nâng cấp đáng kể so với các phiên bản tiền nhiệm trước.",
+  "category": {
+    "$oid": "6757518bd6ee0814ebb5301d"
+  },
+  "img": "\\img\\1733777484875.webp",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575881d6ee0814ebb53146"
+  },
+  "name": "Huawei Mate 60 Pro",
+  "price": 29090090,
+  "description": "Trong thời đại kết nối và đổi mới, nơi các gã khổng lồ công nghệ không ngừng tranh giành vị trí dẫn đầu, phương pháp bán hàng thầm lặng của Huawei đã gây xôn xao, đánh dấu sự hồi sinh của hãng trên thị trường điện thoại thông minh bằng việc ra mắt Huawei Mate 60 Pro. Chiếc flagship cao cấp nàu không chỉ thể hiện sức mạnh kỹ thuật mà còn ghi dấu ấn trên toàn thị trường với những sự thay đổi đáng kể về chip tích hợp và khả năng 5G của nó. Cùng Viettablet đánh giá Huawei Mate 60 Pro xem hãng đã làm những gì nhé!",
+  "category": {
+    "$oid": "675751e2d6ee0814ebb53020"
+  },
+  "img": "\\img\\1733777537353.webp",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675758a2d6ee0814ebb53149"
+  },
+  "name": "Huawei Nova 8i ",
+  "price": 3890000,
+  "description": "Huawei Nova 8i chiếc điện thoại tầm trung mới nhất được Huawei ra mắt (7/2021), với thiết kế độc đáo cùng màn hình tràn viền rộng lớn đi kèm là hiệu năng hoạt động đầy mạnh mẽ. Đây sẽ là sản phẩm mang đến cho người dùng nhiều trải nghiệm ấn tượng không thể bỏ qua.",
+  "category": {
+    "$oid": "675751e2d6ee0814ebb53020"
+  },
+  "img": "\\img\\1733777570537.jpg",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675758c3d6ee0814ebb5314c"
+  },
+  "name": "Huawei P30 Lite",
+  "price": 3290000,
+  "description": "Ngày càng hoàn thiện từ thiết kế cho đến camera, Huawei P30 Lite (Nova 4e) đang dần chiếm được tình cảm của người dùng, với một mức giá hấp dẫn thuộc phân khúc điện thoại tầm trung.",
+  "category": {
+    "$oid": "675751e2d6ee0814ebb53020"
+  },
+  "img": "\\img\\1733777603649.jpg",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575936d6ee0814ebb5314f"
+  },
+  "name": "Huawei P30 Pro",
+  "price": 9900000,
+  "description": "Tháng 3/2019, Huawei đã chính thức trình làng thế giới siêu phẩm Huawei P30 Pro, một thiết bị kế nhiệm hoàn hảo cho dòng P vốn đã rất thành công trước đó. Không chỉ sở hữu thiết kế sang trọng, hiệu năng mạnh mẽ, Huawei P30 Pro còn tạo nên cơn địa chấn trong làng nhiếp ảnh di động với hệ thống camera đột phá, được ví như “kính viễn vọng” thu gọn trong lòng bàn tay.",
+  "category": {
+    "$oid": "675751e2d6ee0814ebb53020"
+  },
+  "img": "\\img\\1733777718583.jpg",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6757595ad6ee0814ebb53152"
+  },
+  "name": "Huawei P50 Pro 5G",
+  "price": 19800000,
+  "description": "Nhắc đến điện thoại cao cấp của Huawei hầu hết mọi người đều nghĩ đến những chiếc máy với loạt tính năng chụp ảnh chuyên nghiệp. Trong đó, Huawei P50 Pro cũng không ngoại lệ khi vừa ra đã được xếp top 1 bảng xếp hạng điện thoại có camera tốt nhất thế giới. Không dừng tại đó, P50 Pro còn quy tụ nhiều tính năng tuyệt đỉnh hứa hẹn sẽ mang đến sự đột phá mới cho người dùng.",
+  "category": {
+    "$oid": "675751e2d6ee0814ebb53020"
+  },
+  "img": "\\img\\1733777754807.jpg",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575995d6ee0814ebb53165"
+  },
+  "name": "OPPO A3x 128GB",
+  "price": 9800000,
+  "description": "OPPO A3x 4GB|128GB được trang bị Ram 4GB cùng bộ nhớ trong 128GB, máy được bảo hành 12 tháng tại trung tâm bảo hành của OPPO toàn quốc",
+  "category": {
+    "$oid": "6757520fd6ee0814ebb53024"
+  },
+  "img": "\\img\\1733777813043.jpg",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "675759bfd6ee0814ebb53168"
+  },
+  "name": "OPPO Reno12 5G (12GB+256GB)",
+  "price": 9900000,
+  "description": "OPPO Reno12 5G 256GB sở hữu vẻ ngoài hết sức tinh tế và thu hút trong từng chi tiết. Chiếc điện thoại này được thiết kế gợn sóng 3D mềm mại, nhờ đó nâng cao trải nghiệm chạm, cầm nắm và thao tác của người dùng. Không chỉ vậy, OPPO mang đến cho sản phẩm thiết kế dòng chảy hiện đại, cho cảm giác vẻ ngoài mới lạ và khác biệt so với các phiên bản trước đó.",
+  "category": {
+    "$oid": "6757520fd6ee0814ebb53024"
+  },
+  "img": "\\img\\1733777855064.webp",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575a31d6ee0814ebb531a3"
+  },
+  "name": "Oppo Find X7 5G (12GB|256GB)",
+  "price": 5490000,
+  "description": "Ngay từ cái nhìn đầu tiên, Oppo Find X7 5G 256GB đã tạo ấn tượng khi sở hữu thiết kế khá hiện đại, sang trọng với chất liệu cao cấp. Máy được hoàn thiện bởi khung viền thép bo cong tinh tế, có độ dày vượt trội hơn so với mẫu Find X6 tiền nhiệm. Vì thế, người dùng sẽ có trải nghiệm cầm nắm chắc tay và thoải mái hơn. ",
+  "category": {
+    "$oid": "6757520fd6ee0814ebb53024"
+  },
+  "img": "\\img\\1733777969617.png",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575a65d6ee0814ebb531b6"
+  },
+  "name": "Vivo V30e 12GB 256GB",
+  "price": 8790000,
+  "description": "Vivo V30E mang đến sự kết hợp hoàn hảo giữa hiệu năng vượt trội và thiết kế tinh tế, đáp ứng mọi nhu cầu của khách hàng hiện đại. Với bộ vi xử lý mạnh mẽ, màn hình sống động và camera chụp ảnh chuyên nghiệp, sản phẩm này là người bạn đồng hành lý tưởng cho cả công việc lẫn giải trí. Dung lượng pin ấn tượng giúp khách hàng sử dụng suốt ngày dài mà không lo gián đoạn. Đột phá công nghệ, chiếc điện thoại chính là chìa khóa mở ra thế giới trải nghiệm không giới hạn.",
+  "category": {
+    "$oid": "6757522cd6ee0814ebb53027"
+  },
+  "img": "\\img\\1733778021412.jpg",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575a92d6ee0814ebb531b9"
+  },
+  "name": "Vivo iQOO Z9 Turbo ",
+  "price": 5870000,
+  "description": "Vivo iQOO Z9 Turbo là một smartphone tầm trung nổi bật với thiết kế hiện đại và hiệu năng mạnh mẽ. Máy sở hữu màn hình AMOLED lớn, cho chất lượng hình ảnh sắc nét và mượt mà. Được trang bị vi xử lý Snapdragon hiệu suất cao, dòng máy này có thể đáp ứng tốt nhu cầu sử dụng đa nhiệm. Ngoài ra, chiếc smartphone này còn có cụm camera với rất nhiều công nghệ chụp ảnh tiên tiến.",
+  "category": {
+    "$oid": "6757522cd6ee0814ebb53027"
+  },
+  "img": "\\img\\1733778066704.jpg",
+  "stock": 997,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575b3cd6ee0814ebb531dc"
+  },
+  "name": "Vivo X200 Pro (5G) Box",
+  "price": 39900000,
+  "description": "Vivo X200 Pro là một trong những mẫu smartphone cao cấp mới nhất đến từ Vivo, được thiết kế để đáp ứng nhu cầu của những người dùng yêu thích công nghệ hiện đại. Với sự kết hợp giữa thiết kế đẳng cấp, hiệu năng vượt trội và những tính năng camera tiên tiến, X200 Pro mang đến cho người dùng một trải nghiệm hoàn hảo và đầy ấn tượng. Từ màn hình LTPO AMOLED sắc nét, hiệu suất mạnh mẽ của chipset đến camera 200MP đỉnh cao, chiếc smartphone này chắc chắn có thể đáp ứng được hầu hết các nhu cầu từ cơ bản đến nâng cao của người dùng.",
+  "category": {
+    "$oid": "6757522cd6ee0814ebb53027"
+  },
+  "img": "\\img\\1733778236553.jpg",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575b5ed6ee0814ebb531df"
+  },
+  "name": "Vivo IQOO Z9 (Snap 7 Gen 3) ",
+  "price": 18900000,
+  "description": "Vivo iQOO Z9 chính thức ra mắt vào ngày 24/04/2024 tại Trung Quốc, đánh dấu sự xuất hiện của một sản phẩm smartphone mạnh mẽ trong phân khúc tầm trung. Sự kiện này diễn ra trong bối cảnh thị trường công nghệ đang chứng kiến sự cạnh tranh gay gắt giữa các thương hiệu lớn, đặc biệt ở mảng thiết bị hỗ trợ kết nối 5G và hiệu năng cao. Với việc trang bị nhiều công nghệ tiên tiến và mức giá cạnh tranh, iQOO Z9 được kỳ vọng sẽ thu hút sự quan tâm của người dùng đam mê công nghệ và các game thủ trẻ năng động.",
+  "category": {
+    "$oid": "6757522cd6ee0814ebb53027"
+  },
+  "img": "\\img\\1733778270515.jpg",
+  "stock": 1000,
+  "averageRating": null,
+  "reviews": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67575b7ed6ee0814ebb531e2"
+  },
+  "name": "vivo iQOO 3 5G 8GB 128GB",
+  "price": 1237000,
+  "description": "Vivo iQOO 3 – thiết bị được thiết kế để định nghĩa lại trải nghiệm di động. Với bộ vi xử lý Snapdragon 865, khả năng kết nối 5G siêu tốc và màn hình AMOLED 6.44 inch sắc nét, iQOO 3 không chỉ đáp ứng nhu cầu giải trí và làm việc mà còn mang đến hiệu suất chơi game mượt mà và hiệu quả. Khám phá khả năng chinh phục mọi thử thách với thiết kế đẳng cấp và công nghệ tiên tiến của chiếc điện thoại này.",
+  "category": {
+    "$oid": "6757522cd6ee0814ebb53027"
+  },
+  "img": "\\img\\1733778302491.jpg",
+  "stock": 1000,
   "averageRating": null,
   "reviews": [],
   "__v": 0

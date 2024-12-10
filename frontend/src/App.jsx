@@ -19,6 +19,7 @@ import Detail from "./pages/Detail/Detail";
 import UserApp from "./pages/user/UserApp";
 import MyOrders from "./pages/MyOrders/MyOrders";
 import Profile from "./pages/Profile/Profile";
+import VoucherApp from "./pages/Voucher/VoucherApp";
 
 const App = () => {
   const { showLogin, showOut, showAdd, setShowAdd,user } = useContext(AuthContext); // Show login state from context
@@ -45,6 +46,7 @@ const App = () => {
           <Route path="/admin/category" element={<CategoryManagementApp />} />
           <Route path="/admin/order" element={<OrderManagementApp />} />
           <Route path="/admin/user" element={<UserApp />} />
+          <Route path="/admin/voucher" element={<VoucherApp />} />
         </Routes>
       </div>
     );
@@ -74,6 +76,7 @@ const App = () => {
               <Route path="/admin/category" element={<CategoryManagementApp />} />
               <Route path="/admin/order" element={<OrderManagementApp />} />
               <Route path="/admin/user" element={<UserApp />} />
+              <Route path="/admin/voucher" element={<VoucherApp />} />
             </>
           )}
         </Routes>

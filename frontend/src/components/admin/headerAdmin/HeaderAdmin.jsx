@@ -49,6 +49,12 @@ const HeaderAdmin = () => {
                 Order Manage
               </Link>
             </li>
+            <li>
+              <Link to="../admin/voucher" className="navIcon">
+                <StyleOutlinedIcon />
+                Voucher Manage
+              </Link>
+            </li>
           </ul>
           <button className="toggle" onClick={() => setMobile(!Mobile)}>
             {Mobile ? <CloseIcon /> : <MenuIcon />}
