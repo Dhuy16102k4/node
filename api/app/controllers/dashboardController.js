@@ -1,6 +1,6 @@
-const Order = require('../models/Order');
-const Product = require('../models/Product');
-const User = require('../models/User');
+const Order = require('../models/orders');
+const Product = require('../models/products');
+const User = require('../models/users');
 
 const dashboardController = {
     async getDashboardStats(req, res) {

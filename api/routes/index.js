@@ -7,6 +7,7 @@ const order = require('./order');
 const homeRouter = require('./home');
 const userRouter = require('./user');
 const tokenRouter = require('./refreshToken');
+const dashRouter = require('./admin/dashboard');
 function route(app) {
 
     app.use('/login', loginRouter);
@@ -17,7 +18,8 @@ function route(app) {
 
     app.use('/admin/product',productRouter);
     app.use('/category',categoryRouter);
-    app.use('/user',userRouter)
+    app.use('/user',userRouter);
+    app.use('/admin',dashRouter);
     
     //home
     app.use('/',homeRouter);
