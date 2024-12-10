@@ -12,7 +12,6 @@ const fetchVouchers = async () => {
     return []; // Trả về danh sách rỗng nếu có lỗi
   }
 };
-
 const VoucherManagement = () => {
   const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -79,16 +78,15 @@ const VoucherManagement = () => {
   // Xóa voucher
   const handleDeleteVoucher = async (id) => {
     try {
-        // Gửi yêu cầu DELETE với id
-        await axiosInstance.delete(`/voucher/${id}`);
-        
-        // Cập nhật lại state sau khi xóa thành công
-        setVouchers((prevVouchers) => prevVouchers.filter((voucher) => voucher._id !== id));
+      // Gửi yêu cầu DELETE với id
+      await axiosInstance.delete(`/voucher/${id}`);
+      
+      // Cập nhật lại state sau khi xóa thành công
+      setVouchers((prevVouchers) => prevVouchers.filter((voucher) => voucher._id !== id));
     } catch (error) {
-        console.error("Error deleting voucher:", error);
+      console.error("Error deleting voucher:", error);
     }
-};
-
+  };
 
   if (loading) {
     return <div className={styles.loading}>Loading...</div>;
@@ -102,47 +100,77 @@ const VoucherManagement = () => {
       <div className={styles.formContainer}>
         <h2>Add New Voucher</h2>
         <form>
-          <input
-            type="text"
-            placeholder="Voucher Code"
-            value={newVoucher.code}
-            onChange={(e) => setNewVoucher({ ...newVoucher, code: e.target.value })}
-            required
-          />
-          <select
-            value={newVoucher.discountType}
-            onChange={(e) => setNewVoucher({ ...newVoucher, discountType: e.target.value })}
-            required
-          >
-            <option value="percentage">Percentage</option>
-            <option value="fixed">Fixed Amount</option>
-          </select>
-          <input
-            type="number"
-            placeholder="Discount Value"
-            value={newVoucher.discountValue}
-            onChange={(e) => setNewVoucher({ ...newVoucher, discountValue: e.target.value })}
-            required
-          />
-          <input
-            type="number"
-            placeholder="Minimum Order Value"
-            value={newVoucher.minOrderValue}
-            onChange={(e) => setNewVoucher({ ...newVoucher, minOrderValue: e.target.value })}
-          />
-          <input
-            type="date"
-            placeholder="Expiry Date"
-            value={newVoucher.expiryDate}
-            onChange={(e) => setNewVoucher({ ...newVoucher, expiryDate: e.target.value })}
-            required
-          />
-          <input
-            type="number"
-            placeholder="Usage Limit"
-            value={newVoucher.usageLimit}
-            onChange={(e) => setNewVoucher({ ...newVoucher, usageLimit: e.target.value })}
-          />
+          <div className={styles.formGroup}>
+            <label htmlFor="voucherCode">Voucher Code</label>
+            <input
+              type="text"
+              id="voucherCode"
+              placeholder="Voucher Code"
+              value={newVoucher.code}
+              onChange={(e) => setNewVoucher({ ...newVoucher, code: e.target.value })}
+              required
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="discountType">Discount Type</label>
+            <select
+              id="discountType"
+              value={newVoucher.discountType}
+              onChange={(e) => setNewVoucher({ ...newVoucher, discountType: e.target.value })}
+              required
+            >
+              <option value="percentage">Percentage</option>
+              <option value="fixed">Fixed Amount</option>
+            </select>
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="discountValue">Discount Value</label>
+            <input
+              type="number"
+              id="discountValue"
+              placeholder="Discount Value"
+              value={newVoucher.discountValue}
+              onChange={(e) => setNewVoucher({ ...newVoucher, discountValue: e.target.value })}
+              required
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="minOrderValue">Minimum Order Value</label>
+            <input
+              type="number"
+              id="minOrderValue"
+              placeholder="Minimum Order Value"
+              value={newVoucher.minOrderValue}
+              onChange={(e) => setNewVoucher({ ...newVoucher, minOrderValue: e.target.value })}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="expiryDate">Expiry Date</label>
+            <input
+              type="date"
+              id="expiryDate"
+              placeholder="Expiry Date"
+              value={newVoucher.expiryDate}
+              onChange={(e) => setNewVoucher({ ...newVoucher, expiryDate: e.target.value })}
+              required
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="usageLimit">Usage Limit</label>
+            <input
+              type="number"
+              id="usageLimit"
+              placeholder="Usage Limit"
+              value={newVoucher.usageLimit}
+              onChange={(e) => setNewVoucher({ ...newVoucher, usageLimit: e.target.value })}
+            />
+          </div>
+
           <button type="button" onClick={handleAddVoucher}>
             Add Voucher
           </button>
@@ -198,5 +226,6 @@ const VoucherManagement = () => {
     </div>
   );
 };
+
 
 export default VoucherManagement;
