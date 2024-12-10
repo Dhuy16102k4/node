@@ -7,7 +7,7 @@ const StoreProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
+  const [voucher, setVoucher] = useState(null);
   const formatPrice = (price) => {
     return price.toLocaleString() + "₫";
   };
@@ -48,7 +48,22 @@ const StoreProvider = ({ children }) => {
       setLoading(false);
     }
   };
-  
+  const applyVoucher = async (voucherCode) => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post('/voucher/apply', { voucherCode }, { headers: createHeaders() });
+      if (response.data?.voucher) {
+        setVoucher(response.data.voucher); // Cập nhật voucher
+      } else {
+        setVoucher(null);
+        setError('Invalid voucher code');
+      }
+    } catch (err) {
+      setError('Error applying voucher.');
+    } finally {
+      setLoading(false);
+    }
+  };
   
   const addToCart = async (productId, quantity = 1) => {
     setLoading(true);
@@ -89,18 +104,27 @@ const StoreProvider = ({ children }) => {
     }
   };
   const getTotalCartAmount = () => {
-    return Object.values(cartItems).reduce((total, item) => {
+    const total = Object.values(cartItems).reduce((total, item) => {
       if (item.isSelected) {
-        const price = item.price || 0; // Ensure price is valid
-        const quantity = item.quantity || 0;  // Ensure quantity is valid
+        const price = item.price || 0;
+        const quantity = item.quantity || 0;
         total += price * quantity;
       }
       return total;
     }, 0);
+
+    if (voucher) {
+      // Áp dụng voucher vào khi tính toán tổng tiền thanh toán
+      if (voucher.discountType === 'percentage') {
+        return total - (total * voucher.discountValue / 100);
+      } else if (voucher.discountType === 'fixed') {
+        return total - voucher.discountValue;
+      }
+    }
+
+    return total;
   };
-  useEffect(() => {
-    getCart();
-  }, []);
+  
 //ORDER
 const createOrder = async (orderData) => {
   setLoading(true);
@@ -108,7 +132,8 @@ const createOrder = async (orderData) => {
     const response = await axiosInstance.post('/order/submit', orderData, { headers: createHeaders() });
     if (response.data) {
       console.log('Order created successfully:', response.data);
-      setCartItems({});
+      setCartItems({}); // Reset cart after order is created
+      setVoucher(null); // Reset voucher after order creation
     }
   } catch (err) {
     setError('Failed to create order.');
@@ -117,12 +142,15 @@ const createOrder = async (orderData) => {
     setLoading(false);
   }
 };
-  
+
+useEffect(() => {
+  getCart();
+}, []);
 
   
 
   return (
-    <StoreContext.Provider value={{ cartItems, addToCart, handleRemoveFromCart, selectItems, formatPrice,getTotalCartAmount,createOrder, loading, error }}>
+    <StoreContext.Provider value={{ cartItems, addToCart, handleRemoveFromCart, selectItems, formatPrice,getTotalCartAmount,createOrder, applyVoucher, voucher, loading, error }}>
       {children}
     </StoreContext.Provider>
   );
