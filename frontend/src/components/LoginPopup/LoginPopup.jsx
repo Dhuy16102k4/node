@@ -227,9 +227,7 @@ const LoginPopup = () => {
         </button>
 
         <GoogleLogin
-          onSuccess={credentialResponse => {
-            console.log(credentialResponse);
-          }}
+          onSuccess={handleGoogleLogin}
           onError={() => {
             console.log('Login Failed');
           }}
